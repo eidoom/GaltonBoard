@@ -3,10 +3,34 @@ import sys
 import random
 import numpy as np
 
+import matplotlib
+matplotlib.use("Agg")
+
+import matplotlib.pyplot as plt
+import matplotlib.backends.backend_agg as agg
+
+fig = plt.figure(figsize=[9, 3])
+ax = fig.add_subplot(111)
+canvas = agg.FigureCanvasAgg(fig)
+
+
+def plot(data):
+    ax.plot(data)
+    canvas.draw()
+    renderer = canvas.get_renderer()
+
+    raw_data = renderer.tostring_rgb()
+    size = canvas.get_width_height()
+
+    return pygame.image.fromstring(raw_data, size, "RGB")
+
+
 pygame.init()
+clock = pygame.time.Clock()
 
 width, height = 800, 800
 screen = pygame.display.set_mode((width,height))
+
 pygame.display.set_caption('Tutorial 1')
 
 background_colour = (255,255,255)
@@ -125,8 +149,21 @@ def create_fixed_grid():
             new_p = Particle((x, y), size)
             new_p.v[0] = 0 # 5 * random.random()
             new_p.v[1] = 0 # 5 * random.random()
-            fixed.append(new_p)
+            if y < height - 200:
+                fixed.append(new_p)
     return fixed
+
+def check_end(m):
+    if m.x[1] > height - 150:
+        m.frozen = True
+        m.v *= 0
+
+def remove_frozen(moving):
+    return filter(lambda x: x.frozen == False, moving)
+
+def quit_all():
+    pygame.quit()
+    sys.exit(0)
 
 fixed = create_fixed_grid()
 
@@ -134,12 +171,16 @@ moving = []
 for n in range(1):
     c = (0,200,0) # tuple([random.randint(100,180) for i in range(3)])
 
-    if True:
+    for _ in range(50):
         p = Particle((390 + 3*n, 10), 5, colour=c)
         p.v[0] = 0.1 * random.random()
         p.v[1] = 0 #5 #+ 5 * random.random()
 
-    moving.append(p)
+        moving.append(p)
+
+
+surf = plot([1,2,3,4,7,8,3])
+
 
 while True:
     #screen.fill(background_colour)
@@ -158,12 +199,24 @@ while True:
             collide(m,f)
         m.display()
         E += m.E
+
+        check_end(m)
+
+
+
     screen.unlock()
+
+    screen.blit(surf, (100,100))
 
     print E #, moving[0].v[0], moving[1].v[0]
     pygame.display.flip()
+    clock.tick(30)
+
+    moving = remove_frozen(moving)    
+
+#    if not moving:
+#        quit_all()
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            pygame.quit()
-            sys.exit(0)
+            quit_all()
