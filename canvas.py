@@ -9,18 +9,21 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import matplotlib.backends.backend_agg as agg
 
-fig = plt.figure(figsize=[9, 3])
+fig = plt.figure(figsize=[9, 2])
 ax = fig.add_subplot(111)
 canvas = agg.FigureCanvasAgg(fig)
 
 
 def plot(data):
-    ax.plot(data)
+    ax.hist(data,bins=11,range=(0,800))
+    ax.set_xlim((0,800))
     canvas.draw()
     renderer = canvas.get_renderer()
 
     raw_data = renderer.tostring_rgb()
     size = canvas.get_width_height()
+
+    #print '%r' % raw_data
 
     return pygame.image.fromstring(raw_data, size, "RGB")
 
@@ -124,10 +127,10 @@ def collide(p1,p2):
 
 def create_fixed_rnd():
     fixed = []
-    for n in range(20):
-        size = 15 # random.randint(10, 20)
+    for n in range(360):
+        size = 3 # random.randint(10, 20)
         x = random.randint(size, width-size)
-        y = random.randint(size, height-size)
+        y = random.randint(size+50, height-size-50)
         new_p = Particle((x, y), size)
         new_p.v[0] = 0 # 5 * random.random()
         new_p.v[1] = 0 #5 * random.random()
@@ -153,10 +156,19 @@ def create_fixed_grid():
                 fixed.append(new_p)
     return fixed
 
+ENDPOINTS = []
+
+CATONKEYBOARD = pygame.USEREVENT + 1
+my_event = pygame.event.Event(CATONKEYBOARD, message="Bad cat!")
+
+
 def check_end(m):
+    global ENDPOINTS
     if m.x[1] > height - 150:
         m.frozen = True
         m.v *= 0
+        ENDPOINTS.append(m.x[0])
+        pygame.event.post(my_event)
 
 def remove_frozen(moving):
     return filter(lambda x: x.frozen == False, moving)
@@ -171,16 +183,15 @@ moving = []
 for n in range(1):
     c = (0,200,0) # tuple([random.randint(100,180) for i in range(3)])
 
-    for _ in range(50):
+    for _ in range(10):
         p = Particle((390 + 3*n, 10), 5, colour=c)
         p.v[0] = 0.1 * random.random()
         p.v[1] = 0 #5 #+ 5 * random.random()
 
         moving.append(p)
 
-
-surf = plot([1,2,3,4,7,8,3])
-
+surf = plot(ENDPOINTS)
+screen.blit(surf, (0,600))
 
 while True:
     #screen.fill(background_colour)
@@ -192,7 +203,7 @@ while True:
     E = 0.0
 
     for m in moving:
-        m.colour = tuple([random.randint(100,180) for i in range(3)])
+        m.colour = (0,0,0)#tuple([random.randint(100,180) for i in range(3)])
         m.move()
         m.bounce()
         for f in fixed: #[i+1:]:
@@ -203,11 +214,9 @@ while True:
         check_end(m)
 
 
-
     screen.unlock()
 
-    screen.blit(surf, (100,100))
-
+    
     print E #, moving[0].v[0], moving[1].v[0]
     pygame.display.flip()
     clock.tick(30)
@@ -220,3 +229,6 @@ while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             quit_all()
+        if event.type == CATONKEYBOARD:
+            surf = plot(ENDPOINTS)
+            screen.blit(surf, (0,600))
