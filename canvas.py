@@ -15,8 +15,9 @@ canvas = agg.FigureCanvasAgg(fig)
 
 
 def plot(data):
-    ax.hist(data,bins=11,range=(0,800))
+    ax.hist(data,bins=11,range=(0,800),color='b')
     ax.set_xlim((0,800))
+    ax.set_ylim((0,10))
     canvas.draw()
     renderer = canvas.get_renderer()
 
