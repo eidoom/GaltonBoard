@@ -17,7 +17,7 @@ canvas = agg.FigureCanvasAgg(fig)
 def plot(data):
     ax.hist(data,bins=11,range=(0,800),color='b')
     ax.set_xlim((0,800))
-    ax.set_ylim((0,10))
+    ax.set_ylim((0,50))
     canvas.draw()
     renderer = canvas.get_renderer()
 
@@ -184,8 +184,8 @@ moving = []
 for n in range(1):
     c = (0,200,0) # tuple([random.randint(100,180) for i in range(3)])
 
-    for _ in range(10):
-        p = Particle((390 + 3*n, 10), 5, colour=c)
+    for _ in range(50):
+        p = Particle((393.5 + 3*n, 10), 5, colour=c)
         p.v[0] = 0.1 * random.random()
         p.v[1] = 0 #5 #+ 5 * random.random()
 
@@ -218,9 +218,9 @@ while True:
     screen.unlock()
 
     
-    print E #, moving[0].v[0], moving[1].v[0]
+#    print E #, moving[0].v[0], moving[1].v[0]
     pygame.display.flip()
-    clock.tick(30)
+    clock.tick(1000)
 
     moving = remove_frozen(moving)    
 
