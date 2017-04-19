@@ -12,7 +12,7 @@ l, = plt.plot(t, s, lw=2, color='red')
 plt.axis([0, 1, -10, 10])
 
 axcolor = 'lightgoldenrodyellow'
-axfreq = plt.axes([0.25, 0.1, 0.65, 0.03], facecolor=axcolor)
+axfreq = plt.axes([0.25, 0.10, 0.65, 0.03], facecolor=axcolor)
 axamp = plt.axes([0.25, 0.15, 0.65, 0.03], facecolor=axcolor)
 
 sfreq = Slider(axfreq, 'Freq', 0.1, 30.0, valinit=f0)
