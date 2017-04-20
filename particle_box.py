@@ -42,12 +42,12 @@ class ParticleBox:
                  size = 0.04,
                  M = 0.1,
                  G = 9.8):
-        self.init_state = np.asarray(init_state, dtype=float)
-        self.M = M * np.ones(self.init_state.shape[0], dtype=float)
-        #self.live_pts = np.ones(self.init_state.shape[0], dtype=bool)
-        self.size = size
-        self.state = self.init_state.copy()
+        self.state      = np.asarray(init_state, dtype=float)
+        self.M          = np.full(self.state.shape[0], M, dtype=float)
+        self.live       = np.full(self.state.shape[0], True, dtype=bool)
+
         self.fixed_grid = np.asarray(fixed_grid, dtype=float)
+        self.size = size
         self.time_elapsed = 0
         self.bounds = bounds
         self.G = G
@@ -104,9 +104,6 @@ class ParticleBox:
 
             # update velocities of colliding pairs
             for i1, i2 in zip(ind1, ind2):
-                # mass
-                m = self.M[i1]
-
                 # location vector
                 r1 = self.state[i1, :2]
                 r2 = self.fixed_grid[i2]
@@ -114,16 +111,16 @@ class ParticleBox:
                 # velocity vector
                 v = self.state[i1, 2:]
 
-                # relative location & velocity vectors
+                # relative location
                 r_rel = r1 - r2
 
                 # collisions of spheres reflect v_rel over r_rel
                 rr_rel = np.dot(r_rel, r_rel)
                 vr_rel = np.dot(v,     r_rel)
-                v_rel  = r_rel * (2 * vr_rel / rr_rel)
+                v_new  = v - r_rel * (2 * vr_rel / rr_rel)
 
                 # assign new velocities
-                self.state[i1, 2:] = DAMPING * (v - v_rel)
+                self.state[i1, 2:] = DAMPING * v_new
                 
         # check for crossing boundary
         crossed_x1 = (self.state[:, 0] < self.bounds[0] + self.size)
