@@ -46,7 +46,7 @@ class ParticleBox:
                                [-0.3, 0.3]], 
                  bounds = [-BOXSIZE, BOXSIZE, -BOXSIZE, BOXSIZE],
                  size = 0.04,
-                 M = 0.1,
+                 M = 0.5,
                  G = 9.8):
         self.state      = np.asarray(init_state, dtype=float)
         self.M          = np.full(self.state.shape[0], M, dtype=float)
@@ -165,7 +165,7 @@ class ParticleBox:
 #------------------------------------------------------------
 # set up initial state
 np.random.seed(0)
-init_state = -0.5 + np.random.random((20, 4))
+init_state = -0.5 + np.random.random((120, 4))
 init_state[:, :2] *= 0.5
 init_state[:, 1] += BOXSIZE - 0.5
 
@@ -187,7 +187,7 @@ fixed_grid *= 0.8
 # fixed_grid *= 3.5
 
 box = ParticleBox(init_state, fixed_grid, size=0.04)
-dt = 1. / 30 # 30fps
+dt = 1. / 100 # 30fps
 
 
 #------------------------------------------------------------
@@ -226,19 +226,19 @@ def animate(i):
     global box, rect, dt, ax, fig, PAUSED
     if not PAUSED:
         box.step(dt)
-        print box.done()
+
         if box.done():
             PAUSED = True
-    # update pieces of the animation
-    # rect.set_edgecolor('k')
-    # alive = box.state[box.dead_pts]
+        # update pieces of the animation
+        # rect.set_edgecolor('k')
+        # alive = box.state[box.dead_pts]
         particles.set_data(box.state[~box.dead][:, 0], 
                            box.state[~box.dead][:, 1])
     return particles, rect
 
 # need to hold the handle to avoid GC
 ani = animation.FuncAnimation(fig, animate, #frames=600,
-                              interval=60, blit=True, init_func=init)
+                              interval=40, blit=True, init_func=init)
 
 
 
