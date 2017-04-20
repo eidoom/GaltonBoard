@@ -8,6 +8,10 @@ license: BSD
 Please feel free to use and modify this, but keep the above information. Thanks!
 """
 import numpy as np
+
+import matplotlib as mpl
+mpl.rcParams['toolbar'] = 'None'
+
 from scipy.spatial.distance import pdist, squareform, cdist
 
 import matplotlib.pyplot as plt
@@ -21,6 +25,8 @@ GRAVITY = True
 DAMPING = 1.0
 
 BOXSIZE = 2.75
+
+PAUSED = False
 
 class ParticleBox:
     """Orbits class
@@ -44,7 +50,7 @@ class ParticleBox:
                  G = 9.8):
         self.state      = np.asarray(init_state, dtype=float)
         self.M          = np.full(self.state.shape[0], M, dtype=float)
-        self.live       = np.full(self.state.shape[0], True, dtype=bool)
+        self.dead       = np.full(self.state.shape[0], False, dtype=bool)
 
         self.fixed_grid = np.asarray(fixed_grid, dtype=float)
         self.size = size
@@ -69,6 +75,10 @@ class ParticleBox:
 
             # update velocities of colliding pairs
             for i1, i2 in zip(ind1, ind2):
+
+                if self.dead[i1] or self.dead[i2]:
+                    continue
+
                 # mass
                 m1 = self.M[i1]
                 m2 = self.M[i2]
@@ -104,6 +114,9 @@ class ParticleBox:
 
             # update velocities of colliding pairs
             for i1, i2 in zip(ind1, ind2):
+                if self.dead[i1]:
+                    continue
+
                 # location vector
                 r1 = self.state[i1, :2]
                 r2 = self.fixed_grid[i2]
@@ -139,10 +152,14 @@ class ParticleBox:
         self.state[crossed_y1 | crossed_y2, 3] *= -1
 
         self.state[crossed_y1, 2:4] = 0 
+        self.dead[crossed_y1] = True
 
         # add gravity
         if GRAVITY:
             self.state[:, 3] -= self.M * self.G * dt
+
+    def done(self):
+        return np.all(self.dead)
 
 
 #------------------------------------------------------------
@@ -180,43 +197,59 @@ fig.subplots_adjust(left=0, right=1, bottom=0, top=1)
 ax = fig.add_subplot(111, aspect='equal', autoscale_on=False,
                      xlim=(-1.6*BOXSIZE, 1.6*BOXSIZE), ylim=(-1.2*BOXSIZE, 1.2*BOXSIZE))
 
+
+
+
+ms = int(fig.dpi * 2 * box.size * fig.get_figwidth()
+         / np.diff(ax.get_xbound())[0])
+
 # particles holds the locations of the particles
-particles, = ax.plot([], [], 'bo', ms=6)
-fixed, = ax.plot(box.fixed_grid[:, 0], box.fixed_grid[:, 1], 'ro', ms=6)
+particles, = ax.plot([], [], 'bo', ms=ms)
+fixed, = ax.plot(box.fixed_grid[:, 0], box.fixed_grid[:, 1], 'ro', ms=ms)
 
 # rect is the box edge
 rect = plt.Rectangle(box.bounds[::2],
                      box.bounds[1] - box.bounds[0],
                      box.bounds[3] - box.bounds[2],
-                     ec='none', lw=2, fc='none')
+                     ec='k', lw=2, fc='none')
 ax.add_patch(rect)
 
 def init():
     """initialize animation"""
-    global box, rect
-    particles.set_data([], [])
-    rect.set_edgecolor('k')
+#    global box, rect
+#    particles.set_data([], [])
+#    rect.set_edgecolor('k')
     return particles, rect
 
 def animate(i):
     """perform animation step"""
-    global box, rect, dt, ax, fig
-    box.step(dt)
-
-    ms = int(fig.dpi * 2 * box.size * fig.get_figwidth()
-             / np.diff(ax.get_xbound())[0])
-    
+    global box, rect, dt, ax, fig, PAUSED
+    if not PAUSED:
+        box.step(dt)
+        print box.done()
+        if box.done():
+            PAUSED = True
     # update pieces of the animation
     # rect.set_edgecolor('k')
-    # alive = box.state[box.live_pts]
-    particles.set_data(box.state[:, 0], 
-                       box.state[:, 1])
-    particles.set_markersize(ms)
+    # alive = box.state[box.dead_pts]
+        particles.set_data(box.state[~box.dead][:, 0], 
+                           box.state[~box.dead][:, 1])
     return particles, rect
 
 # need to hold the handle to avoid GC
 ani = animation.FuncAnimation(fig, animate, #frames=600,
                               interval=60, blit=True, init_func=init)
+
+
+
+# def onDraw(event):
+#     global PAUSED
+#     if box.done():
+#         PAUSED = True
+# #        ani.event_source.stop()
+
+
+# fig.canvas.mpl_connect('draw_event', onDraw)
 
 
 # save the animation as an mp4.  This requires ffmpeg or mencoder to be
