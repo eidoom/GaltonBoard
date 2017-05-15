@@ -15,14 +15,22 @@ mpl.rcParams['toolbar'] = 'None'
 from scipy.spatial.distance import pdist, squareform, cdist
 
 import matplotlib.pyplot as plt
+
+import matplotlib.gridspec as gridspec
+
+import matplotlib.patches as patches
+import matplotlib.path as path
+import matplotlib.animation as animation
+
 import scipy.integrate as integrate
 import matplotlib.animation as animation
 
 PAIRWISE = False
 FIXEDGRID = True
 GRAVITY = True
+FRICTION = True
 
-DAMPING = 1.0
+DAMPING = 1
 
 BOXSIZE = 2.75
 
@@ -46,7 +54,7 @@ class ParticleBox:
                                [-0.3, 0.3]], 
                  bounds = [-BOXSIZE, BOXSIZE, -BOXSIZE, BOXSIZE],
                  size = 0.04,
-                 M = 0.5,
+                 M = 0.99,
                  G = 9.8):
         self.state      = np.asarray(init_state, dtype=float)
         self.M          = np.full(self.state.shape[0], M, dtype=float)
@@ -57,6 +65,8 @@ class ParticleBox:
         self.time_elapsed = 0
         self.bounds = bounds
         self.G = G
+
+        self.endpos = []
 
     def step(self, dt):
         """step once by dt seconds"""
@@ -110,7 +120,7 @@ class ParticleBox:
         if FIXEDGRID: # fixed grid interactions
             # find pairs of particles undergoing a collision
             D = cdist(self.state[:, :2], self.fixed_grid)
-            ind1, ind2 = np.where(D < 2 * self.size)
+            ind1, ind2 = np.where(D < 1.75 * self.size)
 
             # update velocities of colliding pairs
             for i1, i2 in zip(ind1, ind2):
@@ -158,15 +168,21 @@ class ParticleBox:
         if GRAVITY:
             self.state[:, 3] -= self.M * self.G * dt
 
+        if FRICTION:
+            self.state[:, 2:] *= 0.98
+
     def done(self):
         return np.all(self.dead)
+
+    def registered_pos(self):
+        return self.state[self.dead, 0]
 
 
 #------------------------------------------------------------
 # set up initial state
 np.random.seed(0)
-init_state = -0.5 + np.random.random((120, 4))
-init_state[:, :2] *= 0.5
+init_state = -0.5 + np.random.random((240, 4))
+init_state[:, :2] *= 0.1
 init_state[:, 1] += BOXSIZE - 0.5
 
 # zero initial velocity
@@ -175,13 +191,13 @@ init_state[:, 2:] = 0.0
 
 triangle_height = np.sqrt(0.75)
 fixed_grid = []
-for i,y in enumerate(np.linspace(-0.6*BOXSIZE, 0.75*BOXSIZE, 7)):
+for i,y in enumerate(np.linspace(-BOXSIZE, BOXSIZE, 13)):
     for x in np.linspace(-0.1*BOXSIZE*i, 0.1*BOXSIZE*i, i+1):
         fixed_grid.append([x, -triangle_height*y])
 
 fixed_grid = np.asarray(fixed_grid, dtype=float)
-fixed_grid *= 0.8
-#fixed_grid[:,1] += 1
+fixed_grid *= 0.7
+fixed_grid[:,1] += 0.5
 
 # fixed_grid = -0.5 + np.random.random((10,2))
 # fixed_grid *= 3.5
@@ -192,10 +208,58 @@ dt = 1. / 100 # 30fps
 
 #------------------------------------------------------------
 # set up figure and animation
-fig = plt.figure()
-fig.subplots_adjust(left=0, right=1, bottom=0, top=1)
-ax = fig.add_subplot(111, aspect='equal', autoscale_on=False,
-                     xlim=(-1.6*BOXSIZE, 1.6*BOXSIZE), ylim=(-1.2*BOXSIZE, 1.2*BOXSIZE))
+fig = plt.figure(figsize=(8,10))
+#fig.subplots_adjust(left=0, right=1, bottom=0, top=1)
+#ax = fig.add_subplot(211, aspect='equal', autoscale_on=False,
+#                     xlim=(-1.6*BOXSIZE, 1.6*BOXSIZE), ylim=(-1.2*BOXSIZE, 1.2*BOXSIZE))
+
+#ax_h = fig.add_subplot(212, aspect='equal', autoscale_on=False,
+#                     xlim=(-1.6*BOXSIZE, 1.6*BOXSIZE), ylim=(-1.2*BOXSIZE, 1.2*BOXSIZE))
+
+gs = gridspec.GridSpec(2, 1, height_ratios=[4, 1], wspace=0.0, hspace=0.0)
+
+ax_h = plt.subplot(gs[1])
+
+n, bins = np.histogram([], bins=13, range=(-BOXSIZE,BOXSIZE))
+left = np.array(bins[:-1])
+right = np.array(bins[1:])
+bottom = np.zeros(len(left))
+top = bottom + n
+nrects = len(left)
+
+nverts = nrects*(1 + 3 + 1)
+verts = np.zeros((nverts, 2))
+codes = np.ones(nverts, int) * path.Path.LINETO
+codes[0::5] = path.Path.MOVETO
+codes[4::5] = path.Path.CLOSEPOLY
+verts[0::5, 0] = left
+verts[0::5, 1] = bottom
+verts[1::5, 0] = left
+verts[1::5, 1] = top
+verts[2::5, 0] = right
+verts[2::5, 1] = top
+verts[3::5, 0] = right
+verts[3::5, 1] = bottom
+
+barpath = path.Path(verts, codes)
+patch = patches.PathPatch(
+    barpath, facecolor='green', edgecolor='yellow', alpha=0.5)
+
+ax_h.add_patch(patch)
+ax_h.set_xlim(left[0], right[-1])
+ax_h.set_ylim((0, 40))
+
+
+
+ax = plt.subplot(gs[0],
+        aspect='equal', 
+        autoscale_on=False,
+        xlim=(-BOXSIZE, BOXSIZE), 
+        ylim=(-BOXSIZE, BOXSIZE),
+        sharex=ax_h
+     )
+#ax.set_xticks([])
+ax.set_yticks([])
 
 
 
@@ -207,19 +271,21 @@ ms = int(fig.dpi * 2 * box.size * fig.get_figwidth()
 particles, = ax.plot([], [], 'bo', ms=ms)
 fixed, = ax.plot(box.fixed_grid[:, 0], box.fixed_grid[:, 1], 'ro', ms=ms)
 
+histo = ax_h.hist([],bins=13)
+
 # rect is the box edge
-rect = plt.Rectangle(box.bounds[::2],
-                     box.bounds[1] - box.bounds[0],
-                     box.bounds[3] - box.bounds[2],
-                     ec='k', lw=2, fc='none')
-ax.add_patch(rect)
+#rect = plt.Rectangle(box.bounds[::2],
+#                     box.bounds[1] - box.bounds[0],
+#                     box.bounds[3] - box.bounds[2],
+#                     ec='k', lw=2, fc='none')
+#ax.add_patch(rect)
 
 def init():
     """initialize animation"""
 #    global box, rect
 #    particles.set_data([], [])
 #    rect.set_edgecolor('k')
-    return particles, rect
+    return particles, patch
 
 def animate(i):
     """perform animation step"""
@@ -234,7 +300,14 @@ def animate(i):
         # alive = box.state[box.dead_pts]
         particles.set_data(box.state[~box.dead][:, 0], 
                            box.state[~box.dead][:, 1])
-    return particles, rect
+
+        data = box.registered_pos()
+        n, bins = np.histogram(data, bins=13, range=(-BOXSIZE,BOXSIZE))
+        top = bottom + n
+        verts[1::5, 1] = top
+        verts[2::5, 1] = top
+
+    return particles, patch
 
 # need to hold the handle to avoid GC
 ani = animation.FuncAnimation(fig, animate, #frames=600,
