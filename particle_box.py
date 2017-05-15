@@ -120,7 +120,7 @@ class ParticleBox:
         if FIXEDGRID: # fixed grid interactions
             # find pairs of particles undergoing a collision
             D = cdist(self.state[:, :2], self.fixed_grid)
-            ind1, ind2 = np.where(D < 1.75 * self.size)
+            ind1, ind2 = np.where(D < 1.7 * self.size)
 
             # update velocities of colliding pairs
             for i1, i2 in zip(ind1, ind2):
@@ -180,13 +180,16 @@ class ParticleBox:
 
 #------------------------------------------------------------
 # set up initial state
+
+NN = 1500
+
 np.random.seed(0)
-init_state = -0.5 + np.random.random((240, 4))
-init_state[:, :2] *= 0.1
-init_state[:, 1] += BOXSIZE - 0.5
+init_state = -0.5 + np.random.random((NN, 4))
+init_state[:, :2] *= 0.05
+init_state[:, 1] += BOXSIZE - 1.5
 
 # zero initial velocity
-init_state[:, 2:] = 0.0
+#init_state[:, 2:] = 0.0
 
 
 triangle_height = np.sqrt(0.75)
@@ -197,7 +200,7 @@ for i,y in enumerate(np.linspace(-BOXSIZE, BOXSIZE, 13)):
 
 fixed_grid = np.asarray(fixed_grid, dtype=float)
 fixed_grid *= 0.7
-fixed_grid[:,1] += 0.5
+fixed_grid[:,1] -= 0.5
 
 # fixed_grid = -0.5 + np.random.random((10,2))
 # fixed_grid *= 3.5
@@ -247,7 +250,7 @@ patch = patches.PathPatch(
 
 ax_h.add_patch(patch)
 ax_h.set_xlim(left[0], right[-1])
-ax_h.set_ylim((0, 40))
+ax_h.set_ylim((0, NN/5.))
 
 
 
