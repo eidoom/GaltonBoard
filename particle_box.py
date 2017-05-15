@@ -33,6 +33,7 @@ PAIRWISE = False
 FIXEDGRID = True
 GRAVITY = True
 FRICTION = True
+BARRIER = True
 
 DAMPING = 1
 
@@ -40,7 +41,35 @@ BOXSIZE = 2.75
 
 PAUSED = False
 
-class ParticleBox:
+
+
+class Barrier(object):
+    def __init__(self):
+        self.min = -0.5
+        self.max = 0.5
+
+        self.fun = lambda x: np.piecewise(x, 
+                               [x < self.min, (x >= self.min) & (x < self.max), x >= self.max],
+                               [np.inf, lambda xx: 0, np.inf]
+                   )
+
+        self.norm = np.array([0,1])
+
+    #@np.vectorize
+    def check(self, x):
+        return x[0] > self.min and x[0] < self.max and np.abs(self.fun(x[0]) - x[1]) < 0.04
+
+barrier = Barrier()
+
+x = np.random.uniform(-1,1,size=(20,2))
+print x
+
+print barrier.fun(x[:,0])
+
+
+exit(0)
+
+class ParticleBox(object):
     """Orbits class
     
     init_state is an [N x 4] array, where N is the number of particles:
@@ -148,7 +177,11 @@ class ParticleBox:
 
                 # assign new velocities
                 self.state[i1, 2:] = DAMPING * v_new
-                
+        
+        if BARRIER: # bounces of barriers
+            pass
+
+
         # check for crossing boundary
         crossed_x1 = (self.state[:, 0] < self.bounds[0] + self.size)
         crossed_x2 = (self.state[:, 0] > self.bounds[1] - self.size)
@@ -185,7 +218,7 @@ class ParticleBox:
 #------------------------------------------------------------
 # set up initial state
 
-NN = 1500
+NN = 50
 
 np.random.seed(0)
 init_state = -0.5 + np.random.random((NN, 4))
