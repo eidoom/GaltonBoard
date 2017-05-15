@@ -7,6 +7,7 @@ website: http://jakevdp.github.com
 license: BSD
 Please feel free to use and modify this, but keep the above information. Thanks!
 """
+import sys
 import numpy as np
 
 import matplotlib as mpl
@@ -21,6 +22,9 @@ import matplotlib.gridspec as gridspec
 import matplotlib.patches as patches
 import matplotlib.path as path
 import matplotlib.animation as animation
+
+from matplotlib.widgets import Button
+
 
 import scipy.integrate as integrate
 import matplotlib.animation as animation
@@ -251,7 +255,7 @@ patch = patches.PathPatch(
 ax_h.add_patch(patch)
 ax_h.set_xlim(left[0], right[-1])
 ax_h.set_ylim((0, NN/5.))
-
+ax_h.set_xticks([])
 
 
 ax = plt.subplot(gs[0],
@@ -261,7 +265,7 @@ ax = plt.subplot(gs[0],
         ylim=(-BOXSIZE, BOXSIZE),
         sharex=ax_h
      )
-#ax.set_xticks([])
+ax.set_xticks([])
 ax.set_yticks([])
 
 
@@ -276,12 +280,7 @@ fixed, = ax.plot(box.fixed_grid[:, 0], box.fixed_grid[:, 1], 'ro', ms=ms)
 
 histo = ax_h.hist([],bins=13)
 
-# rect is the box edge
-#rect = plt.Rectangle(box.bounds[::2],
-#                     box.bounds[1] - box.bounds[0],
-#                     box.bounds[3] - box.bounds[2],
-#                     ec='k', lw=2, fc='none')
-#ax.add_patch(rect)
+
 
 def init():
     """initialize animation"""
@@ -316,6 +315,34 @@ def animate(i):
 ani = animation.FuncAnimation(fig, animate, #frames=600,
                               interval=40, blit=True, init_func=init)
 
+
+button_off = patches.Circle((2.2, 2.2), 0.2, picker=1)
+ax.add_patch(button_off)
+
+
+def key_press(event):
+    print('press', event.key)
+    sys.stdout.flush()
+    if event.key == 'q':
+        sys.exit(0)
+        # visible = xl.get_visible()
+        # xl.set_visible(not visible)
+        # fig.canvas.draw()
+
+def pick(event):
+    artist = event.artist
+
+    print dir(event)
+
+    print artist
+    print artist == button_off
+
+    if artist == button_off:
+        sys.exit(0)
+
+
+fig.canvas.mpl_connect('key_press_event', key_press)
+fig.canvas.mpl_connect('pick_event', pick)
 
 
 # def onDraw(event):
