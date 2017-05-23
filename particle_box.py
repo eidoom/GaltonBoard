@@ -30,7 +30,7 @@ import scipy.integrate as integrate
 import matplotlib.animation as animation
 
 PAIRWISE = False
-FIXEDGRID = True
+FIXEDGRID = False # True
 GRAVITY = True
 FRICTION = True
 BARRIER = True
@@ -44,30 +44,44 @@ PAUSED = False
 
 
 class Barrier(object):
-    def __init__(self):
-        self.min = -0.5
-        self.max = 0.5
+    def __init__(self, min_x, max_x, fn):
+        self.min = min_x
+        self.max = max_x
 
-        self.fun = lambda x: np.piecewise(x, 
-                               [x < self.min, (x >= self.min) & (x < self.max), x >= self.max],
-                               [np.inf, lambda xx: 0, np.inf]
-                   )
+        self.fun = np.vectorize(fn)
+        # self.fun = lambda x: np.piecewise(x, 
+        #                        [x < self.min, (x >= self.min) & (x < self.max), x >= self.max],
+        #                        [np.inf, fn, np.inf]
+        #            )
 
-        self.norm = np.array([0,1])
+        self.norm = np.array([-1,1])
 
-    #@np.vectorize
     def check(self, x):
-        return x[0] > self.min and x[0] < self.max and np.abs(self.fun(x[0]) - x[1]) < 0.04
+        """Return bool array selecting the Nx2 grid elements that touch the line."""
+        return (
+            (x[:,0] > self.min) 
+            & (x[:,0] < self.max) 
+            & (np.abs(self.fun(x[:,0]) - x[:,1]) < 0.07)
+        )
 
-barrier = Barrier()
+    @property
+    def xs(self):
+        return np.linspace(self.min, self.max, 30)
 
-x = np.random.uniform(-1,1,size=(20,2))
-print x
+    @property
+    def ys(self):
+        return self.fun(self.xs)
 
-print barrier.fun(x[:,0])
+
+# barrier = Barrier()
+
+# x = np.random.uniform(-1,1,size=(20,2))
+# print x
+
+# print barrier.fun(x[:,0])
 
 
-exit(0)
+#exit(0)
 
 class ParticleBox(object):
     """Orbits class
@@ -85,6 +99,7 @@ class ParticleBox(object):
                                [-0.5, -0.5, -0.5, 0.5]],
                  fixed_grid = [[-0.9, 0.9],
                                [-0.3, 0.3]], 
+                 barrier = None,
                  bounds = [-BOXSIZE, BOXSIZE, -BOXSIZE, BOXSIZE],
                  size = 0.04,
                  M = 0.99,
@@ -94,6 +109,9 @@ class ParticleBox(object):
         self.dead       = np.full(self.state.shape[0], False, dtype=bool)
 
         self.fixed_grid = np.asarray(fixed_grid, dtype=float)
+
+        self.barrier = barrier
+
         self.size = size
         self.time_elapsed = 0
         self.bounds = bounds
@@ -178,8 +196,22 @@ class ParticleBox(object):
                 # assign new velocities
                 self.state[i1, 2:] = DAMPING * v_new
         
-        if BARRIER: # bounces of barriers
-            pass
+        if BARRIER and self.barrier: # bounces of barriers
+            idx, = np.where(self.barrier.check(self.state[:,:2]))
+            for i in idx:
+                if self.dead[i]: 
+                    continue
+
+                v = self.state[i,2:]
+                r = self.barrier.norm
+
+                rr = np.dot(r,r)
+                rv = np.dot(r,v)
+
+                new_v = -2 * r * rv / rr + v
+
+                self.state[i,2:] = new_v
+              
 
 
         # check for crossing boundary
@@ -218,7 +250,7 @@ class ParticleBox(object):
 #------------------------------------------------------------
 # set up initial state
 
-NN = 50
+NN = 3 # 50
 
 np.random.seed(0)
 init_state = -0.5 + np.random.random((NN, 4))
@@ -242,7 +274,9 @@ fixed_grid[:,1] -= 0.5
 # fixed_grid = -0.5 + np.random.random((10,2))
 # fixed_grid *= 3.5
 
-box = ParticleBox(init_state, fixed_grid, size=0.04)
+barr = Barrier(-0.5, 0.5, lambda x: x)
+
+box = ParticleBox(init_state, fixed_grid, barr, size=0.04)
 dt = 1. / 100 # 30fps
 
 
@@ -309,7 +343,12 @@ ms = int(fig.dpi * 2 * box.size * fig.get_figwidth()
 
 # particles holds the locations of the particles
 particles, = ax.plot([], [], 'bo', ms=ms)
-fixed, = ax.plot(box.fixed_grid[:, 0], box.fixed_grid[:, 1], 'ro', ms=ms)
+
+if FIXEDGRID:
+    fixed, = ax.plot(box.fixed_grid[:, 0], box.fixed_grid[:, 1], 'ro', ms=ms)
+
+if BARRIER:
+    barriers, = ax.plot(barr.xs, barr.ys)
 
 histo = ax_h.hist([],bins=13)
 
