@@ -30,7 +30,7 @@ import scipy.integrate as integrate
 import matplotlib.animation as animation
 
 PAIRWISE = False
-FIXEDGRID = False # True
+FIXEDGRID = True
 GRAVITY = True
 FRICTION = True
 BARRIER = True
@@ -61,7 +61,7 @@ class Barrier(object):
         return (
             (x[:,0] > self.min) 
             & (x[:,0] < self.max) 
-            & (np.abs(self.fun(x[:,0]) - x[:,1]) < 0.07)
+            & (np.abs(self.fun(x[:,0]) - x[:,1]) < 0.1)
         )
 
     @property
@@ -250,7 +250,7 @@ class ParticleBox(object):
 #------------------------------------------------------------
 # set up initial state
 
-NN = 3 # 50
+NN = 50
 
 np.random.seed(0)
 init_state = -0.5 + np.random.random((NN, 4))
@@ -274,7 +274,7 @@ fixed_grid[:,1] -= 0.5
 # fixed_grid = -0.5 + np.random.random((10,2))
 # fixed_grid *= 3.5
 
-barr = Barrier(-0.5, 0.5, lambda x: x)
+barr = Barrier(-2, -0.2, lambda x: 1.45*x + 1.45)
 
 box = ParticleBox(init_state, fixed_grid, barr, size=0.04)
 dt = 1. / 100 # 30fps
@@ -332,8 +332,8 @@ ax = plt.subplot(gs[0],
         ylim=(-BOXSIZE, BOXSIZE),
         sharex=ax_h
      )
-ax.set_xticks([])
-ax.set_yticks([])
+#ax.set_xticks([])
+#ax.set_yticks([])
 
 
 
