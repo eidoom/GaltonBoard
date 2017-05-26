@@ -274,7 +274,7 @@ fixed_grid[:,1] -= 0.5
 # fixed_grid = -0.5 + np.random.random((10,2))
 # fixed_grid *= 3.5
 
-barr = Barrier(-2, -0.2, lambda x: 1.45*x + 1.45)
+barr = Barrier(-0.5, 0.5, lambda x: 1.5*x+0.14)#(-2, -0.2, lambda x: 1.45*x + 1.45)
 
 box = ParticleBox(init_state, fixed_grid, barr, size=0.04)
 dt = 1. / 200 # 30fps
