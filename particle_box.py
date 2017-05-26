@@ -250,7 +250,7 @@ class ParticleBox(object):
 #------------------------------------------------------------
 # set up initial state
 
-NN = 50
+NN = 250
 
 np.random.seed(0)
 init_state = -0.5 + np.random.random((NN, 4))
