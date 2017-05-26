@@ -277,7 +277,7 @@ fixed_grid[:,1] -= 0.5
 barr = Barrier(-2, -0.2, lambda x: 1.45*x + 1.45)
 
 box = ParticleBox(init_state, fixed_grid, barr, size=0.04)
-dt = 1. / 100 # 30fps
+dt = 1. / 200 # 30fps
 
 
 #------------------------------------------------------------
@@ -385,7 +385,7 @@ def animate(i):
 
 # need to hold the handle to avoid GC
 ani = animation.FuncAnimation(fig, animate, #frames=600,
-                              interval=40, blit=True, init_func=init)
+                              interval=20, blit=True, init_func=init)
 
 
 button_off = patches.Circle((2.2, 2.2), 0.2, picker=1)
