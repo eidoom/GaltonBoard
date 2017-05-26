@@ -282,7 +282,7 @@ dt = 1. / 200 # 30fps
 
 #------------------------------------------------------------
 # set up figure and animation
-fig = plt.figure(figsize=(6.4,8))
+fig = plt.figure(figsize=(4.8,6))
 #fig.subplots_adjust(left=0, right=1, bottom=0, top=1)
 #ax = fig.add_subplot(211, aspect='equal', autoscale_on=False,
 #                     xlim=(-1.6*BOXSIZE, 1.6*BOXSIZE), ylim=(-1.2*BOXSIZE, 1.2*BOXSIZE))
