@@ -1,0 +1,168 @@
+#!/usr/bin/env python
+
+import sys
+import numpy as np
+
+import matplotlib as mpl
+mpl.rcParams['toolbar'] = 'None'
+
+
+import matplotlib.pyplot as plt
+
+import matplotlib.gridspec as gridspec
+
+import matplotlib.path as path
+import matplotlib.animation as animation
+
+import matplotlib.patches as patches
+
+
+from matplotlib.widgets import Button
+
+import scipy.integrate as integrate
+import matplotlib.animation as animation
+
+from galton.button import connect_buttons
+
+
+
+#------------------------------------------------------------
+# set up initial state
+
+
+from galton import box, barr, BOXSIZE, NN
+
+dt = 1. / 200 # 30fps
+
+
+#------------------------------------------------------------
+# set up figure and animation
+fig = plt.figure(figsize=(4.8,6))
+#fig.subplots_adjust(left=0, right=1, bottom=0, top=1)
+#ax = fig.add_subplot(211, aspect='equal', autoscale_on=False,
+#                     xlim=(-1.6*BOXSIZE, 1.6*BOXSIZE), ylim=(-1.2*BOXSIZE, 1.2*BOXSIZE))
+
+#ax_h = fig.add_subplot(212, aspect='equal', autoscale_on=False,
+#                     xlim=(-1.6*BOXSIZE, 1.6*BOXSIZE), ylim=(-1.2*BOXSIZE, 1.2*BOXSIZE))
+
+gs = gridspec.GridSpec(2, 1, height_ratios=[4, 1], wspace=0.0, hspace=0.0)
+
+ax_h = plt.subplot(gs[1])
+
+n, bins = np.histogram([], bins=13, range=(-BOXSIZE,BOXSIZE))
+left = np.array(bins[:-1])
+right = np.array(bins[1:])
+bottom = np.zeros(len(left))
+top = bottom + n
+nrects = len(left)
+
+nverts = nrects*(1 + 3 + 1)
+verts = np.zeros((nverts, 2))
+codes = np.ones(nverts, int) * path.Path.LINETO
+codes[0::5] = path.Path.MOVETO
+codes[4::5] = path.Path.CLOSEPOLY
+verts[0::5, 0] = left
+verts[0::5, 1] = bottom
+verts[1::5, 0] = left
+verts[1::5, 1] = top
+verts[2::5, 0] = right
+verts[2::5, 1] = top
+verts[3::5, 0] = right
+verts[3::5, 1] = bottom
+
+barpath = path.Path(verts, codes)
+patch = patches.PathPatch(
+    barpath, facecolor='green', edgecolor='yellow', alpha=0.5)
+
+ax_h.add_patch(patch)
+ax_h.set_xlim(left[0], right[-1])
+ax_h.set_ylim((0, NN/3.))
+ax_h.set_xticks([])
+
+
+ax = plt.subplot(gs[0],
+        aspect='equal', 
+        autoscale_on=False,
+        xlim=(-BOXSIZE, BOXSIZE), 
+        ylim=(-BOXSIZE, BOXSIZE),
+        sharex=ax_h
+     )
+#ax.set_xticks([])
+#ax.set_yticks([])
+
+
+
+
+ms = int(fig.dpi * 2 * box.size * fig.get_figwidth()
+         / np.diff(ax.get_xbound())[0])
+
+# particles holds the locations of the particles
+particles, = ax.plot([], 
+                     [], 
+                     'bo', ms=ms)
+
+if box.FIXEDGRID:
+    fixed, = ax.plot(box.fixed_grid[:, 0], 
+                     box.fixed_grid[:, 1], 
+                     'ro', ms=ms)
+
+if box.BARRIER:
+    barriers, = ax.plot(barr.xs, barr.ys)
+
+histo = ax_h.hist([],bins=13)
+
+
+
+def init():
+    """initialize animation"""
+#    global box, rect
+#    particles.set_data([], [])
+#    rect.set_edgecolor('k')
+    return particles, patch
+
+def animate(i):
+    """perform animation step"""
+    global box, rect, dt, ax, fig
+    if not box.PAUSED:
+        box.step(dt)
+
+        if box.done():
+            box.PAUSED = True
+        # update pieces of the animation
+        # rect.set_edgecolor('k')
+        # alive = box.state[box.dead_pts]
+        particles.set_data(box.state[~box.dead][:, 0], 
+                           box.state[~box.dead][:, 1])
+
+        data = box.registered_pos()
+        n, bins = np.histogram(data, bins=13, range=(-BOXSIZE,BOXSIZE))
+        top = bottom + n
+        verts[1::5, 1] = top
+        verts[2::5, 1] = top
+
+    return particles, patch
+
+# need to hold the handle to avoid GC
+ani = animation.FuncAnimation(fig, animate, #frames=600,
+                              interval=20, blit=True, init_func=init)
+
+connect_buttons(ax, fig)
+
+# def onDraw(event):
+#     global PAUSED
+#     if box.done():
+#         PAUSED = True
+# #        ani.event_source.stop()
+
+
+# fig.canvas.mpl_connect('draw_event', onDraw)
+
+
+# save the animation as an mp4.  This requires ffmpeg or mencoder to be
+# installed.  The extra_args ensure that the x264 codec is used, so that
+# the video can be embedded in html5.  You may need to adjust this for
+# your system: for more information, see
+# http://matplotlib.sourceforge.net/api/animation_api.html
+#ani.save('particle_box.mp4', fps=30, extra_args=['-vcodec', 'libx264'])
+
+plt.show()
