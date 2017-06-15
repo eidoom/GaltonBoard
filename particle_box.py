@@ -349,10 +349,14 @@ ms = int(fig.dpi * 2 * box.size * fig.get_figwidth()
          / np.diff(ax.get_xbound())[0])
 
 # particles holds the locations of the particles
-particles, = ax.plot([], [], 'bo', ms=ms)
+particles, = ax.plot([], 
+                     [], 
+                     'bo', ms=ms)
 
 if FIXEDGRID:
-    fixed, = ax.plot(box.fixed_grid[:, 0], box.fixed_grid[:, 1], 'ro', ms=ms)
+    fixed, = ax.plot(box.fixed_grid[:, 0], 
+                     box.fixed_grid[:, 1], 
+                     'ro', ms=ms)
 
 if BARRIER:
     barriers, = ax.plot(barr.xs, barr.ys)
@@ -400,9 +404,8 @@ ani = animation.FuncAnimation(fig, animate, #frames=600,
 
 class ActionDict(dict):
     def __missing__(self, key):
-        def foo():
-            pass
-        return foo
+        def do_nothing(): pass
+        return do_nothing
 
 action = ActionDict()
 
@@ -427,12 +430,9 @@ def key_press(event):
     sys.stdout.flush()
     if event.key == 'q':
         sys.exit(0)
- 
-def pick(event):
-    action[event.artist]()
 
 fig.canvas.mpl_connect('key_press_event', key_press)
-fig.canvas.mpl_connect('pick_event', pick)
+fig.canvas.mpl_connect('pick_event', lambda ev: action[ev.artist]() )
 
 
 # def onDraw(event):
