@@ -104,20 +104,27 @@ class ParticleBox(object):
                  size = 0.04,
                  M = 0.99,
                  G = 9.8):
-        self.state      = np.asarray(init_state, dtype=float)
-        self.M          = np.full(self.state.shape[0], M, dtype=float)
-        self.dead       = np.full(self.state.shape[0], False, dtype=bool)
+        self.initstate  = np.asarray(init_state, dtype=float)
 
         self.fixed_grid = np.asarray(fixed_grid, dtype=float)
 
         self.barrier = barrier
 
+        self.reset()
+
+        self.M          = np.full(self.state.shape[0], M, dtype=float)
         self.size = size
         self.time_elapsed = 0
         self.bounds = bounds
         self.G = G
 
         self.endpos = []
+
+
+    def reset(self):
+        self.state      = self.initstate.copy()
+        self.dead       = np.full(self.state.shape[0], False, dtype=bool)
+
 
     def step(self, dt):
         """step once by dt seconds"""
@@ -206,9 +213,9 @@ class ParticleBox(object):
                 r = self.barrier.norm
 
                 rr = np.dot(r,r)
-                rv = np.dot(r,v)
+                vr = np.dot(r,v)
 
-                new_v = -2 * r * rv / rr + v
+                new_v = v - r * (2 * vr / rr)
 
                 self.state[i,2:] = new_v
               
@@ -274,7 +281,7 @@ fixed_grid[:,1] -= 0.5
 # fixed_grid = -0.5 + np.random.random((10,2))
 # fixed_grid *= 3.5
 
-barr = Barrier(-0.5, 0.5, lambda x: 1.5*x+0.14)#(-2, -0.2, lambda x: 1.45*x + 1.45)
+barr = Barrier(-0.5, 0.5, lambda x: 1.5*x-1.54)#(-2, -0.2, lambda x: 1.45*x + 1.45)
 
 box = ParticleBox(init_state, fixed_grid, barr, size=0.04)
 dt = 1. / 200 # 30fps
@@ -321,7 +328,7 @@ patch = patches.PathPatch(
 
 ax_h.add_patch(patch)
 ax_h.set_xlim(left[0], right[-1])
-ax_h.set_ylim((0, NN/5.))
+ax_h.set_ylim((0, NN/3.))
 ax_h.set_xticks([])
 
 
@@ -388,8 +395,31 @@ ani = animation.FuncAnimation(fig, animate, #frames=600,
                               interval=20, blit=True, init_func=init)
 
 
+
+
+
+class ActionDict(dict):
+    def __missing__(self, key):
+        def foo():
+            pass
+        return foo
+
+action = ActionDict()
+
 button_off = patches.Circle((2.2, 2.2), 0.2, picker=1)
 ax.add_patch(button_off)
+action[button_off] = lambda: sys.exit(0)
+
+button_reset = patches.Circle((1.8, 2.2), 0.2, picker=1)
+ax.add_patch(button_reset)
+def reset():
+    global PAUSED
+    PAUSED = False
+    box.reset()
+action[button_reset] = reset
+
+
+
 
 
 def key_press(event):
@@ -397,21 +427,9 @@ def key_press(event):
     sys.stdout.flush()
     if event.key == 'q':
         sys.exit(0)
-        # visible = xl.get_visible()
-        # xl.set_visible(not visible)
-        # fig.canvas.draw()
-
+ 
 def pick(event):
-    artist = event.artist
-
-    print dir(event)
-
-    print artist
-    print artist == button_off
-
-    if artist == button_off:
-        sys.exit(0)
-
+    action[event.artist]()
 
 fig.canvas.mpl_connect('key_press_event', key_press)
 fig.canvas.mpl_connect('pick_event', pick)
