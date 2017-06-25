@@ -47,13 +47,14 @@ class ParticleBox(object):
         self.bounds = bounds
         self.G = G
 
+        self.redraw = False
+
         self.endpos = []
 
         self.PAIRWISE = False
         self.FIXEDGRID = True
         self.GRAVITY = True
         self.FRICTION = True
-        self.BARRIER = True
 
         self.DAMPING = 1
 
@@ -141,7 +142,7 @@ class ParticleBox(object):
                 # assign new velocities
                 self.state[i1, 2:] = self.DAMPING * v_new
         
-        if self.BARRIER and self.barrier: # bounces of barriers
+        if self.barrier: # bounces of barriers
             idx, = np.where(self.barrier.check(self.state[:,:2]))
             for i in idx:
                 if self.dead[i]: 

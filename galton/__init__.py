@@ -34,6 +34,7 @@ fixed_grid[:,1] -= 0.5
 barr = Barrier(-0.5, 0.5, lambda x: 1.5*x-1.54)#(-2, -0.2, lambda x: 1.45*x + 1.45)
 box = ParticleBox(init_state, fixed_grid, barr, size=0.04)
 
+
 del fixed_grid
 del init_state
 

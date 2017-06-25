@@ -106,8 +106,10 @@ if box.FIXEDGRID:
                      box.fixed_grid[:, 1], 
                      'ro', ms=ms)
 
-if box.BARRIER:
+if box.barrier:
     barriers, = ax.plot(barr.xs, barr.ys)
+else:
+    barriers, = ax.plot([],[])
 
 histo = ax_h.hist([],bins=13)
 
@@ -118,11 +120,19 @@ def init():
 #    global box, rect
 #    particles.set_data([], [])
 #    rect.set_edgecolor('k')
-    return particles, patch
+    return particles, patch, barriers
 
 def animate(i):
     """perform animation step"""
     global box, rect, dt, ax, fig
+
+    if box.redraw:
+        if box.barrier:
+          barriers.set_data(box.barrier.xs, box.barrier.ys)
+        else:
+          barriers.set_data([],[])
+        box.redraw = False
+
     if not box.PAUSED:
         box.step(dt)
 
@@ -140,7 +150,7 @@ def animate(i):
         verts[1::5, 1] = top
         verts[2::5, 1] = top
 
-    return particles, patch
+    return particles, patch, barriers
 
 # need to hold the handle to avoid GC
 ani = animation.FuncAnimation(fig, animate, #frames=600,
