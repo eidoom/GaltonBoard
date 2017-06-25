@@ -9,6 +9,11 @@ mpl.rcParams['toolbar'] = 'None'
 
 import matplotlib.pyplot as plt
 
+# fullscreen if we're on the rpi3
+if os.uname()[4][:3] == 'arm':
+    mgr = plt.get_current_fig_manager()
+    mgr.resize(*mgr.window.maxsize())
+
 import matplotlib.gridspec as gridspec
 
 import matplotlib.path as path
@@ -37,7 +42,7 @@ dt = 1. / 200 # 30fps
 
 #------------------------------------------------------------
 # set up figure and animation
-fig = plt.figure(figsize=(4.8,6))
+fig = plt.figure(figsize=(3.4,6.1))
 #fig.subplots_adjust(left=0, right=1, bottom=0, top=1)
 #ax = fig.add_subplot(211, aspect='equal', autoscale_on=False,
 #                     xlim=(-1.6*BOXSIZE, 1.6*BOXSIZE), ylim=(-1.2*BOXSIZE, 1.2*BOXSIZE))
