@@ -34,15 +34,15 @@ class Barrier(object):
 
 
 
-#barr = Barrier(xmin, 0.5, lambda x: 1.5*x-1.54)#(-2, -0.2, lambda x: 1.45*x + 1.45)
+barr = Barrier(-0.5, 0.5, lambda x: 1.5*x-1.54)#(-2, -0.2, lambda x: 1.45*x + 1.45)
 
-xmin, xmax = -0.66, 0.66
+#xmin, xmax = -0.66, 0.66
 
-barr = Barrier(xmin, xmax, lambda x: np.piecewise(x, 
-                                [x < xmin, (x >= xmin) & (x < 0), (x >= 0) & (x < xmax), x >= xmax],
-                                [np.inf, lambda x: 1.5*x-0.42, lambda x: -1.5*x-0.42, np.inf]
-                    )
-                )
+#barr = Barrier(xmin, xmax, lambda x: np.piecewise(x, 
+#                                [x < xmin, (x >= xmin) & (x < 0), (x >= 0) & (x < xmax), x >= xmax],
+#                                [np.inf, lambda x: 1.5*x-0.42, lambda x: -1.5*x-0.42, np.inf]
+#                    )
+#                )
 
 
 
