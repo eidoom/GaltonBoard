@@ -30,7 +30,7 @@ from galton.button import connect_buttons
 # set up initial state
 
 
-from galton import box, BOXSIZE, NN
+from galton import box, BOXSIZE
 
 dt = 1. / 200 # 30fps
 
@@ -76,7 +76,7 @@ patch = patches.PathPatch(
 
 ax_h.add_patch(patch)
 ax_h.set_xlim(left[0], right[-1])
-ax_h.set_ylim((0, NN/3.))
+ax_h.set_ylim((0, 100.))
 ax_h.set_xticks([])
 
 
