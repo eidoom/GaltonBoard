@@ -9,11 +9,6 @@ mpl.rcParams['toolbar'] = 'None'
 
 import matplotlib.pyplot as plt
 
-# fullscreen if we're on the rpi3
-if os.uname()[4][:3] == 'arm':
-    mgr = plt.get_current_fig_manager()
-    mgr.resize(*mgr.window.maxsize())
-
 import matplotlib.gridspec as gridspec
 
 import matplotlib.path as path
