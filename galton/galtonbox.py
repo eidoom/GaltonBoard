@@ -11,6 +11,7 @@ from scipy.spatial.distance import cdist # pdist, squareform, cdist
 # license: BSD
 # Please feel free to use and modify this, but keep the above information. Thanks!
 
+NN = 250
 
 class ParticleBox(object):
     """Orbits class
@@ -23,9 +24,6 @@ class ParticleBox(object):
     bounds is the size of the box: [xmin, xmax, ymin, ymax]
     """
     def __init__(self,
-                 init_state = [[1, 0, 0, -1],
-                               [-0.5, 0.5, 0.5, 0.5],
-                               [-0.5, -0.5, -0.5, 0.5]],
                  fixed_grid = [[-0.9, 0.9],
                                [-0.3, 0.3]], 
                  barrier = None,
@@ -33,7 +31,6 @@ class ParticleBox(object):
                  size = 0.04,
                  M = 0.99,
                  G = 9.8):
-        self.initstate  = np.asarray(init_state, dtype=float)
 
         self.fixed_grid = np.asarray(fixed_grid, dtype=float)
 
@@ -60,7 +57,14 @@ class ParticleBox(object):
 
 
     def reset(self):
-        self.state  = self.initstate.copy()
+        #np.random.seed(0)
+        state = -0.5 + np.random.random((NN, 4))
+        state[:, :2] *= 0.05
+        state[:, 1] += BOXSIZE - 1.5
+        ## zero initial velocity
+        #state[:, 2:] = 0.0
+
+        self.state  = state
         self.dead   = np.full(self.state.shape[0], False, dtype=bool)
         self.PAUSED  = False
 
