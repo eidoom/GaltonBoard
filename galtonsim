@@ -30,7 +30,7 @@ from galton.button import connect_buttons
 # set up initial state
 
 
-from galton import box, barr, BOXSIZE, NN
+from galton import box, BOXSIZE, NN
 
 dt = 1. / 200 # 30fps
 
@@ -107,7 +107,7 @@ if box.FIXEDGRID:
                      'ro', ms=ms)
 
 if box.barrier:
-    barriers, = ax.plot(barr.xs, barr.ys)
+    barriers, = ax.plot(box.barrier.xs, box.barrier.ys)
 else:
     barriers, = ax.plot([],[])
 

@@ -149,7 +149,7 @@ class ParticleBox(object):
                     continue
 
                 v = self.state[i,2:]
-                r = self.barrier.norm
+                r = self.barrier.norm(self.state[i,0])
 
                 rr = np.dot(r,r)
                 vr = np.dot(r,v)

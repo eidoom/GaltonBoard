@@ -1,5 +1,5 @@
 import numpy as np
-from barrier import Barrier
+from barrier import barr
 del barrier
 
 BOXSIZE = 2.75
@@ -31,7 +31,6 @@ fixed_grid[:,1] -= 0.5
 # fixed_grid = -0.5 + np.random.random((10,2))
 # fixed_grid *= 3.5
 
-barr = Barrier(-0.5, 0.5, lambda x: 1.5*x-1.54)#(-2, -0.2, lambda x: 1.45*x + 1.45)
 box = ParticleBox(init_state, fixed_grid, barr, size=0.04)
 
 
