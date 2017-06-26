@@ -60,7 +60,7 @@ class ParticleBox(object):
         #np.random.seed(0)
         state = -0.5 + np.random.random((NN, 4))
         state[:, :2] *= 0.05
-        state[:, 1] += BOXSIZE - 1.5
+        state[:, 1] += BOXSIZE - 1.4
         ## zero initial velocity
         #state[:, 2:] = 0.0
 
