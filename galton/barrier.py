@@ -34,7 +34,9 @@ class Barrier(object):
 
 
 
-barr = Barrier(-0.5, 0.5, lambda x: 1.5*x-1.54)#(-2, -0.2, lambda x: 1.45*x + 1.45)
+#barr = [Barrier(-0.5, 0.5, lambda x: 1.5*x-1.54)] #(-2, -0.2, lambda x: 1.45*x + 1.45)
+
+barr = [Barrier(-0.5, 0.5, lambda x: 1.5*x-1.54),Barrier(-1.5, -0.5, lambda x: 1.5*x+0.15)]
 
 #xmin, xmax = -0.66, 0.66
 

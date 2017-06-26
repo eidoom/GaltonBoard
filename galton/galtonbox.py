@@ -26,7 +26,7 @@ class ParticleBox(object):
     def __init__(self,
                  fixed_grid = [[-0.9, 0.9],
                                [-0.3, 0.3]], 
-                 barrier = None,
+                 barriers = [],
                  bounds = [-BOXSIZE, BOXSIZE, -BOXSIZE, BOXSIZE],
                  size = 0.04,
                  M = 0.99,
@@ -34,7 +34,7 @@ class ParticleBox(object):
 
         self.fixed_grid = np.asarray(fixed_grid, dtype=float)
 
-        self.barrier = barrier
+        self.barriers = barriers
 
         self.reset()
 
@@ -146,14 +146,14 @@ class ParticleBox(object):
                 # assign new velocities
                 self.state[i1, 2:] = self.DAMPING * v_new
         
-        if self.barrier: # bounces of barriers
-            idx, = np.where(self.barrier.check(self.state[:,:2]))
+        for bar in self.barriers: # bounces of barriers
+            idx, = np.where(bar.check(self.state[:,:2]))
             for i in idx:
                 if self.dead[i]: 
                     continue
 
                 v = self.state[i,2:]
-                r = self.barrier.norm(self.state[i,0])
+                r = bar.norm(self.state[i,0])
 
                 rr = np.dot(r,r)
                 vr = np.dot(r,v)

@@ -106,31 +106,39 @@ if box.FIXEDGRID:
                      box.fixed_grid[:, 1], 
                      'ro', ms=ms)
 
-if box.barrier:
-    barriers, = ax.plot(box.barrier.xs, box.barrier.ys)
-else:
-    barriers, = ax.plot([],[])
+barr_plot = []
+
+# for i,b in enumerate(box.barriers):
+#     barr_plot[i].set_data(b.xs, b.ys)
+# else:
+#     barr_plot[i].set_data([], [])
 
 histo = ax_h.hist([],bins=13)
 
 
+def draw_barriers(barriers):
+    global barr_plot
+    for b in barr_plot:
+        b.remove()
+    barr_plot = []
+    for b in box.barriers:
+        barr_plot.append(ax.plot(b.xs, b.ys,'b')[0])
+
+draw_barriers(box.barriers)
 
 def init():
     """initialize animation"""
 #    global box, rect
 #    particles.set_data([], [])
 #    rect.set_edgecolor('k')
-    return particles, patch, barriers
+    return [particles, patch] + barr_plot
 
 def animate(i):
     """perform animation step"""
     global box, rect, dt, ax, fig
 
     if box.redraw:
-        if box.barrier:
-          barriers.set_data(box.barrier.xs, box.barrier.ys)
-        else:
-          barriers.set_data([],[])
+        draw_barriers(box.barriers)
         box.redraw = False
 
     if not box.PAUSED:
@@ -150,7 +158,7 @@ def animate(i):
         verts[1::5, 1] = top
         verts[2::5, 1] = top
 
-    return particles, patch, barriers
+    return [particles, patch] + barr_plot
 
 # need to hold the handle to avoid GC
 ani = animation.FuncAnimation(fig, animate, #frames=600,

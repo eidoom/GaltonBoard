@@ -19,19 +19,16 @@ action[button_off] = lambda: sys.exit(0)
 button_reset = patches.Circle((1.0, 2.2), 0.2, picker=1)
 def reset():
     box.reset()
-    box.barrier = None
+    box.barriers = []
     box.redraw = True
 action[button_reset] = reset
 
 button_reset_A = patches.Circle((0.5, 2.2), 0.2, picker=1)
 def reset_A():
     box.reset()
-    box.barrier = barr
+    box.barriers = barr
     box.redraw = True
 action[button_reset_A] = reset_A
-
-
-
 
 
 
