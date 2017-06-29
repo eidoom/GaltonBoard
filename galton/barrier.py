@@ -8,7 +8,7 @@ class Barrier(object):
         self.fun = np.vectorize(fn)
         #self.fun = lambda x: np.piecewise(x, 
         #                        [x < self.min, (x >= self.min) & (x < 0), (x >= 0) & (x < self.max), x >= self.max],
-        #                        [np.inf, fn, lambda x: -1.5*x-1.54, np.inf]
+        #                        [np.inf, fn, lambda x: -m*x-1.54, np.inf]
         #            )
 
     def check(self, x):
@@ -16,7 +16,7 @@ class Barrier(object):
         return (
             (x[:,0] > self.min) 
             & (x[:,0] < self.max) 
-            & (np.abs(self.fun(x[:,0]) - x[:,1]) < 0.1)
+            & (np.abs(self.fun(x[:,0]) - x[:,1]) < 0.12)
         )
 
     def norm(self, x):
@@ -25,57 +25,64 @@ class Barrier(object):
 
     @property
     def xs(self):
-        return np.linspace(self.min, self.max, 60)
+        return np.linspace(self.min, self.max, 5)
 
     @property
     def ys(self):
         return self.fun(self.xs)
 
+m = 1.5
+
+L_WALL = Barrier(-2.5, -0.2, lambda x: m*x+1.67)
+R_WALL = Barrier(0.2, 2.5 , lambda x: -m*x+1.67)
 
 preset_barriers = {
 
-'empty' : 
+'empty' : # ok
 [
-Barrier(-2.5, -0.2, lambda x: 1.5*x+1.75),
-Barrier(0.2, 2.5 , lambda x: -1.5*x+1.75),
+L_WALL,
+R_WALL,
 ],
 
 
-'triangle' : [
-Barrier(-2.5, -0.2, lambda x: 1.5*x+1.75),
+'triangle' : # ok
+[
+L_WALL,
 Barrier(-0.66, 0.66, lambda x: -1.5*np.abs(x)-0.34),
-Barrier(0.2, 2.5 , lambda x: -1.5*x+1.75),
-], #(-2, -0.2, lambda x: 1.45*x + 1.45)
+R_WALL,
+],
 
 
-'funnel' : [
-Barrier(-2.5, -0.2, lambda x: 1.5*x+1.75),
-Barrier(-0.66, -0.05, lambda x: 1.5*x-0.34),
-Barrier(0.05, 0.66, lambda x: -1.5*x-0.34),
-Barrier(0.2, 2.5 , lambda x: -1.5*x+1.75),
-], #(-2, -0.2, lambda x: 1.45*x + 1.45)
+'funnel' : 
+[
+L_WALL,
+Barrier(-0.75, -0.12, lambda x: -m*x-1.58),
+Barrier(0.12, 0.75, lambda x: m*x-1.58),
+R_WALL,
+],
 
 
-'left' : [
-Barrier(-2.5, -0.2, lambda x: 1.5*x+1.75),
-Barrier(-0.66, 0.66, lambda x: -1.5*np.abs(x)-0.34),
-Barrier(0.2, 2.5 , lambda x: -1.5*x+1.75),
-], #(-2, -0.2, lambda x: 1.45*x + 1.45)
+'left' : 
+[
+L_WALL,
+Barrier(-1.4, -0.75, lambda x: m*x+0.7),
+Barrier(-0.62, -0.02, lambda x: m*x-0.45),
+Barrier(0.12, 0.75, lambda x: m*x-1.58),
+R_WALL,
+],
 
 
-'right' : [
-Barrier(-2.5, -0.2, lambda x: 1.5*x+1.75),
-Barrier(-0.66, 0.66, lambda x: -1.5*np.abs(x)-0.34),
-Barrier(0.2, 2.5 , lambda x: -1.5*x+1.75),
-], #(-2, -0.2, lambda x: 1.45*x + 1.45)
+'right' : 
+[
+L_WALL,
+Barrier(0.75, 1.4, lambda x: -m*x+0.7),
+Barrier(0.02, 0.62, lambda x: -m*x-0.45),
+Barrier(-0.75, -0.12, lambda x: -m*x-1.58),
+R_WALL,
+],
 
 
 }
-#barr = [
-#Barrier(-0.5,  0.5, lambda x: 1.5*x-1.54),
-#Barrier(-1.5, -0.5, lambda x: 1.5*x+0.15),
-#]
-
 
 if __name__ == '__main__':
     barrier = Barrier(-5, 5, lambda x: -x)

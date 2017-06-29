@@ -89,8 +89,8 @@ ax = plt.subplot(gs[0],
         ylim=(-BOXSIZE, BOXSIZE),
         sharex=ax_h
      )
-#ax.set_xticks([])
-#ax.set_yticks([])
+ax.set_xticks([])
+ax.set_yticks([])
 
 
 
@@ -126,7 +126,7 @@ def draw_barriers(barriers):
         b.remove()
     barr_plot = []
     for b in box.barriers:
-        barr_plot.append(ax.plot(b.xs, b.ys,'k',linewidth=5)[0])
+        barr_plot.append(ax.plot(b.xs, b.ys,'k',linewidth=8)[0])
 
 draw_barriers(box.barriers)
 
