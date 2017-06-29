@@ -56,8 +56,8 @@ R_WALL,
 'funnel' : 
 [
 L_WALL,
-Barrier(-0.75, -0.12, lambda x: -m*x-1.58),
-Barrier(0.12, 0.75, lambda x: m*x-1.58),
+Barrier(-1.27, -0.55, lambda x: -m*x-2.18),
+Barrier(0.55, 1.27, lambda x: m*x-2.18),
 R_WALL,
 ],
 

@@ -49,20 +49,22 @@ funnel = [
 [1,1,7,13,35,71,43,56,37,15,6,0,0],
 ]
 
-import pylab as pl
+if __name__ == '__main__':
 
-for e in empty:
-	pl.plot(e,'r')
-#for e in triangle:
-#	pl.plot(e,'b')
-#for e in funnel:
-#	pl.plot(e,'y')
-for e in left:
-	pl.plot(e,'k')
-for e in right:
-	pl.plot(e,'g')
+	import pylab as pl
 
-pl.show()
+	for e in empty:
+		pl.plot(e,'r')
+	#for e in triangle:
+	#	pl.plot(e,'b')
+	#for e in funnel:
+	#	pl.plot(e,'y')
+	for e in left:
+		pl.plot(e,'k')
+	for e in right:
+		pl.plot(e,'g')
+
+	pl.show()
 
 
 

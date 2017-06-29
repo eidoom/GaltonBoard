@@ -48,7 +48,7 @@ ax_h = plt.subplot(gs[1])
 hrange=(-3,3)
 hbins=np.linspace(-HISTOSIZE,HISTOSIZE,NBINS+1)
 hbins[0], hbins[-1] = -5,5
-print hbins
+
 n, bins = np.histogram([], bins=hbins)#, range=hrange)
 
 #n, bins = np.histogram([], bins=NBINS, range=(-HISTOSIZE,HISTOSIZE))
@@ -78,9 +78,14 @@ patch = patches.PathPatch(
 
 ax_h.add_patch(patch)
 ax_h.set_xlim(left[0], right[-1])
-ax_h.set_ylim((0, 100.))
+ax_h.set_ylim((0, 80.))
 ax_h.set_xticks([])
 
+if True:
+    import refdata as ref
+    shift = (bins[5]-bins[4])/2
+    for i in ref.funnel:
+        ax_h.plot(np.array(bins[:-1])+shift,i,'k')
 
 ax = plt.subplot(gs[0],
         aspect='equal', 
@@ -97,8 +102,6 @@ ax.set_yticks([])
 
 ms = 6#int(fig.dpi * 2 * box.size * fig.get_figwidth()
        #  / np.diff(ax.get_xbound())[0])
-
-print 'ms',ms
 
 # particles holds the locations of the particles
 particles, = ax.plot([], 
