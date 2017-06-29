@@ -11,7 +11,7 @@ from scipy.spatial.distance import cdist # pdist, squareform, cdist
 # license: BSD
 # Please feel free to use and modify this, but keep the above information. Thanks!
 
-NN = 250
+NN = 300
 
 class ParticleBox(object):
     """Orbits class
@@ -26,9 +26,9 @@ class ParticleBox(object):
     def __init__(self,
                  fixed_grid = [[-0.9, 0.9],
                                [-0.3, 0.3]], 
-                 barriers = [],
+                 barriers = None,
                  bounds = [-BOXSIZE, BOXSIZE, -BOXSIZE, BOXSIZE],
-                 size = 0.04,
+                 size = 0.05,
                  M = 0.99,
                  G = 9.8):
 
@@ -188,7 +188,7 @@ class ParticleBox(object):
             self.state[:, 3] -= self.M * self.G * dt
 
         if self.FRICTION:
-            self.state[:, 2:] *= 0.98
+            self.state[:, 2:] *= 0.99
 
     def done(self):
         return np.all(self.dead)

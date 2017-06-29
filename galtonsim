@@ -34,22 +34,24 @@ from galton import box, BOXSIZE
 
 dt = 1. / 200 # 30fps
 
+NBINS = 13
+HISTOSIZE=0.9*BOXSIZE
 
 #------------------------------------------------------------
 # set up figure and animation
 fig = plt.figure(figsize=(3.4,6.1))
-#fig.subplots_adjust(left=0, right=1, bottom=0, top=1)
-#ax = fig.add_subplot(211, aspect='equal', autoscale_on=False,
-#                     xlim=(-1.6*BOXSIZE, 1.6*BOXSIZE), ylim=(-1.2*BOXSIZE, 1.2*BOXSIZE))
-
-#ax_h = fig.add_subplot(212, aspect='equal', autoscale_on=False,
-#                     xlim=(-1.6*BOXSIZE, 1.6*BOXSIZE), ylim=(-1.2*BOXSIZE, 1.2*BOXSIZE))
 
 gs = gridspec.GridSpec(2, 1, height_ratios=[4, 1], wspace=0.0, hspace=0.0)
 
 ax_h = plt.subplot(gs[1])
 
-n, bins = np.histogram([], bins=13, range=(-BOXSIZE,BOXSIZE))
+hrange=(-3,3)
+hbins=np.linspace(-HISTOSIZE,HISTOSIZE,NBINS+1)
+hbins[0], hbins[-1] = -5,5
+print hbins
+n, bins = np.histogram([], bins=hbins)#, range=hrange)
+
+#n, bins = np.histogram([], bins=NBINS, range=(-HISTOSIZE,HISTOSIZE))
 left = np.array(bins[:-1])
 right = np.array(bins[1:])
 bottom = np.zeros(len(left))
@@ -93,8 +95,10 @@ ax = plt.subplot(gs[0],
 
 
 
-ms = int(fig.dpi * 2 * box.size * fig.get_figwidth()
-         / np.diff(ax.get_xbound())[0])
+ms = 6#int(fig.dpi * 2 * box.size * fig.get_figwidth()
+       #  / np.diff(ax.get_xbound())[0])
+
+print 'ms',ms
 
 # particles holds the locations of the particles
 particles, = ax.plot([], 
@@ -113,7 +117,7 @@ barr_plot = []
 # else:
 #     barr_plot[i].set_data([], [])
 
-histo = ax_h.hist([],bins=13)
+histo = ax_h.hist([],bins=NBINS)
 
 
 def draw_barriers(barriers):
@@ -122,7 +126,7 @@ def draw_barriers(barriers):
         b.remove()
     barr_plot = []
     for b in box.barriers:
-        barr_plot.append(ax.plot(b.xs, b.ys,'b')[0])
+        barr_plot.append(ax.plot(b.xs, b.ys,'k',linewidth=5)[0])
 
 draw_barriers(box.barriers)
 
@@ -153,7 +157,11 @@ def animate(i):
                            box.state[~box.dead][:, 1])
 
         data = box.registered_pos()
-        n, bins = np.histogram(data, bins=13, range=(-BOXSIZE,BOXSIZE))
+
+        hrange=(-3,3)
+        hbins=np.linspace(-HISTOSIZE,HISTOSIZE,NBINS+1)
+        hbins[0], hbins[-1] = -5,5
+        n, bins = np.histogram(data, bins=hbins)#, range=hrange)
         top = bottom + n
         verts[1::5, 1] = top
         verts[2::5, 1] = top

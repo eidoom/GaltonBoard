@@ -23,7 +23,6 @@ class Barrier(object):
         m = (self.fun(x+0.001) - self.fun(x-0.001)) / 0.002
         return np.array([-m,1])
 
-
     @property
     def xs(self):
         return np.linspace(self.min, self.max, 60)
@@ -33,19 +32,49 @@ class Barrier(object):
         return self.fun(self.xs)
 
 
+preset_barriers = {
 
-#barr = [Barrier(-0.5, 0.5, lambda x: 1.5*x-1.54)] #(-2, -0.2, lambda x: 1.45*x + 1.45)
+'empty' : 
+[
+Barrier(-2.5, -0.2, lambda x: 1.5*x+1.75),
+Barrier(0.2, 2.5 , lambda x: -1.5*x+1.75),
+],
 
-barr = [Barrier(-0.5, 0.5, lambda x: 1.5*x-1.54),Barrier(-1.5, -0.5, lambda x: 1.5*x+0.15)]
 
-#xmin, xmax = -0.66, 0.66
+'triangle' : [
+Barrier(-2.5, -0.2, lambda x: 1.5*x+1.75),
+Barrier(-0.66, 0.66, lambda x: -1.5*np.abs(x)-0.34),
+Barrier(0.2, 2.5 , lambda x: -1.5*x+1.75),
+], #(-2, -0.2, lambda x: 1.45*x + 1.45)
 
-#barr = Barrier(xmin, xmax, lambda x: np.piecewise(x, 
-#                                [x < xmin, (x >= xmin) & (x < 0), (x >= 0) & (x < xmax), x >= xmax],
-#                                [np.inf, lambda x: 1.5*x-0.42, lambda x: -1.5*x-0.42, np.inf]
-#                    )
-#                )
 
+'funnel' : [
+Barrier(-2.5, -0.2, lambda x: 1.5*x+1.75),
+Barrier(-0.66, -0.05, lambda x: 1.5*x-0.34),
+Barrier(0.05, 0.66, lambda x: -1.5*x-0.34),
+Barrier(0.2, 2.5 , lambda x: -1.5*x+1.75),
+], #(-2, -0.2, lambda x: 1.45*x + 1.45)
+
+
+'left' : [
+Barrier(-2.5, -0.2, lambda x: 1.5*x+1.75),
+Barrier(-0.66, 0.66, lambda x: -1.5*np.abs(x)-0.34),
+Barrier(0.2, 2.5 , lambda x: -1.5*x+1.75),
+], #(-2, -0.2, lambda x: 1.45*x + 1.45)
+
+
+'right' : [
+Barrier(-2.5, -0.2, lambda x: 1.5*x+1.75),
+Barrier(-0.66, 0.66, lambda x: -1.5*np.abs(x)-0.34),
+Barrier(0.2, 2.5 , lambda x: -1.5*x+1.75),
+], #(-2, -0.2, lambda x: 1.45*x + 1.45)
+
+
+}
+#barr = [
+#Barrier(-0.5,  0.5, lambda x: 1.5*x-1.54),
+#Barrier(-1.5, -0.5, lambda x: 1.5*x+0.15),
+#]
 
 
 if __name__ == '__main__':
