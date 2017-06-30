@@ -1,11 +1,14 @@
 #!/usr/bin/env python
 
-import galton.readout as ro
+import sys
+from galton.readout import GaltonBoardRead
 
 #import matplotlib.patches as patches
 
 
 # import matplotlib as mpl
+
+ro = GaltonBoardRead()
 
 while True:
 	print '(q)uit (r)eset (u)pdate'
@@ -18,9 +21,10 @@ while True:
 		continue
 
 	if 'u' in inp:
-		count = ro.read_from_counters()
+		count = ro.read_from_counters().split()[0]
+		count = 'a,%sz' % count
 		print count
 #		try:
-		with open('/var/www/galton_counts.txt') as f:
-				f.write(count)
+		with open('/var/www/html/galton_counts.txt','w') as f:
+				f.write(count + '\n')
 
