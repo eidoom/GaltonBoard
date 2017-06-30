@@ -1,6 +1,6 @@
 import serial
 
-class GaltonBoard():
+class GaltonBoardRead(object):
 
     def __init__(self, ACMx = 0):
         self.ser = serial.Serial("/dev/ttyACM{}".format(ACMx), baudrate = 57600,
@@ -38,7 +38,7 @@ class GaltonBoard():
 
 
 if __name__ == "__main__":
-    gb = GaltonBoard()
+    gb = GaltonBoardRead()
     while True:
         raw_input()
         print  "Total:"

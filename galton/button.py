@@ -1,6 +1,5 @@
 import sys
 import matplotlib.patches as patches
-import matplotlib.transforms as tf
 from . import box, preset_barriers
 import numpy as np
 
@@ -69,10 +68,6 @@ def key_press(event):
         sys.exit(0)
 
 def connect_buttons(axis, figure):
-
-
-#    rot_180 = tf.Affine2D().rotate_deg(180) + axis.transData
-#    button_reset_funnel.set_transform(rot_180)
 
     axis.add_patch(button_off)
     axis.add_patch(button_reset)

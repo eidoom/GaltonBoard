@@ -1,0 +1,26 @@
+#!/usr/bin/env python
+
+import galton.readout as ro
+
+#import matplotlib.patches as patches
+
+
+# import matplotlib as mpl
+
+while True:
+	print '(q)uit (r)eset (u)pdate'
+	inp = raw_input()
+	if 'q' in inp:
+		sys.exit(0)
+
+	if 'r' in inp:
+		ro.reset_counters()
+		continue
+
+	if 'u' in inp:
+		count = ro.read_from_counters()
+		print count
+#		try:
+		with open('/var/www/galton_counts.txt') as f:
+				f.write(count)
+
