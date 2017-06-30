@@ -5,7 +5,7 @@ class GaltonBoardRead(object):
     def __init__(self, ACMx = 0):
         self.ser = serial.Serial("/dev/ttyACM{}".format(ACMx), baudrate = 57600,
                                  bytesize = serial.EIGHTBITS, parity = serial.PARITY_NONE)
-        self.reset_counters()
+        #self.reset_counters()
 
     def reset_counters(self):
         self.ser.write("C")
