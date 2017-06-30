@@ -30,7 +30,7 @@ from galton.button import connect_buttons
 # set up initial state
 
 
-from galton import box, BOXSIZE
+from galton import box, BOXSIZE, read_board_data
 
 dt = 1. / 200 # 30fps
 
@@ -81,11 +81,17 @@ ax_h.set_xlim(left[0], right[-1])
 ax_h.set_ylim((0, 80.))
 ax_h.set_xticks([])
 
-if True:
+if False:
     import refdata as ref
     shift = (bins[5]-bins[4])/2
     for i in ref.funnel:
         ax_h.plot(np.array(bins[:-1])+shift,i,'k')
+
+shift = (bins[5]-bins[4])/2
+refdata_xs = np.array(bins[:-1])+shift
+refdata_xs[0] = refdata_xs[1] - 2*shift
+ys = read_board_data()
+refdata, = ax_h.plot(refdata_xs, ys, 'ok')
 
 ax = plt.subplot(gs[0],
         aspect='equal', 
@@ -138,7 +144,7 @@ def init():
 #    global box, rect
 #    particles.set_data([], [])
 #    rect.set_edgecolor('k')
-    return [particles, patch] + barr_plot
+    return [particles, patch, refdata] + barr_plot
 
 def animate(i):
     """perform animation step"""
@@ -147,6 +153,10 @@ def animate(i):
     if box.redraw:
         draw_barriers(box.barriers)
         box.redraw = False
+
+    if box.getdata:
+        refdata.set_data(refdata_xs, read_board_data())
+        box.getdata = False
 
     if not box.PAUSED:
         box.step(dt)
@@ -169,7 +179,7 @@ def animate(i):
         verts[1::5, 1] = top
         verts[2::5, 1] = top
 
-    return [particles, patch] + barr_plot
+    return [particles, patch, refdata] + barr_plot
 
 # need to hold the handle to avoid GC
 ani = animation.FuncAnimation(fig, animate, #frames=600,

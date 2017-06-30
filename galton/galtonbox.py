@@ -44,7 +44,8 @@ class ParticleBox(object):
         self.bounds = bounds
         self.G = G
 
-        self.redraw = False
+        self.redraw  = False
+        self.getdata = False
 
         self.endpos = []
 

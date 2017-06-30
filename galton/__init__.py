@@ -2,9 +2,13 @@ import numpy as np
 from barrier import preset_barriers
 del barrier
 
+from datareader import read_board_data, BrokenData
+del datareader
+
 BOXSIZE = 2.75
 
 from galtonbox import ParticleBox
+del galtonbox
 
 triangle_height = np.sqrt(0.75)
 fixed_grid = []
@@ -23,5 +27,3 @@ fixed_grid[:,1] -= 0.5
 box = ParticleBox(fixed_grid, preset_barriers['empty'], size=0.04)
 
 del fixed_grid
-
-del galtonbox
