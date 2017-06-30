@@ -32,7 +32,9 @@ from galton.button import connect_buttons
 
 from galton import box, BOXSIZE, read_board_data
 
-dt = 1. / 200 # 30fps
+dt = 1. / 100 # 30fps
+
+interval = 40
 
 NBINS = 13
 HISTOSIZE=0.9*BOXSIZE
@@ -183,7 +185,7 @@ def animate(i):
 
 # need to hold the handle to avoid GC
 ani = animation.FuncAnimation(fig, animate, #frames=600,
-                              interval=20, blit=True, init_func=init)
+                              interval=interval, blit=True, init_func=init)
 
 connect_buttons(ax, fig)
 
