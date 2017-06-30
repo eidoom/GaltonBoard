@@ -30,7 +30,7 @@ class ActionDict(dict):
         return do_nothing
 action = ActionDict()
 
-button_getdata = patches.Circle((0.25, 0.75), 0.2, picker=1, color='blue', transform=fig.transFigure)
+button_getdata = patches.Circle((0.25, 0.75), 0.2, picker=1, color='blue', transform=fig.transFigure, clip_on=False)
 def getdata():
     print 'get data'
     dataplot.set_data(range(13),[3]*13)
@@ -39,7 +39,7 @@ action[button_getdata] = getdata
 ax.add_patch(button_getdata)
 
 
-button_reset = patches.Circle((0.75, 0.75), 0.2, picker=1, color='orange', transform=fig.transFigure)
+button_reset = patches.Circle((0.75, 0.75), 0.2, picker=1, color='orange', transform=fig.transFigure, clip_on=False)
 def reset():
     print 'reset'
     dataplot.set_data(range(13),[0]*13)
@@ -58,7 +58,7 @@ textstyle ={
 plt.text(0.25, 0.75, 'update', **textstyle)
 plt.text(0.75, 0.75, 'reset',  **textstyle)
 
-
+plt.text(0.2,0.02, '%s'%([0]*13), color='k', fontsize=20, transform=fig.transFigure, clip_on=False)
 
 plt.show()
 
