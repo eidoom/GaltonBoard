@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 
-import sys
-#from galton.readout import GaltonBoardRead
+import sys, os
+from galton.readout import GaltonBoardRead
+ro = GaltonBoardRead()
 
 import matplotlib as mpl
-#mpl.rcParams['toolbar'] = 'None'
+mpl.rcParams['toolbar'] = 'None'
 
 import matplotlib.patches as patches
 import matplotlib.pyplot as plt
@@ -30,10 +31,21 @@ class ActionDict(dict):
         return do_nothing
 action = ActionDict()
 
+button_off = patches.Circle((0.1,0.1),0.1,picker=1, color='red', transform=fig.transFigure, clip_on=False)
+action[button_off] = lambda: sys.exit(0)
+ax.add_patch(button_off)
+
+count_text = plt.text(0.2,0.02, '%s'%([0]*13), color='k', fontsize=12, transform=fig.transFigure, clip_on=False)
+
 button_getdata = patches.Circle((0.25, 0.75), 0.2, picker=1, color='blue', transform=fig.transFigure, clip_on=False)
 def getdata():
     print 'get data'
-    dataplot.set_data(range(13),[3]*13)
+    count = ro.numeric_count()
+    dataplot.set_data(range(13),count)
+    count_str = ro.formatted_count()
+    count_text.set_text(count_str)
+    with open('/var/www/html/galton_counts.txt','w') as f:
+        f.write(count_str + '\n')
     plt.draw()
 action[button_getdata] = getdata
 ax.add_patch(button_getdata)
@@ -42,6 +54,7 @@ ax.add_patch(button_getdata)
 button_reset = patches.Circle((0.75, 0.75), 0.2, picker=1, color='orange', transform=fig.transFigure, clip_on=False)
 def reset():
     print 'reset'
+    ro.reset_counters()
     dataplot.set_data(range(13),[0]*13)
     plt.draw()
 action[button_reset] = reset
@@ -55,34 +68,21 @@ textstyle ={
     'transform' : fig.transFigure,
 }
 
-plt.text(0.25, 0.75, 'update', **textstyle)
-plt.text(0.75, 0.75, 'reset',  **textstyle)
+plt.text(0.17, 0.75, 'update', **textstyle)
+plt.text(0.7, 0.75, 'reset',  **textstyle)
 
-plt.text(0.2,0.02, '%s'%([0]*13), color='k', fontsize=20, transform=fig.transFigure, clip_on=False)
+
+# fullscreen if we're on the rpi3
+if os.uname()[4][:3] == 'arm':
+    mgr = plt.get_current_fig_manager()
+    mgr.full_screen_toggle()
+
 
 plt.show()
 
 exit(0)
 
 
-# import matplotlib as mpl
-
-ro = GaltonBoardRead()
-
-while True:
-    print '(q)uit (r)eset (u)pdate'
-    inp = raw_input()
-    if 'q' in inp:
-        sys.exit(0)
-
-    if 'r' in inp:
-        ro.reset_counters()
-        continue
-
-    if 'u' in inp:
-        count = ro.read_from_counters().split()[0]
-        count = 'a,%sz' % count
-        print count
 #       try:
-        with open('/var/www/html/galton_counts.txt','w') as f:
-                f.write(count + '\n')
+#        with open('/var/www/html/galton_counts.txt','w') as f:
+#                f.write(count + '\n')

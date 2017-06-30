@@ -36,6 +36,19 @@ class GaltonBoardRead(object):
         _, total = self.parse_count(counter_output)
         print total
 
+    def formatted_count(self):
+	count = self.read_from_counters().split()[0]
+        count = 'a,%sz' % count
+        return count
+#        with open('/var/www/html/galton_counts.txt','w') as f:
+#                f.write(count + '\n')
+
+    def numeric_count(self):
+	count = self.read_from_counters().split()[0]
+	count = count.split(',')[:-1]
+	count = map(int,count)
+	print count
+	return count
 
 if __name__ == "__main__":
     gb = GaltonBoardRead()
