@@ -1,11 +1,15 @@
 import serial
 
 class GaltonBoardRead(object):
-
+    """
+    Wrapper class to handle interactions with the ACM counter 
+    hardware on the galton board
+    """
     def __init__(self, ACMx = 0):
-        self.ser = serial.Serial("/dev/ttyACM{}".format(ACMx), baudrate = 57600,
-                                 bytesize = serial.EIGHTBITS, parity = serial.PARITY_NONE)
-        #self.reset_counters()
+        self.ser = serial.Serial("/dev/ttyACM{}".format(ACMx), 
+                                 baudrate = 57600,
+                                 bytesize = serial.EIGHTBITS, 
+                                 parity   = serial.PARITY_NONE)
 
     def reset_counters(self):
         self.ser.write("C")
@@ -15,9 +19,14 @@ class GaltonBoardRead(object):
         return self.ser.readline().strip()
 
     def parse_count(self, counter_output):
-        # counter_output comes in the form
-        # #,#,#,#,#,#,#,#,#,#,#,#,#,    #
-        # where the first 13 numbers are individual bin counts, and the last number is a total
+        """
+        Parse the output of the counter hardware.
+
+        The output comes in the form
+        #,#,#,#,#,#,#,#,#,#,#,#,#,    #
+        where the first 13 numbers are individual bin counts 
+        and the last number is a total
+        """
         counts, total = counter_output.split()
         # Remove the trailing comma, then split into individual bins
         counts = counts[:-1].split(",")
@@ -37,22 +46,30 @@ class GaltonBoardRead(object):
         print total
 
     def formatted_count(self):
-	count = self.read_from_counters().split()[0]
+        """
+        Return a formatted count, parseable by the galton simulators.
+
+        The format is comma-separated integers, preceded by 'a' and followed by 'z',
+        to be able to detect partial transfers
+        """
+        # strip off the total
+        count = self.read_from_counters().split()[0]
         count = 'a,%sz' % count
         return count
-#        with open('/var/www/html/galton_counts.txt','w') as f:
-#                f.write(count + '\n')
 
     def numeric_count(self):
-	count = self.read_from_counters().split()[0]
-	count = count.split(',')[:-1]
-	count = map(int,count)
-	print count
-	return count
+        """Return a list of integer bucket counts"""
+        # strip the total figure
+        count = self.read_from_counters().split()[0]
+        # remove blank after trailing comma
+        count = count.split(',')[:-1]
+        count = map(int,count)
+        return count
 
 if __name__ == "__main__":
     gb = GaltonBoardRead()
     while True:
+        print 'Waiting for <enter>',
         raw_input()
         print  "Total:"
         gb.print_total()

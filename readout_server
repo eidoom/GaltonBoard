@@ -1,9 +1,21 @@
 #!/usr/bin/env python
 
-import sys, os
+"""
+Graphical interface to control the Galton board hardware 
+and update the counters file for the web server
+"""
+
+# Counters file location
+COUNTERS_FILE = '/var/www/html/galton_counts.txt'
+
+# Number of counters
+N = 13
 
 from galton.readout import GaltonBoardRead
 galton = GaltonBoardRead()
+
+import sys
+from os import uname
 
 import matplotlib as mpl
 mpl.rcParams['toolbar'] = 'None'
@@ -11,30 +23,31 @@ mpl.rcParams['toolbar'] = 'None'
 import matplotlib.patches as patches
 import matplotlib.pyplot as plt
 
+#### Initial plot configuration ###
+# matplotlib figure and axis are global objects
 
-SERVER_FILE = '/var/www/html/galton_counts.txt'
-
-
-#### Initial configuration
-
+# physical size of RPi touchscreen
 fig = plt.figure(figsize=(3.4,6.1))
 ax = plt.subplot()
 
 def server_state():
-    with open(SERVER_FILE, 'r') as f:
+    """Provide the raw contents of the counters file"""
+    with open(COUNTERS_FILE, 'r') as f:
         state = f.read()
     return state
 
 def state2int(state):
+    """Convert counters string to integers"""
     res = state.split(',')[1:-1]
     res = map(int,res)
     return res
 
 def pretty_state(state):
+    """Prettier string for presentation"""
     return 'Server: %s' % state
 
 init_state = server_state()
-dataplot,  = plt.plot(state2int(init_state),'ok')
+data_plot,  = plt.plot(range(N),state2int(init_state),'ok')
 count_text = plt.text(0.2,0.02, 
                       pretty_state(init_state), 
                       color='k', 
@@ -46,22 +59,25 @@ count_text = plt.text(0.2,0.02,
 #####################################
 #### Main functionality is here
 #####################################
-def get_data():
+def update_data():
     """Get data string from the machine, update plot and server"""
+    # read new count from hardware
     count = galton.numeric_count()
-    dataplot.set_data(range(13),count)
+    # update server file
+    count_str = galton.formatted_count()
+    with open(COUNTERS_FILE,'w') as f:
+        f.write(count_str + '\n')
+    # upate plot
+    data_plot.set_data(range(N),count)
     ax.relim()
     ax.autoscale_view()
-    count_str = galton.formatted_count()
-    count_text.set_text(count_str)
-    with open(SERVER_FILE,'w') as f:
-        f.write(count_str + '\n')
+    count_text.set_text(pretty_state(server_state()))
     plt.draw()
 
 def reset_data():
     """Reset machine counter to 0, update plot and server"""
     galton.reset_counters()
-    get_data()
+    update_data()
 
 #### Event handlers
 
@@ -79,20 +95,27 @@ class ActionDict(dict):
         return do_nothing
 action = ActionDict()
 
+def connect(patch, fn):
+    action[patch] = fn
+    ax.add_patch(patch)
+
+common_config = {
+    'picker' : 1,
+    'transform' : fig.transFigure,
+    'clip_on' : False,
+}
+
 # Off switch
-button_off = patches.Circle((0.1,0.1),0.1,picker=1, color='red', transform=fig.transFigure, clip_on=False)
-action[button_off] = lambda: sys.exit(0)
-ax.add_patch(button_off)
+button_off = patches.Circle((0.1,0.1),   0.1, color='red', **common_config)
+connect(button_off, lambda: sys.exit(0))
 
 # Update switch
-button_getdata = patches.Circle((0.25, 0.75), 0.2, picker=1, color='blue', transform=fig.transFigure, clip_on=False)
-action[button_getdata] = get_data
-ax.add_patch(button_getdata)
+button_update = patches.Circle((0.25, 0.75), 0.2, color='blue', **common_config)
+connect(button_update, update_data)
 
 # Reset switch
-button_reset = patches.Circle((0.75, 0.75), 0.2, picker=1, color='orange', transform=fig.transFigure, clip_on=False)
-action[button_reset] = reset_data
-ax.add_patch(button_reset)
+button_reset = patches.Circle((0.75, 0.75), 0.2, color='orange', **common_config)
+connect(button_reset, reset_data)
 
 fig.canvas.mpl_connect('pick_event', lambda ev: action[ev.artist]() )
 
@@ -109,8 +132,8 @@ plt.text(0.17, 0.75, 'update', **textstyle)
 plt.text(0.7, 0.75, 'reset',  **textstyle)
 
 
-#### fullscreen if we're on the rpi3
-if os.uname()[4][:3] == 'arm':
+#### set fullscreen if we're on the rpi3
+if uname()[4][:3] == 'arm':
     mgr = plt.get_current_fig_manager()
     mgr.full_screen_toggle()
 
