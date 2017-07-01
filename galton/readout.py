@@ -5,11 +5,18 @@ class FakeSerial(object):
     Fake data source to use if serial connection to
     the hardware counter is not available.
     """
-    def __init__(self, *args, **kwargs): pass
-    def write(self, *args, **kwargs): pass
+    def __init__(self, *args, **kwargs):
+        self.data = [1]*13
+    def write(self, msg, *args, **kwargs):
+        """Increment fake data each time we're called"""
+        if msg == 'C':
+            self.data = [0]*13
+        else:
+            self.data = [self.data[0]+1]*13
     def readline(self, *args, **kwargs):
-        """Always return same fake data"""
-        return '5,'*13 + '    78\n'
+        """Return current fake data"""
+        data_str = ','.join(map(str,self.data))
+        return data_str + ',    %s'%sum(self.data)
 
 try:
     from serial import Serial, EIGHTBITS, PARITY_NONE
