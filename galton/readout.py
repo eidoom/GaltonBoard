@@ -1,4 +1,23 @@
-import serial
+from sys import stderr
+
+class FakeSerial(object):
+    """
+    Fake data source to use if serial connection to
+    the hardware counter is not available.
+    """
+    def __init__(self, *args, **kwargs): pass
+    def write(self, *args, **kwargs): pass
+    def readline(self, *args, **kwargs):
+        """Always return same fake data"""
+        return '5,'*13 + '    78\n'
+
+try:
+    from serial import Serial, EIGHTBITS, PARITY_NONE
+except:
+    # use a fake serial data source
+    stderr.write('Serial module not found. Using fake data!\n')
+    EIGHTBITS, PARITY_NONE = None, None
+    Serial = FakeSerial
 
 class GaltonBoardRead(object):
     """
@@ -6,10 +25,15 @@ class GaltonBoardRead(object):
     hardware on the galton board
     """
     def __init__(self, ACMx = 0):
-        self.ser = serial.Serial("/dev/ttyACM{}".format(ACMx), 
-                                 baudrate = 57600,
-                                 bytesize = serial.EIGHTBITS, 
-                                 parity   = serial.PARITY_NONE)
+        tty="/dev/ttyACM{}".format(ACMx)
+        try:
+            self.ser = Serial(tty, 
+                              baudrate = 57600,
+                              bytesize = EIGHTBITS, 
+                              parity   = PARITY_NONE)
+        except:
+            stderr.write('Serial connection to %s failed. Using fake data!\n'%tty)
+            self.ser = FakeSerial()
 
     def reset_counters(self):
         self.ser.write("C")

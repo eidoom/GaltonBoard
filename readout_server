@@ -1,12 +1,18 @@
 #!/usr/bin/env python
-
 """
 Graphical interface to control the Galton board hardware 
 and update the counters file for the web server
 """
 
+import os
+
 # Counters file location
 COUNTERS_FILE = '/var/www/html/galton_counts.txt'
+
+if not os.access(COUNTERS_FILE, os.W_OK):
+    COUNTERS_FILE = '/tmp/galton_counts.txt'
+    with open(COUNTERS_FILE,'w') as f:
+        f.write('a,0,0,0,0,0,0,0,0,0,0,0,0,0,x\n')
 
 # Number of counters
 N = 13
