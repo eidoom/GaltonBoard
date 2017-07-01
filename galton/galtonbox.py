@@ -2,7 +2,8 @@ from . import BOXSIZE
 import numpy as np
 from scipy.spatial.distance import cdist # pdist, squareform, cdist
 
-
+# Based on 
+#
 # Animation of Elastic collisions with Gravity
 # 
 # author: Jake Vanderplas
@@ -10,18 +11,27 @@ from scipy.spatial.distance import cdist # pdist, squareform, cdist
 # website: http://jakevdp.github.com
 # license: BSD
 # Please feel free to use and modify this, but keep the above information. Thanks!
+#
+# Modifications by D.Grellscheid, 2017. 
 
 NN = 300
 
 class ParticleBox(object):
-    """Orbits class
-    
-    init_state is an [N x 4] array, where N is the number of particles:
-       [[x1, y1, vx1, vy1],
-        [x2, y2, vx2, vy2],
-        ...               ]
+    """
+    Simulate colliding particles in a box, bouncing off fixed pegs and barriers
+
+    fixed grid is an [N x 2] array, where N is the number of pegs:
+       [[x1, y1],
+        [x2, y2],
+        ...     ]
+
+    barriers is a list of galton.Barrier objects
 
     bounds is the size of the box: [xmin, xmax, ymin, ymax]
+
+    size of the points
+
+    M, the mass of all points
     """
     def __init__(self,
                  fixed_grid = [[-0.9, 0.9],
@@ -29,20 +39,20 @@ class ParticleBox(object):
                  barriers = None,
                  bounds = [-BOXSIZE, BOXSIZE, -BOXSIZE, BOXSIZE],
                  size = 0.05,
-                 M = 0.99,
-                 G = 9.8):
+                 M = 0.99):
 
         self.fixed_grid = np.asarray(fixed_grid, dtype=float)
 
         self.barriers = barriers
 
+        # get initial state
         self.reset()
 
-        self.M          = np.full(self.state.shape[0], M, dtype=float)
+        self.M = np.full(self.state.shape[0], M, dtype=float)
         self.size = size
         self.time_elapsed = 0
         self.bounds = bounds
-        self.G = G
+        self.GRAVITY = 9.8
 
         self.redraw  = False
         self.getdata = False
@@ -51,27 +61,30 @@ class ParticleBox(object):
 
         self.PAIRWISE = False
         self.FIXEDGRID = True
-        self.GRAVITY = True
-        self.FRICTION = True
 
+        self.FRICTION = 0.99
         self.DAMPING = 1
 
 
     def reset(self):
-        #np.random.seed(0)
+        """
+        Put simulation back into original state.
+        
+        Uses a random initial cloud, hardcoded to the current galton layout.
+        """
         state = -0.5 + np.random.random((NN, 4))
         state[:, :2] *= 0.05
         state[:, 1] += BOXSIZE - 1.4
-        ## zero initial velocity
-        #state[:, 2:] = 0.0
 
         self.state  = state
+        # points that have reached the end get this set to True
         self.dead   = np.full(self.state.shape[0], False, dtype=bool)
+        # overall simulation state, should be True if no active objects are left
         self.PAUSED  = False
 
 
     def step(self, dt):
-        """step once by dt seconds"""
+        """Advance simulation by dt seconds"""
         self.time_elapsed += dt
         
         # update positions
@@ -165,12 +178,13 @@ class ParticleBox(object):
               
 
 
-        # check for crossing boundary
+        # check for crossing outer boundary
         crossed_x1 = (self.state[:, 0] < self.bounds[0] + self.size)
         crossed_x2 = (self.state[:, 0] > self.bounds[1] - self.size)
         crossed_y1 = (self.state[:, 1] < self.bounds[2] + self.size)
         crossed_y2 = (self.state[:, 1] > self.bounds[3] - self.size)
 
+        # reset position away from boundary
         self.state[crossed_x1, 0] = self.bounds[0] + self.size
         self.state[crossed_x2, 0] = self.bounds[1] - self.size
 
@@ -181,19 +195,21 @@ class ParticleBox(object):
         self.state[crossed_x1 | crossed_x2, 2] *= -1
         self.state[crossed_y1 | crossed_y2, 3] *= -1
 
-        self.state[crossed_y1, 2:4] = 0 
+        # stop movement after crossing bottom boundary
+        self.state[crossed_y1, 2:4] = 0
         self.dead[crossed_y1] = True
 
         # add gravity
-        if self.GRAVITY:
-            self.state[:, 3] -= self.M * self.G * dt
+        self.state[:, 3] -= self.M * self.GRAVITY * dt
 
-        if self.FRICTION:
-            self.state[:, 2:] *= 0.99
+        # and friction
+        self.state[:, 2:] *= self.FRICTION
 
     def done(self):
+        """Check if no more live objects are left"""
         return np.all(self.dead)
 
     def registered_pos(self):
+        """Return list of final x positions"""
         return self.state[self.dead, 0]
 
