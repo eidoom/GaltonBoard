@@ -30,7 +30,7 @@ from galton.button import connect_buttons
 # set up initial state
 
 
-from galton import box, BOXSIZE, read_board_data
+from galton import box, BOXSIZE, read_board_data, BrokenData
 
 dt = 1. / 100 # 30fps
 
@@ -92,8 +92,11 @@ if False:
 shift = (bins[5]-bins[4])/2
 refdata_xs = np.array(bins[:-1])+shift
 refdata_xs[0] = refdata_xs[1] - 2*shift
-ys = read_board_data()
-refdata, = ax_h.plot(refdata_xs, ys, 'ok')
+try:
+    ys = read_board_data()
+    refdata, = ax_h.plot(refdata_xs, ys, 'ok')
+except BrokenData:
+    refdata, = ax_h.plot([], [], 'ok')
 
 ax = plt.subplot(gs[0],
         aspect='equal', 
@@ -157,7 +160,11 @@ def animate(i):
         box.redraw = False
 
     if box.getdata:
-        refdata.set_data(refdata_xs, read_board_data())
+        try:
+            ys = read_board_data()
+            refdata.set_data(refdata_xs, ys)
+        except BrokenData:
+            pass
         box.getdata = False
 
     if not box.PAUSED:
@@ -183,7 +190,7 @@ def animate(i):
 
     return [particles, patch, refdata] + barr_plot
 
-# need to hold the handle to avoid GC
+# need to hold the handle, even if not used below, to avoid GC
 ani = animation.FuncAnimation(fig, animate, #frames=600,
                               interval=interval, blit=True, init_func=init)
 

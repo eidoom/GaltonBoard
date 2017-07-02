@@ -1,9 +1,13 @@
+"""
+Define all interactive buttons and their actions
+"""
 import sys
 import matplotlib.patches as patches
 from . import box, preset_barriers
 import numpy as np
 
 class ActionDict(dict):
+    """Map from pickable patch to function. Default does nothing."""
     def __missing__(self, key):
         def do_nothing(): pass
         return do_nothing
@@ -68,13 +72,11 @@ action[button_reset_right] = reset_right
 
 
 def key_press(event):
-    print('press', event.key)
-    sys.stdout.flush()
     if event.key == 'q':
         sys.exit(0)
 
 def connect_buttons(axis, figure):
-
+    """Display buttons on the canvas and connect up functionality"""
     axis.add_patch(button_off)
     axis.add_patch(button_getdata)
     axis.add_patch(button_reset)

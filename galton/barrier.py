@@ -1,6 +1,7 @@
 import numpy as np
 
 class Barrier(object):
+    """A barrier that balls can interact with"""
     def __init__(self, min_x, max_x, fn):
         self.min = min_x
         self.max = max_x
@@ -20,7 +21,9 @@ class Barrier(object):
         )
 
     def norm(self, x):
-        m = (self.fun(x+0.001) - self.fun(x-0.001)) / 0.002
+        """Crude approximation to the normal vector. Won't work at edges"""
+        h = 0.001
+        m = (self.fun(x+h) - self.fun(x-h)) / (2*h)
         return np.array([-m,1])
 
     @property
@@ -31,6 +34,7 @@ class Barrier(object):
     def ys(self):
         return self.fun(self.xs)
 
+# common slope of barriers
 m = 1.5
 
 L_WALL = Barrier(-2.5, -0.2, lambda x: m*x+1.67)
@@ -38,14 +42,14 @@ R_WALL = Barrier(0.2, 2.5 , lambda x: -m*x+1.67)
 
 preset_barriers = {
 
-'empty' : # ok
+'empty' :
 [
 L_WALL,
 R_WALL,
 ],
 
 
-'triangle' : # ok
+'triangle' :
 [
 L_WALL,
 Barrier(-0.66, 0.66, lambda x: -1.5*np.abs(x)-0.34),

@@ -5,6 +5,12 @@ class BrokenData(Exception):
     pass
 
 def read_board_data():
+    """
+    Read experimental data off the server.
+
+    URL currently hard coded to the Royal Society exhibition setup
+    """
+    
     url = 'http://10.10.10.10/galton_counts.txt'
 
     try:
@@ -12,7 +18,7 @@ def read_board_data():
         counts = conn.readline()
         conn.close()
     except:
-        return np.random.random_integers(0,40,13) # [0]*13
+        raise BrokenData()
 
     counts = counts.rstrip().split(',')
     if counts[0] != 'a' or counts[-1] != 'z':
