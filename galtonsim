@@ -156,7 +156,7 @@ def animate(i):
         draw_barriers(box.barriers)
         box.redraw = False
 
-    if i % 80 == 0:
+    if i % 150 == 0:
         try:
             ys = read_board_data()
             refdata.set_data(refdata_xs, ys)
