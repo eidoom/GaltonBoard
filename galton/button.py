@@ -16,12 +16,12 @@ action = ActionDict()
 
 
 
-button_off   = patches.Circle((2.2, 2.2), 0.2, picker=1, color='orange')
+button_off   = patches.Circle((2.2, 2.7), 0.4, picker=1, color='orange')
 action[button_off] = lambda: sys.exit(0)
 
 
 
-button_reset = patches.Wedge((-2.2, 2.2), 0.2, 0, 360, width=0.05, picker=1)
+button_reset = patches.Wedge((0.0, 2.7), 0.4, 0, 360, width=0.05, picker=1)
 def reset():
     box.reset()
     box.barriers = preset_barriers['empty']
@@ -30,7 +30,7 @@ action[button_reset] = reset
 
 
 
-button_reset_triangle = patches.RegularPolygon((-1.5, 2.15), 3, 0.25, picker=1)
+button_reset_triangle = patches.RegularPolygon((-2.2, 2.45), 3, 0.5, picker=1)
 def reset_triangle():
     box.reset()
     box.barriers = preset_barriers['triangle']
@@ -38,7 +38,7 @@ def reset_triangle():
 action[button_reset_triangle] = reset_triangle
 
 
-button_reset_funnel = patches.RegularPolygon((-1.0, 2.25), 3, 0.25, orientation = np.pi, picker=1)
+button_reset_funnel = patches.RegularPolygon((-1.1, 2.65), 3, 0.5, orientation = np.pi, picker=1)
 def reset_funnel():
     box.reset()
     box.barriers = preset_barriers['funnel']
@@ -48,7 +48,7 @@ action[button_reset_funnel] = reset_funnel
 
 
 
-button_reset_left = patches.Arrow(0.0, 2.3, -0.3, -0.3, 0.5, picker=1)
+button_reset_left = patches.Arrow(1.25, 2.8, -0.6, -0.6, 1.0, picker=1)
 def reset_left():
     box.reset()
     box.barriers = preset_barriers['left']
@@ -56,7 +56,7 @@ def reset_left():
 action[button_reset_left] = reset_left
 
 
-button_reset_right = patches.Arrow(0.5, 2.3, 0.3, -0.3, 0.5, picker=1)
+button_reset_right = patches.Arrow(2.0, 2.8, 0.6, -0.6, 1.0, picker=1)
 def reset_right():
     box.reset()
     box.barriers = preset_barriers['right']

@@ -45,19 +45,19 @@ HISTOSIZE=0.9*BOXSIZE
 # set up figure and animation
 fig = plt.figure(figsize=(3.4,6.1))
 
-gs = gridspec.GridSpec(2, 1, height_ratios=[4, 1], wspace=0.0, hspace=0.0)
+gs = gridspec.GridSpec(2, 1, height_ratios=[5, 3], wspace=0.0, hspace=0.0)
 
 ax_h = plt.subplot(gs[1])
 
-hrange=(-3,3)
 hbins=np.linspace(-HISTOSIZE,HISTOSIZE,NBINS+1)
 hbins[0], hbins[-1] = -5,5
 
-n, bins = np.histogram([], bins=hbins)#, range=hrange)
+n, bins = np.histogram([], bins=hbins)
 
-#n, bins = np.histogram([], bins=NBINS, range=(-HISTOSIZE,HISTOSIZE))
 left = np.array(bins[:-1])
+left[0] = left[1] - (left[2] - left[1])
 right = np.array(bins[1:])
+right[-1] = right[-2] + (right[-2] - right[-3])
 bottom = np.zeros(len(left))
 top = bottom + n
 nrects = len(left)
@@ -85,11 +85,6 @@ ax_h.set_xlim(left[0], right[-1])
 ax_h.set_ylim((0, 80.))
 ax_h.set_xticks([])
 
-if False:
-    import refdata as ref
-    shift = (bins[5]-bins[4])/2
-    for i in ref.funnel:
-        ax_h.plot(np.array(bins[:-1])+shift,i,'k')
 
 shift = (bins[5]-bins[4])/2
 refdata_xs = np.array(bins[:-1])+shift
@@ -181,10 +176,9 @@ def animate(i):
 
         data = box.registered_pos()
 
-        hrange=(-3,3)
         hbins=np.linspace(-HISTOSIZE,HISTOSIZE,NBINS+1)
         hbins[0], hbins[-1] = -5,5
-        n, bins = np.histogram(data, bins=hbins)#, range=hrange)
+        n, bins = np.histogram(data, bins=hbins)
         top = bottom + n
         verts[1::5, 1] = top
         verts[2::5, 1] = top
