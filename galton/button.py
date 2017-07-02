@@ -20,12 +20,6 @@ button_off   = patches.Circle((2.2, 2.2), 0.2, picker=1, color='orange')
 action[button_off] = lambda: sys.exit(0)
 
 
-button_getdata = patches.Circle((2.2, 1.7), 0.2, picker=1, color='orange')
-def getdata():
-    box.getdata = True
-action[button_getdata] = getdata
-
-
 
 button_reset = patches.Wedge((-2.2, 2.2), 0.2, 0, 360, width=0.05, picker=1)
 def reset():
@@ -77,8 +71,7 @@ def key_press(event):
 
 def connect_buttons(axis, figure):
     """Display buttons on the canvas and connect up functionality"""
-    axis.add_patch(button_off)
-    axis.add_patch(button_getdata)
+    #axis.add_patch(button_off)
     axis.add_patch(button_reset)
     axis.add_patch(button_reset_triangle)
     axis.add_patch(button_reset_funnel)

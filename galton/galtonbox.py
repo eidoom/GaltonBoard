@@ -55,7 +55,6 @@ class ParticleBox(object):
         self.GRAVITY = 9.8
 
         self.redraw  = False
-        self.getdata = False
 
         self.endpos = []
 
