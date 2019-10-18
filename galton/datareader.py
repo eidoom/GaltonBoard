@@ -1,4 +1,4 @@
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 import numpy as np
 
 class BrokenData(Exception):
@@ -14,7 +14,7 @@ def read_board_data():
     url = 'http://10.10.10.10/galton_counts.txt'
 
     try:
-        conn = urllib2.urlopen(url, timeout=2)
+        conn = urllib.request.urlopen(url, timeout=2)
         counts = conn.readline()
         conn.close()
     except:
@@ -26,7 +26,7 @@ def read_board_data():
     counts = counts[1:-1]
 
     try:
-        counts = map(int,counts)
+        counts = list(map(int,counts))
     except ValueError:
         raise BrokenData()
 
@@ -34,4 +34,4 @@ def read_board_data():
 
 if __name__ == '__main__':
     data = read_board_data()
-    print data
+    print(data)

@@ -63,18 +63,18 @@ class GaltonBoardRead(object):
         counts = counts[:-1].split(",")
 
         total = int(total)
-        counts = map(int, counts)
+        counts = list(map(int, counts))
         return counts, total
 
     def print_bins(self):
         counter_output = self.read_from_counters()
         counts, _ = self.parse_count(counter_output)
-        print ",".join(map(str, counts))
+        print(",".join(map(str, counts)))
 
     def print_total(self):
         counter_output = self.read_from_counters()
         _, total = self.parse_count(counter_output)
-        print total
+        print(total)
 
     def formatted_count(self):
         """
@@ -94,16 +94,16 @@ class GaltonBoardRead(object):
         count = self.read_from_counters().split()[0]
         # remove blank after trailing comma
         count = count.split(',')[:-1]
-        count = map(int,count)
+        count = list(map(int,count))
         return count
 
 if __name__ == "__main__":
     gb = GaltonBoardRead()
     while True:
-        print 'Waiting for <enter>',
-        raw_input()
-        print  "Total:"
+        print('Waiting for <enter>')
+        input()
+        print("Total:")
         gb.print_total()
-        print "Bins:"
+        print("Bins:")
         gb.print_bins()
         gb.reset_counters()

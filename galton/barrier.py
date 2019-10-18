@@ -91,6 +91,6 @@ R_WALL,
 if __name__ == '__main__':
     barrier = Barrier(-5, 5, lambda x: -x)
     x = np.random.uniform(-1,1,size=(20,2))
-    print x
-    print barrier.fun(x[:,0])
+    print(x)
+    print(barrier.fun(x[:,0]))
 

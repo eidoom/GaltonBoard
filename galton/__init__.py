@@ -1,13 +1,13 @@
 import numpy as np
-from barrier import preset_barriers
+from .barrier import preset_barriers
 del barrier
 
-from datareader import read_board_data, BrokenData
+from .datareader import read_board_data, BrokenData
 del datareader
 
 BOXSIZE = 2.75
 
-from galtonbox import ParticleBox
+from .galtonbox import ParticleBox
 del galtonbox
 
 triangle_height = np.sqrt(0.75)
