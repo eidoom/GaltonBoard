@@ -1,0 +1,4016 @@
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.file	"VFD_1.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.section	.text.VFD_1_AMuxDmaInit,"ax",%progbits
+  19              		.align	2
+  20              		.thumb
+  21              		.thumb_func
+  22              		.type	VFD_1_AMuxDmaInit, %function
+  23              	VFD_1_AMuxDmaInit:
+  24              	.LFB7:
+  25              		.file 1 "Generated_Source\\PSoC5\\VFD_1.c"
+   1:Generated_Source\PSoC5/VFD_1.c **** /*******************************************************************************
+   2:Generated_Source\PSoC5/VFD_1.c **** * File Name: VFD_1.c
+   3:Generated_Source\PSoC5/VFD_1.c **** * Version 3.0
+   4:Generated_Source\PSoC5/VFD_1.c **** *
+   5:Generated_Source\PSoC5/VFD_1.c **** * Description:
+   6:Generated_Source\PSoC5/VFD_1.c **** *  Contains the function prototypes, constants and register definition
+   7:Generated_Source\PSoC5/VFD_1.c **** *  of the Voltage Fault Detector Component.
+   8:Generated_Source\PSoC5/VFD_1.c **** *
+   9:Generated_Source\PSoC5/VFD_1.c **** *
+  10:Generated_Source\PSoC5/VFD_1.c **** ********************************************************************************
+  11:Generated_Source\PSoC5/VFD_1.c **** * Copyright 2012-2015, Cypress Semiconductor Corporation.  All rights reserved.
+  12:Generated_Source\PSoC5/VFD_1.c **** * You may use this file only in accordance with the license, terms, conditions, 
+  13:Generated_Source\PSoC5/VFD_1.c **** * disclaimers, and limitations in the end user license agreement accompanying 
+  14:Generated_Source\PSoC5/VFD_1.c **** * the software package with which this file was provided.
+  15:Generated_Source\PSoC5/VFD_1.c **** *******************************************************************************/
+  16:Generated_Source\PSoC5/VFD_1.c **** 
+  17:Generated_Source\PSoC5/VFD_1.c **** #include "VFD_1.h"
+  18:Generated_Source\PSoC5/VFD_1.c **** #include "VFD_1_MuxDMA_dma.h"
+  19:Generated_Source\PSoC5/VFD_1.c **** #include "VFD_1_FiltRdDMA_dma.h"
+  20:Generated_Source\PSoC5/VFD_1.c **** #include "VFD_1_FiltWrDMA_dma.h"
+  21:Generated_Source\PSoC5/VFD_1.c **** 
+  22:Generated_Source\PSoC5/VFD_1.c **** #if (VFD_1_ENABLE_OV_DETECT)
+  23:Generated_Source\PSoC5/VFD_1.c **** #include "VFD_1_OV.h"
+  24:Generated_Source\PSoC5/VFD_1.c **** #endif /* VFD_1_ENABLE_OV_DETECT */
+  25:Generated_Source\PSoC5/VFD_1.c **** #if (VFD_1_ENABLE_UV_DETECT)
+  26:Generated_Source\PSoC5/VFD_1.c **** #include "VFD_1_UV.h"
+  27:Generated_Source\PSoC5/VFD_1.c **** #endif /* VFD_1_ENABLE_UV_DETECT */
+  28:Generated_Source\PSoC5/VFD_1.c **** 
+  29:Generated_Source\PSoC5/VFD_1.c **** 
+  30:Generated_Source\PSoC5/VFD_1.c **** /***************************************
+  31:Generated_Source\PSoC5/VFD_1.c **** *   Internal definitions
+  32:Generated_Source\PSoC5/VFD_1.c **** ***************************************/
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 2
+
+
+  33:Generated_Source\PSoC5/VFD_1.c **** 
+  34:Generated_Source\PSoC5/VFD_1.c **** #define AMUX_DMA_DATA_SIZE      1u
+  35:Generated_Source\PSoC5/VFD_1.c **** #define AMUX_DMA_DATA_NR        1u
+  36:Generated_Source\PSoC5/VFD_1.c **** 
+  37:Generated_Source\PSoC5/VFD_1.c **** /* Glitch filter DMA data element size depends on the Compare type parameter.
+  38:Generated_Source\PSoC5/VFD_1.c **** * When the parameter is set to UV, the filtering is only applied to PGOOD.
+  39:Generated_Source\PSoC5/VFD_1.c **** * Thus the data element size is 1 byte.
+  40:Generated_Source\PSoC5/VFD_1.c **** * When OV is enabled, a fault type is also distinguished. This requires
+  41:Generated_Source\PSoC5/VFD_1.c **** * a filtering to be additionally applied to OV fault condition. Both filters
+  42:Generated_Source\PSoC5/VFD_1.c **** * are combined to use 16-bit interface for DMA access. 
+  43:Generated_Source\PSoC5/VFD_1.c **** */
+  44:Generated_Source\PSoC5/VFD_1.c **** #define FILT_DMA_DATA_SIZE      (VFD_1_ENABLE_OV_DETECT ? 2u : 1u)
+  45:Generated_Source\PSoC5/VFD_1.c **** 
+  46:Generated_Source\PSoC5/VFD_1.c **** /* Compiler endiannes compatibility defines */
+  47:Generated_Source\PSoC5/VFD_1.c **** #if (CY_PSOC3)
+  48:Generated_Source\PSoC5/VFD_1.c ****     #define STS_B1      3
+  49:Generated_Source\PSoC5/VFD_1.c ****     #define STS_B2      2
+  50:Generated_Source\PSoC5/VFD_1.c ****     #define STS_B3      1
+  51:Generated_Source\PSoC5/VFD_1.c ****     #define STS_B4      0
+  52:Generated_Source\PSoC5/VFD_1.c **** #else
+  53:Generated_Source\PSoC5/VFD_1.c ****     #define STS_B1      0
+  54:Generated_Source\PSoC5/VFD_1.c ****     #define STS_B2      1
+  55:Generated_Source\PSoC5/VFD_1.c ****     #define STS_B3      2
+  56:Generated_Source\PSoC5/VFD_1.c ****     #define STS_B4      3
+  57:Generated_Source\PSoC5/VFD_1.c **** #endif
+  58:Generated_Source\PSoC5/VFD_1.c **** 
+  59:Generated_Source\PSoC5/VFD_1.c **** #define NUM_STS_BYTES   4
+  60:Generated_Source\PSoC5/VFD_1.c **** 
+  61:Generated_Source\PSoC5/VFD_1.c **** 
+  62:Generated_Source\PSoC5/VFD_1.c **** /***************************************
+  63:Generated_Source\PSoC5/VFD_1.c **** *   Internal type definitions
+  64:Generated_Source\PSoC5/VFD_1.c **** ***************************************/
+  65:Generated_Source\PSoC5/VFD_1.c **** 
+  66:Generated_Source\PSoC5/VFD_1.c **** typedef union
+  67:Generated_Source\PSoC5/VFD_1.c **** {
+  68:Generated_Source\PSoC5/VFD_1.c **** 	uint32	word;
+  69:Generated_Source\PSoC5/VFD_1.c **** 	uint8	bytes[NUM_STS_BYTES];
+  70:Generated_Source\PSoC5/VFD_1.c **** } FAULT_STS;
+  71:Generated_Source\PSoC5/VFD_1.c **** 
+  72:Generated_Source\PSoC5/VFD_1.c **** 
+  73:Generated_Source\PSoC5/VFD_1.c **** /***************************************
+  74:Generated_Source\PSoC5/VFD_1.c **** *   Internal component variables
+  75:Generated_Source\PSoC5/VFD_1.c **** ***************************************/
+  76:Generated_Source\PSoC5/VFD_1.c **** 
+  77:Generated_Source\PSoC5/VFD_1.c **** static  uint8   amuxDmaCh;
+  78:Generated_Source\PSoC5/VFD_1.c **** static  uint8   amuxDmaTd;
+  79:Generated_Source\PSoC5/VFD_1.c **** 
+  80:Generated_Source\PSoC5/VFD_1.c **** static  uint8   filtRdDmaCh;
+  81:Generated_Source\PSoC5/VFD_1.c **** static  uint8   filtWrDmaCh;
+  82:Generated_Source\PSoC5/VFD_1.c **** static  uint16  filtCount[VFD_1_NUMBER_OF_VOLTAGES];
+  83:Generated_Source\PSoC5/VFD_1.c **** 
+  84:Generated_Source\PSoC5/VFD_1.c **** 
+  85:Generated_Source\PSoC5/VFD_1.c **** /***************************************
+  86:Generated_Source\PSoC5/VFD_1.c **** *    Internal component functions
+  87:Generated_Source\PSoC5/VFD_1.c **** ***************************************/
+  88:Generated_Source\PSoC5/VFD_1.c **** 
+  89:Generated_Source\PSoC5/VFD_1.c **** static void VFD_1_AMuxDmaInit(void) ;
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 3
+
+
+  90:Generated_Source\PSoC5/VFD_1.c **** static void VFD_1_GlitchFilterDmaInit(void) ;
+  91:Generated_Source\PSoC5/VFD_1.c **** 
+  92:Generated_Source\PSoC5/VFD_1.c **** 
+  93:Generated_Source\PSoC5/VFD_1.c **** /***************************************
+  94:Generated_Source\PSoC5/VFD_1.c **** *   External variables
+  95:Generated_Source\PSoC5/VFD_1.c **** ***************************************/
+  96:Generated_Source\PSoC5/VFD_1.c **** 
+  97:Generated_Source\PSoC5/VFD_1.c **** uint8 VFD_1_initVar = 0u;
+  98:Generated_Source\PSoC5/VFD_1.c **** const uint16 CYCODE VFD_1_VoltageScale[] = {
+  99:Generated_Source\PSoC5/VFD_1.c ****     1000u
+ 100:Generated_Source\PSoC5/VFD_1.c **** };
+ 101:Generated_Source\PSoC5/VFD_1.c **** 
+ 102:Generated_Source\PSoC5/VFD_1.c **** 
+ 103:Generated_Source\PSoC5/VFD_1.c **** /*******************************************************************************
+ 104:Generated_Source\PSoC5/VFD_1.c **** * Function Name: VFD_1_Init
+ 105:Generated_Source\PSoC5/VFD_1.c **** ********************************************************************************
+ 106:Generated_Source\PSoC5/VFD_1.c **** *
+ 107:Generated_Source\PSoC5/VFD_1.c **** * Summary:
+ 108:Generated_Source\PSoC5/VFD_1.c **** *  Initializes or restores the default VFD configuration provided with the
+ 109:Generated_Source\PSoC5/VFD_1.c **** *  customizer. Initializes internal DMA channels. It is not necessary to call
+ 110:Generated_Source\PSoC5/VFD_1.c **** *  VFD_Init() because the VFD_Start() routine calls this function, which is the
+ 111:Generated_Source\PSoC5/VFD_1.c **** *  preferred method to begin the component operation.
+ 112:Generated_Source\PSoC5/VFD_1.c **** *
+ 113:Generated_Source\PSoC5/VFD_1.c **** * Parameters:
+ 114:Generated_Source\PSoC5/VFD_1.c **** *  None.
+ 115:Generated_Source\PSoC5/VFD_1.c **** *
+ 116:Generated_Source\PSoC5/VFD_1.c **** * Return:
+ 117:Generated_Source\PSoC5/VFD_1.c **** *  None.
+ 118:Generated_Source\PSoC5/VFD_1.c **** *
+ 119:Generated_Source\PSoC5/VFD_1.c **** * Side Effects:
+ 120:Generated_Source\PSoC5/VFD_1.c **** *  Disables all interrupts for the moment the counter enabling bits are set.
+ 121:Generated_Source\PSoC5/VFD_1.c **** *  Configures DMA transfer the first time this function is called. Does not
+ 122:Generated_Source\PSoC5/VFD_1.c **** *  reinitialize DMA on subsequent calls.
+ 123:Generated_Source\PSoC5/VFD_1.c **** *  Use VFD_1_Stop() to reset DMA to the initial state.
+ 124:Generated_Source\PSoC5/VFD_1.c **** *
+ 125:Generated_Source\PSoC5/VFD_1.c **** * Reentrant:
+ 126:Generated_Source\PSoC5/VFD_1.c **** *  No.
+ 127:Generated_Source\PSoC5/VFD_1.c **** *
+ 128:Generated_Source\PSoC5/VFD_1.c **** *******************************************************************************/
+ 129:Generated_Source\PSoC5/VFD_1.c **** void VFD_1_Init(void) 
+ 130:Generated_Source\PSoC5/VFD_1.c **** {
+ 131:Generated_Source\PSoC5/VFD_1.c ****     uint8 interruptState;
+ 132:Generated_Source\PSoC5/VFD_1.c ****     static uint8 dmaInitDone = 0u;
+ 133:Generated_Source\PSoC5/VFD_1.c **** 
+ 134:Generated_Source\PSoC5/VFD_1.c ****     /* DMA initialization is done the first time VFD_1_Init() is
+ 135:Generated_Source\PSoC5/VFD_1.c ****     * called. Otherwise it will consume all available TD resources. */
+ 136:Generated_Source\PSoC5/VFD_1.c ****     if(dmaInitDone == 0u)
+ 137:Generated_Source\PSoC5/VFD_1.c ****     {
+ 138:Generated_Source\PSoC5/VFD_1.c ****         VFD_1_AMuxDmaInit();
+ 139:Generated_Source\PSoC5/VFD_1.c ****         VFD_1_GlitchFilterDmaInit();
+ 140:Generated_Source\PSoC5/VFD_1.c ****         dmaInitDone = 1u;
+ 141:Generated_Source\PSoC5/VFD_1.c ****     }
+ 142:Generated_Source\PSoC5/VFD_1.c **** 
+ 143:Generated_Source\PSoC5/VFD_1.c ****     #if (VFD_1_ENABLE_OV_DETECT)
+ 144:Generated_Source\PSoC5/VFD_1.c ****         VFD_1_OVInit();
+ 145:Generated_Source\PSoC5/VFD_1.c ****     #endif /* VFD_1_ENABLE_OV_DETECT */
+ 146:Generated_Source\PSoC5/VFD_1.c **** 
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 4
+
+
+ 147:Generated_Source\PSoC5/VFD_1.c ****     #if (VFD_1_ENABLE_UV_DETECT)
+ 148:Generated_Source\PSoC5/VFD_1.c ****         VFD_1_UVInit();
+ 149:Generated_Source\PSoC5/VFD_1.c ****     #endif /* VFD_1_ENABLE_UV_DETECT */
+ 150:Generated_Source\PSoC5/VFD_1.c **** 
+ 151:Generated_Source\PSoC5/VFD_1.c ****     /* Counters are hardware controlled. Set firmware enable bits at init stage */
+ 152:Generated_Source\PSoC5/VFD_1.c ****     interruptState = CyEnterCriticalSection();
+ 153:Generated_Source\PSoC5/VFD_1.c ****     #if (VFD_1_VIN_SETTLING_DELAY > VFD_1_VIN_SETTLING_DELAY_MIN)
+ 154:Generated_Source\PSoC5/VFD_1.c ****         VFD_1_VIN_DELAY_CNT_ACTL_REG |= VFD_1_CNT_START;
+ 155:Generated_Source\PSoC5/VFD_1.c ****     #endif /* VFD_1_VIN_SETTLING_DELAY > VFD_1_VIN_SETTLING_DELAY_MIN */
+ 156:Generated_Source\PSoC5/VFD_1.c ****     VFD_1_VIN_INDEX_CNT_ACTL_REG |= VFD_1_CNT_START;
+ 157:Generated_Source\PSoC5/VFD_1.c ****     CyExitCriticalSection(interruptState);
+ 158:Generated_Source\PSoC5/VFD_1.c **** }
+ 159:Generated_Source\PSoC5/VFD_1.c **** 
+ 160:Generated_Source\PSoC5/VFD_1.c **** 
+ 161:Generated_Source\PSoC5/VFD_1.c **** /*******************************************************************************
+ 162:Generated_Source\PSoC5/VFD_1.c **** * Function Name: VFD_1_Enable
+ 163:Generated_Source\PSoC5/VFD_1.c **** ********************************************************************************
+ 164:Generated_Source\PSoC5/VFD_1.c **** *
+ 165:Generated_Source\PSoC5/VFD_1.c **** * Summary:
+ 166:Generated_Source\PSoC5/VFD_1.c **** *  Enables hardware blocks, the DMA channels and the control state machine.
+ 167:Generated_Source\PSoC5/VFD_1.c **** *  It is not necessary to call VFD_1_Init() because the VFD_1_Start()
+ 168:Generated_Source\PSoC5/VFD_1.c **** *  routine calls this function, which is the preferred method to begin the component
+ 169:Generated_Source\PSoC5/VFD_1.c **** *  operation.
+ 170:Generated_Source\PSoC5/VFD_1.c **** *
+ 171:Generated_Source\PSoC5/VFD_1.c **** * Parameters:
+ 172:Generated_Source\PSoC5/VFD_1.c **** *  None.
+ 173:Generated_Source\PSoC5/VFD_1.c **** *
+ 174:Generated_Source\PSoC5/VFD_1.c **** * Return:
+ 175:Generated_Source\PSoC5/VFD_1.c **** *  None.
+ 176:Generated_Source\PSoC5/VFD_1.c **** *
+ 177:Generated_Source\PSoC5/VFD_1.c **** * Side Effects:
+ 178:Generated_Source\PSoC5/VFD_1.c **** *  Sets/restores the initial TD for the AMux DMA channel, resets glitch filter
+ 179:Generated_Source\PSoC5/VFD_1.c **** *  counters and the current voltage index. This function should not be called
+ 180:Generated_Source\PSoC5/VFD_1.c **** *  when the component is started.
+ 181:Generated_Source\PSoC5/VFD_1.c **** *
+ 182:Generated_Source\PSoC5/VFD_1.c **** * Reentrant:
+ 183:Generated_Source\PSoC5/VFD_1.c **** *  No.
+ 184:Generated_Source\PSoC5/VFD_1.c **** *
+ 185:Generated_Source\PSoC5/VFD_1.c **** *******************************************************************************/
+ 186:Generated_Source\PSoC5/VFD_1.c **** void VFD_1_Enable(void) 
+ 187:Generated_Source\PSoC5/VFD_1.c **** {
+ 188:Generated_Source\PSoC5/VFD_1.c ****     /* AMux control uses TD chain. Set initial TD in chain. */
+ 189:Generated_Source\PSoC5/VFD_1.c ****     (void)CyDmaChSetInitialTd(amuxDmaCh, amuxDmaTd);
+ 190:Generated_Source\PSoC5/VFD_1.c ****     (void)CyDmaChEnable(amuxDmaCh, 1u);
+ 191:Generated_Source\PSoC5/VFD_1.c ****     (void)CyDmaChEnable(filtRdDmaCh, 1u);
+ 192:Generated_Source\PSoC5/VFD_1.c ****     (void)CyDmaChEnable(filtWrDmaCh, 1u);
+ 193:Generated_Source\PSoC5/VFD_1.c ****        
+ 194:Generated_Source\PSoC5/VFD_1.c ****     #if (VFD_1_ENABLE_OV_DETECT)
+ 195:Generated_Source\PSoC5/VFD_1.c ****         VFD_1_OVEnable();
+ 196:Generated_Source\PSoC5/VFD_1.c ****     #endif /* VFD_1_ENABLE_OV_DETECT */
+ 197:Generated_Source\PSoC5/VFD_1.c **** 
+ 198:Generated_Source\PSoC5/VFD_1.c ****     #if (VFD_1_ENABLE_UV_DETECT)
+ 199:Generated_Source\PSoC5/VFD_1.c ****         VFD_1_UVEnable();
+ 200:Generated_Source\PSoC5/VFD_1.c ****     #endif /* VFD_1_ENABLE_UV_DETECT */
+ 201:Generated_Source\PSoC5/VFD_1.c **** 
+ 202:Generated_Source\PSoC5/VFD_1.c ****     /* Reset glitch filter counters */
+ 203:Generated_Source\PSoC5/VFD_1.c ****     (void)memset((void *)filtCount, 0, sizeof(filtCount));
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 5
+
+
+ 204:Generated_Source\PSoC5/VFD_1.c **** 
+ 205:Generated_Source\PSoC5/VFD_1.c ****     /* Reset voltage index  */
+ 206:Generated_Source\PSoC5/VFD_1.c ****     VFD_1_VIN_INDEX_CNT_COUNT_REG = VFD_1_NUMBER_OF_VOLTAGES - 1u;
+ 207:Generated_Source\PSoC5/VFD_1.c **** 
+ 208:Generated_Source\PSoC5/VFD_1.c ****     /* Enable the control state machine */
+ 209:Generated_Source\PSoC5/VFD_1.c ****     VFD_1_CONTROL_REG = VFD_1_EN;
+ 210:Generated_Source\PSoC5/VFD_1.c **** }
+ 211:Generated_Source\PSoC5/VFD_1.c **** 
+ 212:Generated_Source\PSoC5/VFD_1.c **** 
+ 213:Generated_Source\PSoC5/VFD_1.c **** /*******************************************************************************
+ 214:Generated_Source\PSoC5/VFD_1.c **** * Function Name: VFD_1_Start
+ 215:Generated_Source\PSoC5/VFD_1.c **** ********************************************************************************
+ 216:Generated_Source\PSoC5/VFD_1.c **** *
+ 217:Generated_Source\PSoC5/VFD_1.c **** * Summary:
+ 218:Generated_Source\PSoC5/VFD_1.c **** *  Calls the Init() API if the component has not been initialized before.
+ 219:Generated_Source\PSoC5/VFD_1.c **** *  Runs a calibration routine for comparators and then calls Enable() to
+ 220:Generated_Source\PSoC5/VFD_1.c **** *  begin the component operation.
+ 221:Generated_Source\PSoC5/VFD_1.c **** *
+ 222:Generated_Source\PSoC5/VFD_1.c **** * Parameters:
+ 223:Generated_Source\PSoC5/VFD_1.c **** *  None.
+ 224:Generated_Source\PSoC5/VFD_1.c **** *
+ 225:Generated_Source\PSoC5/VFD_1.c **** * Return:
+ 226:Generated_Source\PSoC5/VFD_1.c **** *  None.
+ 227:Generated_Source\PSoC5/VFD_1.c **** *
+ 228:Generated_Source\PSoC5/VFD_1.c **** * Global variables:
+ 229:Generated_Source\PSoC5/VFD_1.c **** *  VFD_1_initVar - Used to check the initial configuration, modified
+ 230:Generated_Source\PSoC5/VFD_1.c **** *  on a first function call.
+ 231:Generated_Source\PSoC5/VFD_1.c **** *
+ 232:Generated_Source\PSoC5/VFD_1.c **** * Reentrant:
+ 233:Generated_Source\PSoC5/VFD_1.c **** *  No.
+ 234:Generated_Source\PSoC5/VFD_1.c **** *
+ 235:Generated_Source\PSoC5/VFD_1.c **** *******************************************************************************/
+ 236:Generated_Source\PSoC5/VFD_1.c **** void VFD_1_Start(void) 
+ 237:Generated_Source\PSoC5/VFD_1.c **** {
+ 238:Generated_Source\PSoC5/VFD_1.c ****     if(VFD_1_initVar == 0u)
+ 239:Generated_Source\PSoC5/VFD_1.c ****     {
+ 240:Generated_Source\PSoC5/VFD_1.c ****         VFD_1_Init();
+ 241:Generated_Source\PSoC5/VFD_1.c ****         VFD_1_initVar = 1u;
+ 242:Generated_Source\PSoC5/VFD_1.c ****     }
+ 243:Generated_Source\PSoC5/VFD_1.c **** 
+ 244:Generated_Source\PSoC5/VFD_1.c ****     VFD_1_ComparatorCal(VFD_1_OV);
+ 245:Generated_Source\PSoC5/VFD_1.c ****     VFD_1_ComparatorCal(VFD_1_UV);
+ 246:Generated_Source\PSoC5/VFD_1.c ****     VFD_1_Enable();
+ 247:Generated_Source\PSoC5/VFD_1.c **** }
+ 248:Generated_Source\PSoC5/VFD_1.c **** 
+ 249:Generated_Source\PSoC5/VFD_1.c **** 
+ 250:Generated_Source\PSoC5/VFD_1.c **** /*******************************************************************************
+ 251:Generated_Source\PSoC5/VFD_1.c **** * Function Name: VFD_1_Stop
+ 252:Generated_Source\PSoC5/VFD_1.c **** ********************************************************************************
+ 253:Generated_Source\PSoC5/VFD_1.c **** *
+ 254:Generated_Source\PSoC5/VFD_1.c **** * Summary:
+ 255:Generated_Source\PSoC5/VFD_1.c **** *  Disables the VFD component. Stops DMA controller and resets TDs. Disconnects
+ 256:Generated_Source\PSoC5/VFD_1.c **** *  AMux channels.
+ 257:Generated_Source\PSoC5/VFD_1.c **** *
+ 258:Generated_Source\PSoC5/VFD_1.c **** * Parameters:
+ 259:Generated_Source\PSoC5/VFD_1.c **** *  None.
+ 260:Generated_Source\PSoC5/VFD_1.c **** *
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 6
+
+
+ 261:Generated_Source\PSoC5/VFD_1.c **** * Return:
+ 262:Generated_Source\PSoC5/VFD_1.c **** *  None.
+ 263:Generated_Source\PSoC5/VFD_1.c **** *
+ 264:Generated_Source\PSoC5/VFD_1.c **** * Side Effects:
+ 265:Generated_Source\PSoC5/VFD_1.c **** *  pgood and pgood[x] outputs are de-asserted.
+ 266:Generated_Source\PSoC5/VFD_1.c **** *
+ 267:Generated_Source\PSoC5/VFD_1.c **** * Reentrant:
+ 268:Generated_Source\PSoC5/VFD_1.c **** *  No.
+ 269:Generated_Source\PSoC5/VFD_1.c **** *
+ 270:Generated_Source\PSoC5/VFD_1.c **** *******************************************************************************/
+ 271:Generated_Source\PSoC5/VFD_1.c **** void VFD_1_Stop(void) 
+ 272:Generated_Source\PSoC5/VFD_1.c **** {
+ 273:Generated_Source\PSoC5/VFD_1.c ****     uint8 indx;
+ 274:Generated_Source\PSoC5/VFD_1.c ****     uint8 interruptState;
+ 275:Generated_Source\PSoC5/VFD_1.c **** 
+ 276:Generated_Source\PSoC5/VFD_1.c ****     /* Disable control state machine */
+ 277:Generated_Source\PSoC5/VFD_1.c ****     VFD_1_CONTROL_REG = 0u;
+ 278:Generated_Source\PSoC5/VFD_1.c ****     
+ 279:Generated_Source\PSoC5/VFD_1.c ****     /* Terminate all transfers and disable DMA channels */
+ 280:Generated_Source\PSoC5/VFD_1.c ****     (void)CyDmaChSetRequest(amuxDmaCh, CY_DMA_CPU_TERM_CHAIN);
+ 281:Generated_Source\PSoC5/VFD_1.c ****     (void)CyDmaChSetRequest(filtRdDmaCh, CY_DMA_CPU_TERM_CHAIN);
+ 282:Generated_Source\PSoC5/VFD_1.c ****     (void)CyDmaChSetRequest(filtWrDmaCh, CY_DMA_CPU_TERM_CHAIN);
+ 283:Generated_Source\PSoC5/VFD_1.c ****         
+ 284:Generated_Source\PSoC5/VFD_1.c ****     /* Clear potential DRQs that may occur during termination period */    
+ 285:Generated_Source\PSoC5/VFD_1.c ****     (void)CyDmaClearPendingDrq(amuxDmaCh);
+ 286:Generated_Source\PSoC5/VFD_1.c ****     (void)CyDmaClearPendingDrq(filtRdDmaCh);
+ 287:Generated_Source\PSoC5/VFD_1.c ****     (void)CyDmaClearPendingDrq(filtWrDmaCh);
+ 288:Generated_Source\PSoC5/VFD_1.c **** 
+ 289:Generated_Source\PSoC5/VFD_1.c ****     #if (VFD_1_ENABLE_OV_DETECT)
+ 290:Generated_Source\PSoC5/VFD_1.c ****         VFD_1_OVStop();
+ 291:Generated_Source\PSoC5/VFD_1.c ****     #endif /* VFD_1_ENABLE_OV_DETECT */
+ 292:Generated_Source\PSoC5/VFD_1.c **** 
+ 293:Generated_Source\PSoC5/VFD_1.c ****     #if (VFD_1_ENABLE_UV_DETECT)
+ 294:Generated_Source\PSoC5/VFD_1.c ****         VFD_1_UVStop();
+ 295:Generated_Source\PSoC5/VFD_1.c ****     #endif /* VFD_1_ENABLE_UV_DETECT */
+ 296:Generated_Source\PSoC5/VFD_1.c **** 
+ 297:Generated_Source\PSoC5/VFD_1.c ****     /* Disconnect AMux channels */
+ 298:Generated_Source\PSoC5/VFD_1.c ****     for(indx = 0u; indx < VFD_1_NUMBER_OF_VOLTAGES; ++indx)
+ 299:Generated_Source\PSoC5/VFD_1.c ****     {
+ 300:Generated_Source\PSoC5/VFD_1.c ****         *VFD_1_AMux__addrTable[indx] = 0u;
+ 301:Generated_Source\PSoC5/VFD_1.c ****     }
+ 302:Generated_Source\PSoC5/VFD_1.c ****     /* Reset glitch filter FIFOs */
+ 303:Generated_Source\PSoC5/VFD_1.c ****     interruptState = CyEnterCriticalSection();
+ 304:Generated_Source\PSoC5/VFD_1.c ****     VFD_1_PG_FILTER_FIFO_ACTL_REG |= VFD_1_FIFO_CLR;
+ 305:Generated_Source\PSoC5/VFD_1.c ****     VFD_1_PG_FILTER_FIFO_ACTL_REG &= (uint8)~VFD_1_FIFO_CLR;
+ 306:Generated_Source\PSoC5/VFD_1.c ****     #if (VFD_1_ENABLE_OV_DETECT)
+ 307:Generated_Source\PSoC5/VFD_1.c ****         VFD_1_OV_FILTER_FIFO_ACTL_REG |= VFD_1_FIFO_CLR;
+ 308:Generated_Source\PSoC5/VFD_1.c ****         VFD_1_OV_FILTER_FIFO_ACTL_REG &= (uint8)~VFD_1_FIFO_CLR;
+ 309:Generated_Source\PSoC5/VFD_1.c ****     #endif /* VFD_1_ENABLE_OV_DETECT */
+ 310:Generated_Source\PSoC5/VFD_1.c ****     CyExitCriticalSection(interruptState);
+ 311:Generated_Source\PSoC5/VFD_1.c **** }
+ 312:Generated_Source\PSoC5/VFD_1.c **** 
+ 313:Generated_Source\PSoC5/VFD_1.c **** 
+ 314:Generated_Source\PSoC5/VFD_1.c **** /*******************************************************************************
+ 315:Generated_Source\PSoC5/VFD_1.c **** * Function Name: VFD_1_GetOVUVFaultStatus
+ 316:Generated_Source\PSoC5/VFD_1.c **** ********************************************************************************
+ 317:Generated_Source\PSoC5/VFD_1.c **** *
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 7
+
+
+ 318:Generated_Source\PSoC5/VFD_1.c **** * Summary:
+ 319:Generated_Source\PSoC5/VFD_1.c **** *  Assigns an over/under voltage fault status of each voltage input to its
+ 320:Generated_Source\PSoC5/VFD_1.c **** *  parameters. Bits are sticky and cleared by calling this API. Applicable only
+ 321:Generated_Source\PSoC5/VFD_1.c **** *  if Compare Type is set to "OV/UV".
+ 322:Generated_Source\PSoC5/VFD_1.c **** *
+ 323:Generated_Source\PSoC5/VFD_1.c **** * Parameters:
+ 324:Generated_Source\PSoC5/VFD_1.c **** *  ovStatus: OV status for all voltages.
+ 325:Generated_Source\PSoC5/VFD_1.c **** *  uvStatus: UV status for all voltages.
+ 326:Generated_Source\PSoC5/VFD_1.c **** *
+ 327:Generated_Source\PSoC5/VFD_1.c **** * Return:
+ 328:Generated_Source\PSoC5/VFD_1.c **** *  None.
+ 329:Generated_Source\PSoC5/VFD_1.c **** *
+ 330:Generated_Source\PSoC5/VFD_1.c **** * Side Effects:
+ 331:Generated_Source\PSoC5/VFD_1.c **** *  Calling this API clears the fault condition source sticky bits. If the
+ 332:Generated_Source\PSoC5/VFD_1.c **** *  condition still persists, then the bit will be set again after the next scan.
+ 333:Generated_Source\PSoC5/VFD_1.c **** *
+ 334:Generated_Source\PSoC5/VFD_1.c **** * Reentrant:
+ 335:Generated_Source\PSoC5/VFD_1.c **** *  No.
+ 336:Generated_Source\PSoC5/VFD_1.c **** *
+ 337:Generated_Source\PSoC5/VFD_1.c **** *******************************************************************************/
+ 338:Generated_Source\PSoC5/VFD_1.c **** #if (VFD_1_COMP_TYPE == VFD_1_OV_UV)
+ 339:Generated_Source\PSoC5/VFD_1.c **** void VFD_1_GetOVUVFaultStatus(uint32 * ovStatus, uint32 * uvStatus) 
+ 340:Generated_Source\PSoC5/VFD_1.c **** {
+ 341:Generated_Source\PSoC5/VFD_1.c ****     FAULT_STS ovLocal;
+ 342:Generated_Source\PSoC5/VFD_1.c ****     FAULT_STS uvLocal;
+ 343:Generated_Source\PSoC5/VFD_1.c **** 
+ 344:Generated_Source\PSoC5/VFD_1.c ****     #ifdef __CC_ARM
+ 345:Generated_Source\PSoC5/VFD_1.c ****         /* ARMCC compiler issues C4017W warnings about the use of uninitialized
+ 346:Generated_Source\PSoC5/VFD_1.c ****         * variables. The compiler cannot reliably identify faulty code and any
+ 347:Generated_Source\PSoC5/VFD_1.c ****         * C4017W warnings are intended only as an indication of possible problems.
+ 348:Generated_Source\PSoC5/VFD_1.c ****         */
+ 349:Generated_Source\PSoC5/VFD_1.c ****         ovLocal.word = 0u;
+ 350:Generated_Source\PSoC5/VFD_1.c ****         uvLocal.word = 0u;
+ 351:Generated_Source\PSoC5/VFD_1.c ****     #endif /* __CC_ARM */
+ 352:Generated_Source\PSoC5/VFD_1.c **** 
+ 353:Generated_Source\PSoC5/VFD_1.c ****     #ifdef VFD_1_PG_STS8_STATUS_REG
+ 354:Generated_Source\PSoC5/VFD_1.c ****         ovLocal.bytes[STS_B1] = VFD_1_OV_STS8_STATUS_REG;
+ 355:Generated_Source\PSoC5/VFD_1.c ****         uvLocal.bytes[STS_B1] = (uint8)~(VFD_1_PG_STS8_STATUS_REG | ovLocal.bytes[STS_B1]);
+ 356:Generated_Source\PSoC5/VFD_1.c ****     #endif /* VFD_1_PG_STS8_STATUS_REG */
+ 357:Generated_Source\PSoC5/VFD_1.c ****     #ifdef VFD_1_PG_STS16_STATUS_REG
+ 358:Generated_Source\PSoC5/VFD_1.c ****         ovLocal.bytes[STS_B2] = VFD_1_OV_STS16_STATUS_REG;
+ 359:Generated_Source\PSoC5/VFD_1.c ****         uvLocal.bytes[STS_B2] = (uint8)~(VFD_1_PG_STS16_STATUS_REG | ovLocal.bytes[STS_B2]);
+ 360:Generated_Source\PSoC5/VFD_1.c ****     #else
+ 361:Generated_Source\PSoC5/VFD_1.c ****         ovLocal.bytes[STS_B2] = 0u;
+ 362:Generated_Source\PSoC5/VFD_1.c ****         uvLocal.bytes[STS_B2] = 0u;
+ 363:Generated_Source\PSoC5/VFD_1.c ****     #endif /* VFD_1_PG_STS16_STATUS_REG */
+ 364:Generated_Source\PSoC5/VFD_1.c ****     #ifdef VFD_1_PG_STS24_STATUS_REG
+ 365:Generated_Source\PSoC5/VFD_1.c ****         ovLocal.bytes[STS_B3] = VFD_1_OV_STS24_STATUS_REG;
+ 366:Generated_Source\PSoC5/VFD_1.c ****         uvLocal.bytes[STS_B3] = (uint8)~(VFD_1_PG_STS24_STATUS_REG | ovLocal.bytes[STS_B3]);
+ 367:Generated_Source\PSoC5/VFD_1.c ****     #else
+ 368:Generated_Source\PSoC5/VFD_1.c ****         ovLocal.bytes[STS_B3] = 0u;
+ 369:Generated_Source\PSoC5/VFD_1.c ****         uvLocal.bytes[STS_B3] = 0u;
+ 370:Generated_Source\PSoC5/VFD_1.c ****     #endif /* VFD_1_PG_STS24_STATUS_REG */
+ 371:Generated_Source\PSoC5/VFD_1.c ****     #ifdef VFD_1_PG_STS32_STATUS_REG
+ 372:Generated_Source\PSoC5/VFD_1.c ****         ovLocal.bytes[STS_B4] = VFD_1_OV_STS32_STATUS_REG;
+ 373:Generated_Source\PSoC5/VFD_1.c ****         uvLocal.bytes[STS_B4] = (uint8)~(VFD_1_PG_STS32_STATUS_REG | ovLocal.bytes[STS_B4]);
+ 374:Generated_Source\PSoC5/VFD_1.c ****     #else
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 8
+
+
+ 375:Generated_Source\PSoC5/VFD_1.c ****         ovLocal.bytes[STS_B4] = 0u;
+ 376:Generated_Source\PSoC5/VFD_1.c ****         uvLocal.bytes[STS_B4] = 0u;
+ 377:Generated_Source\PSoC5/VFD_1.c ****     #endif /* VFD_1_PG_STS32_STATUS_REG */
+ 378:Generated_Source\PSoC5/VFD_1.c **** 
+ 379:Generated_Source\PSoC5/VFD_1.c ****     *ovStatus = ovLocal.word;
+ 380:Generated_Source\PSoC5/VFD_1.c ****     *uvStatus = uvLocal.word;
+ 381:Generated_Source\PSoC5/VFD_1.c **** }
+ 382:Generated_Source\PSoC5/VFD_1.c **** 
+ 383:Generated_Source\PSoC5/VFD_1.c **** #elif (VFD_1_COMP_TYPE == VFD_1_OV)
+ 384:Generated_Source\PSoC5/VFD_1.c **** 
+ 385:Generated_Source\PSoC5/VFD_1.c **** /*******************************************************************************
+ 386:Generated_Source\PSoC5/VFD_1.c **** * Function Name: VFD_1_GetOVFaultStatus
+ 387:Generated_Source\PSoC5/VFD_1.c **** ********************************************************************************
+ 388:Generated_Source\PSoC5/VFD_1.c **** *
+ 389:Generated_Source\PSoC5/VFD_1.c **** * Summary:
+ 390:Generated_Source\PSoC5/VFD_1.c **** *  Returns the OV status detected for all voltages.
+ 391:Generated_Source\PSoC5/VFD_1.c **** *
+ 392:Generated_Source\PSoC5/VFD_1.c **** * Parameters:
+ 393:Generated_Source\PSoC5/VFD_1.c **** *  None.
+ 394:Generated_Source\PSoC5/VFD_1.c **** *
+ 395:Generated_Source\PSoC5/VFD_1.c **** * Return:
+ 396:Generated_Source\PSoC5/VFD_1.c **** *  None.
+ 397:Generated_Source\PSoC5/VFD_1.c **** *
+ 398:Generated_Source\PSoC5/VFD_1.c **** * Reentrant:
+ 399:Generated_Source\PSoC5/VFD_1.c **** *  No.
+ 400:Generated_Source\PSoC5/VFD_1.c **** *
+ 401:Generated_Source\PSoC5/VFD_1.c **** *******************************************************************************/
+ 402:Generated_Source\PSoC5/VFD_1.c **** void VFD_1_GetOVFaultStatus(uint32 * status) 
+ 403:Generated_Source\PSoC5/VFD_1.c **** {
+ 404:Generated_Source\PSoC5/VFD_1.c ****     FAULT_STS CYDATA stsLocal;
+ 405:Generated_Source\PSoC5/VFD_1.c **** 
+ 406:Generated_Source\PSoC5/VFD_1.c ****     #ifdef __CC_ARM
+ 407:Generated_Source\PSoC5/VFD_1.c ****         /* ARMCC compiler issues C4017W warnings about the use of uninitialized
+ 408:Generated_Source\PSoC5/VFD_1.c ****         * variables. The compiler cannot reliably identify faulty code and any
+ 409:Generated_Source\PSoC5/VFD_1.c ****         * C4017W warnings are intended only as an indication of possible problems.
+ 410:Generated_Source\PSoC5/VFD_1.c ****         */
+ 411:Generated_Source\PSoC5/VFD_1.c ****         stsLocal.word = 0u;
+ 412:Generated_Source\PSoC5/VFD_1.c ****     #endif /* __CC_ARM */
+ 413:Generated_Source\PSoC5/VFD_1.c **** 
+ 414:Generated_Source\PSoC5/VFD_1.c ****     #ifdef VFD_1_OV_STS8_STATUS_REG
+ 415:Generated_Source\PSoC5/VFD_1.c ****         stsLocal.bytes[STS_B1] = VFD_1_OV_STS8_STATUS_REG;
+ 416:Generated_Source\PSoC5/VFD_1.c ****     #endif /* VFD_1_OV_STS8_STATUS_REG */
+ 417:Generated_Source\PSoC5/VFD_1.c ****     #ifdef VFD_1_OV_STS16_STATUS_REG
+ 418:Generated_Source\PSoC5/VFD_1.c ****         stsLocal.bytes[STS_B2] = VFD_1_OV_STS16_STATUS_REG;
+ 419:Generated_Source\PSoC5/VFD_1.c ****     #else
+ 420:Generated_Source\PSoC5/VFD_1.c ****         stsLocal.bytes[STS_B2] = 0u;
+ 421:Generated_Source\PSoC5/VFD_1.c ****     #endif /* VFD_1_OV_STS16_STATUS_REG */
+ 422:Generated_Source\PSoC5/VFD_1.c ****     #ifdef VFD_1_OV_STS24_STATUS_REG
+ 423:Generated_Source\PSoC5/VFD_1.c ****         stsLocal.bytes[STS_B3] = VFD_1_OV_STS24_STATUS_REG;
+ 424:Generated_Source\PSoC5/VFD_1.c ****     #else
+ 425:Generated_Source\PSoC5/VFD_1.c ****         stsLocal.bytes[STS_B3] = 0u;
+ 426:Generated_Source\PSoC5/VFD_1.c ****     #endif /* VFD_1_OV_STS24_STATUS_REG */
+ 427:Generated_Source\PSoC5/VFD_1.c ****     #ifdef VFD_1_OV_STS32_STATUS_REG
+ 428:Generated_Source\PSoC5/VFD_1.c ****         stsLocal.bytes[STS_B4] = VFD_1_OV_STS32_STATUS_REG;
+ 429:Generated_Source\PSoC5/VFD_1.c ****     #else
+ 430:Generated_Source\PSoC5/VFD_1.c ****         stsLocal.bytes[STS_B4] = 0u;
+ 431:Generated_Source\PSoC5/VFD_1.c ****     #endif /* VFD_1_OV_STS32_STATUS_REG */
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 9
+
+
+ 432:Generated_Source\PSoC5/VFD_1.c **** 
+ 433:Generated_Source\PSoC5/VFD_1.c ****     *status = stsLocal.word;
+ 434:Generated_Source\PSoC5/VFD_1.c **** }
+ 435:Generated_Source\PSoC5/VFD_1.c **** 
+ 436:Generated_Source\PSoC5/VFD_1.c **** #else 
+ 437:Generated_Source\PSoC5/VFD_1.c **** 
+ 438:Generated_Source\PSoC5/VFD_1.c **** /*******************************************************************************
+ 439:Generated_Source\PSoC5/VFD_1.c **** * Function Name: VFD_1_GetUVFaultStatus
+ 440:Generated_Source\PSoC5/VFD_1.c **** ********************************************************************************
+ 441:Generated_Source\PSoC5/VFD_1.c **** *
+ 442:Generated_Source\PSoC5/VFD_1.c **** * Summary:
+ 443:Generated_Source\PSoC5/VFD_1.c **** *  Returns the UV status detected for all voltages.
+ 444:Generated_Source\PSoC5/VFD_1.c **** *
+ 445:Generated_Source\PSoC5/VFD_1.c **** * Parameters:
+ 446:Generated_Source\PSoC5/VFD_1.c **** *  None.
+ 447:Generated_Source\PSoC5/VFD_1.c **** *
+ 448:Generated_Source\PSoC5/VFD_1.c **** * Return:
+ 449:Generated_Source\PSoC5/VFD_1.c **** *  None.
+ 450:Generated_Source\PSoC5/VFD_1.c **** *
+ 451:Generated_Source\PSoC5/VFD_1.c **** * Reentrant:
+ 452:Generated_Source\PSoC5/VFD_1.c **** *  No.
+ 453:Generated_Source\PSoC5/VFD_1.c **** *
+ 454:Generated_Source\PSoC5/VFD_1.c **** *******************************************************************************/
+ 455:Generated_Source\PSoC5/VFD_1.c **** void VFD_1_GetUVFaultStatus(uint32 * status) 
+ 456:Generated_Source\PSoC5/VFD_1.c **** {
+ 457:Generated_Source\PSoC5/VFD_1.c ****     FAULT_STS CYDATA stsLocal;
+ 458:Generated_Source\PSoC5/VFD_1.c **** 
+ 459:Generated_Source\PSoC5/VFD_1.c ****     #ifdef __CC_ARM
+ 460:Generated_Source\PSoC5/VFD_1.c ****         /* ARMCC compiler issues C4017W warnings about the use of uninitialized
+ 461:Generated_Source\PSoC5/VFD_1.c ****         * variables. The compiler cannot reliably identify faulty code and any
+ 462:Generated_Source\PSoC5/VFD_1.c ****         * C4017W warnings are intended only as an indication of possible problems.
+ 463:Generated_Source\PSoC5/VFD_1.c ****         */
+ 464:Generated_Source\PSoC5/VFD_1.c ****         stsLocal.word = 0u;
+ 465:Generated_Source\PSoC5/VFD_1.c ****     #endif /* __CC_ARM */
+ 466:Generated_Source\PSoC5/VFD_1.c **** 
+ 467:Generated_Source\PSoC5/VFD_1.c ****     #ifdef VFD_1_PG_STS8_STATUS_REG
+ 468:Generated_Source\PSoC5/VFD_1.c ****         stsLocal.bytes[STS_B1] = (uint8)~VFD_1_PG_STS8_STATUS_REG;
+ 469:Generated_Source\PSoC5/VFD_1.c ****     #endif /* VFD_1_PG_STS8_STATUS_REG */
+ 470:Generated_Source\PSoC5/VFD_1.c ****     #ifdef VFD_1_PG_STS16_STATUS_REG
+ 471:Generated_Source\PSoC5/VFD_1.c ****         stsLocal.bytes[STS_B2] = (uint8)~VFD_1_PG_STS16_STATUS_REG;
+ 472:Generated_Source\PSoC5/VFD_1.c ****     #else
+ 473:Generated_Source\PSoC5/VFD_1.c ****         stsLocal.bytes[STS_B2] = 0u;
+ 474:Generated_Source\PSoC5/VFD_1.c ****     #endif /* VFD_1_PG_STS16_STATUS_REG */
+ 475:Generated_Source\PSoC5/VFD_1.c ****     #ifdef VFD_1_PG_STS24_STATUS_REG
+ 476:Generated_Source\PSoC5/VFD_1.c ****         stsLocal.bytes[STS_B3] = (uint8)~VFD_1_PG_STS24_STATUS_REG;
+ 477:Generated_Source\PSoC5/VFD_1.c ****     #else
+ 478:Generated_Source\PSoC5/VFD_1.c ****         stsLocal.bytes[STS_B3] = 0u;
+ 479:Generated_Source\PSoC5/VFD_1.c ****     #endif /* VFD_1_PG_STS24_STATUS_REG */
+ 480:Generated_Source\PSoC5/VFD_1.c ****     #ifdef VFD_1_PG_STS32_STATUS_REG
+ 481:Generated_Source\PSoC5/VFD_1.c ****         stsLocal.bytes[STS_B4] = (uint8)~VFD_1_PG_STS32_STATUS_REG;
+ 482:Generated_Source\PSoC5/VFD_1.c ****     #else
+ 483:Generated_Source\PSoC5/VFD_1.c ****         stsLocal.bytes[STS_B4] = 0u;
+ 484:Generated_Source\PSoC5/VFD_1.c ****     #endif /* VFD_1_PG_STS32_STATUS_REG */
+ 485:Generated_Source\PSoC5/VFD_1.c **** 
+ 486:Generated_Source\PSoC5/VFD_1.c ****     *status = stsLocal.word;
+ 487:Generated_Source\PSoC5/VFD_1.c **** }
+ 488:Generated_Source\PSoC5/VFD_1.c **** 
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 10
+
+
+ 489:Generated_Source\PSoC5/VFD_1.c **** #endif /* (VFD_1_COMP_TYPE == VFD_1_OV_UV) */
+ 490:Generated_Source\PSoC5/VFD_1.c **** 
+ 491:Generated_Source\PSoC5/VFD_1.c **** 
+ 492:Generated_Source\PSoC5/VFD_1.c **** /*******************************************************************************
+ 493:Generated_Source\PSoC5/VFD_1.c **** * Function Name: VFD_1_ComparatorCal
+ 494:Generated_Source\PSoC5/VFD_1.c **** ********************************************************************************
+ 495:Generated_Source\PSoC5/VFD_1.c **** *
+ 496:Generated_Source\PSoC5/VFD_1.c **** * Summary:
+ 497:Generated_Source\PSoC5/VFD_1.c **** *  Runs a calibration routine that measures the selected comparator's offset 
+ 498:Generated_Source\PSoC5/VFD_1.c **** *  voltage by shorting its inputs together and corrects for it by writing to the
+ 499:Generated_Source\PSoC5/VFD_1.c **** *  CMP block's trim register.
+ 500:Generated_Source\PSoC5/VFD_1.c **** *
+ 501:Generated_Source\PSoC5/VFD_1.c **** * Parameters:
+ 502:Generated_Source\PSoC5/VFD_1.c **** *  enum compType
+ 503:Generated_Source\PSoC5/VFD_1.c **** *    Valid values: VFD_1_OV, VFD_1_UV.
+ 504:Generated_Source\PSoC5/VFD_1.c **** *
+ 505:Generated_Source\PSoC5/VFD_1.c **** * Return:
+ 506:Generated_Source\PSoC5/VFD_1.c **** *  None.
+ 507:Generated_Source\PSoC5/VFD_1.c **** *
+ 508:Generated_Source\PSoC5/VFD_1.c **** * Side Effects:
+ 509:Generated_Source\PSoC5/VFD_1.c **** *  Calling this API may cause the comparator to trigger a fault condition. To 
+ 510:Generated_Source\PSoC5/VFD_1.c **** *  prevent this, call the VFD_Pause() API prior to calling this API.
+ 511:Generated_Source\PSoC5/VFD_1.c **** *
+ 512:Generated_Source\PSoC5/VFD_1.c **** * Reentrant:
+ 513:Generated_Source\PSoC5/VFD_1.c **** *  No.
+ 514:Generated_Source\PSoC5/VFD_1.c **** *
+ 515:Generated_Source\PSoC5/VFD_1.c **** *******************************************************************************/
+ 516:Generated_Source\PSoC5/VFD_1.c **** void VFD_1_ComparatorCal(uint8 compType) 
+ 517:Generated_Source\PSoC5/VFD_1.c **** {    
+ 518:Generated_Source\PSoC5/VFD_1.c ****     #if (VFD_1_ENABLE_OV_DETECT)
+ 519:Generated_Source\PSoC5/VFD_1.c ****         if(compType == VFD_1_OV)
+ 520:Generated_Source\PSoC5/VFD_1.c ****         {
+ 521:Generated_Source\PSoC5/VFD_1.c ****             (void) VFD_1_Comp_OV_ZeroCal();
+ 522:Generated_Source\PSoC5/VFD_1.c ****         }
+ 523:Generated_Source\PSoC5/VFD_1.c ****     #endif /*VFD_1_ENABLE_OV_DETECT */
+ 524:Generated_Source\PSoC5/VFD_1.c **** 
+ 525:Generated_Source\PSoC5/VFD_1.c ****     #if (VFD_1_ENABLE_UV_DETECT)
+ 526:Generated_Source\PSoC5/VFD_1.c ****         if(compType == VFD_1_UV)
+ 527:Generated_Source\PSoC5/VFD_1.c ****         {
+ 528:Generated_Source\PSoC5/VFD_1.c ****             (void) VFD_1_Comp_UV_ZeroCal();
+ 529:Generated_Source\PSoC5/VFD_1.c ****         }
+ 530:Generated_Source\PSoC5/VFD_1.c ****     #endif /* VFD_1_ENABLE_UV_DETECT */
+ 531:Generated_Source\PSoC5/VFD_1.c **** }
+ 532:Generated_Source\PSoC5/VFD_1.c **** 
+ 533:Generated_Source\PSoC5/VFD_1.c **** 
+ 534:Generated_Source\PSoC5/VFD_1.c **** /*******************************************************************************
+ 535:Generated_Source\PSoC5/VFD_1.c **** * Function Name: VFD_1_SetSpeed
+ 536:Generated_Source\PSoC5/VFD_1.c **** ********************************************************************************
+ 537:Generated_Source\PSoC5/VFD_1.c **** *
+ 538:Generated_Source\PSoC5/VFD_1.c **** * Summary:
+ 539:Generated_Source\PSoC5/VFD_1.c **** *  Sets the speed mode for the Voltage DACs and Comparators.
+ 540:Generated_Source\PSoC5/VFD_1.c **** *
+ 541:Generated_Source\PSoC5/VFD_1.c **** * Parameters:
+ 542:Generated_Source\PSoC5/VFD_1.c **** *  speedMode: specifies the speed mode. Valid values are VFD_1_LOW_SPEED
+ 543:Generated_Source\PSoC5/VFD_1.c **** *             and VFD_1_HIGH_SPEED.
+ 544:Generated_Source\PSoC5/VFD_1.c **** *
+ 545:Generated_Source\PSoC5/VFD_1.c **** * Return:
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 11
+
+
+ 546:Generated_Source\PSoC5/VFD_1.c **** *  None
+ 547:Generated_Source\PSoC5/VFD_1.c **** *
+ 548:Generated_Source\PSoC5/VFD_1.c **** * Reentrant:
+ 549:Generated_Source\PSoC5/VFD_1.c **** *  No
+ 550:Generated_Source\PSoC5/VFD_1.c **** *
+ 551:Generated_Source\PSoC5/VFD_1.c **** *******************************************************************************/
+ 552:Generated_Source\PSoC5/VFD_1.c **** void VFD_1_SetSpeed(uint8 speedMode) 
+ 553:Generated_Source\PSoC5/VFD_1.c **** {
+ 554:Generated_Source\PSoC5/VFD_1.c ****     if(speedMode == VFD_1_LOW_SPEED)
+ 555:Generated_Source\PSoC5/VFD_1.c ****     {
+ 556:Generated_Source\PSoC5/VFD_1.c ****         #if (VFD_1_ENABLE_OV_DETECT)
+ 557:Generated_Source\PSoC5/VFD_1.c ****             VFD_1_SetOVSpeed(LOWSPEED);
+ 558:Generated_Source\PSoC5/VFD_1.c ****         #endif /* VFD_1_ENABLE_OV_DETECT */
+ 559:Generated_Source\PSoC5/VFD_1.c **** 
+ 560:Generated_Source\PSoC5/VFD_1.c ****         #if (VFD_1_ENABLE_UV_DETECT)
+ 561:Generated_Source\PSoC5/VFD_1.c ****             VFD_1_SetUVSpeed(LOWSPEED);
+ 562:Generated_Source\PSoC5/VFD_1.c ****         #endif /* VFD_1_ENABLE_UV_DETECT */
+ 563:Generated_Source\PSoC5/VFD_1.c ****     }
+ 564:Generated_Source\PSoC5/VFD_1.c ****     else
+ 565:Generated_Source\PSoC5/VFD_1.c ****     {
+ 566:Generated_Source\PSoC5/VFD_1.c ****         #if (VFD_1_ENABLE_OV_DETECT)
+ 567:Generated_Source\PSoC5/VFD_1.c ****             VFD_1_SetOVSpeed(HIGHSPEED);
+ 568:Generated_Source\PSoC5/VFD_1.c ****         #endif /* VFD_1_ENABLE_OV_DETECT */
+ 569:Generated_Source\PSoC5/VFD_1.c **** 
+ 570:Generated_Source\PSoC5/VFD_1.c ****         #if (VFD_1_ENABLE_UV_DETECT)
+ 571:Generated_Source\PSoC5/VFD_1.c ****             VFD_1_SetUVSpeed(HIGHSPEED);
+ 572:Generated_Source\PSoC5/VFD_1.c ****         #endif /* VFD_1_ENABLE_UV_DETECT */
+ 573:Generated_Source\PSoC5/VFD_1.c ****     }
+ 574:Generated_Source\PSoC5/VFD_1.c **** }
+ 575:Generated_Source\PSoC5/VFD_1.c **** 
+ 576:Generated_Source\PSoC5/VFD_1.c ****     
+ 577:Generated_Source\PSoC5/VFD_1.c **** /*******************************************************************************
+ 578:Generated_Source\PSoC5/VFD_1.c **** * Function Name: VFD_1_AMuxDmaInit
+ 579:Generated_Source\PSoC5/VFD_1.c **** ********************************************************************************
+ 580:Generated_Source\PSoC5/VFD_1.c **** *
+ 581:Generated_Source\PSoC5/VFD_1.c **** * Summary:
+ 582:Generated_Source\PSoC5/VFD_1.c **** *  Initializes the DMA controlled analog multiplexer. On receiving a trigger,
+ 583:Generated_Source\PSoC5/VFD_1.c **** *  the AMUX DMA channel connects the next analog input voltage to the window
+ 584:Generated_Source\PSoC5/VFD_1.c **** *  comparator. The DMA controller disconnects the previous input before
+ 585:Generated_Source\PSoC5/VFD_1.c **** *  connecting the next input to ensure a break-before-make connection.
+ 586:Generated_Source\PSoC5/VFD_1.c **** *
+ 587:Generated_Source\PSoC5/VFD_1.c **** * Parameters:
+ 588:Generated_Source\PSoC5/VFD_1.c **** *  None.
+ 589:Generated_Source\PSoC5/VFD_1.c **** *
+ 590:Generated_Source\PSoC5/VFD_1.c **** * Return:
+ 591:Generated_Source\PSoC5/VFD_1.c **** *  None.
+ 592:Generated_Source\PSoC5/VFD_1.c **** *
+ 593:Generated_Source\PSoC5/VFD_1.c **** * Reentrant:
+ 594:Generated_Source\PSoC5/VFD_1.c **** *  No.
+ 595:Generated_Source\PSoC5/VFD_1.c **** *
+ 596:Generated_Source\PSoC5/VFD_1.c **** *******************************************************************************/
+ 597:Generated_Source\PSoC5/VFD_1.c **** static void VFD_1_AMuxDmaInit(void) 
+ 598:Generated_Source\PSoC5/VFD_1.c **** {      
+  26              		.loc 1 598 0
+  27              		.cfi_startproc
+  28              		@ args = 0, pretend = 0, frame = 0
+  29              		@ frame_needed = 0, uses_anonymous_args = 0
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 12
+
+
+  30 0000 2DE9F041 		push	{r4, r5, r6, r7, r8, lr}
+  31              		.cfi_def_cfa_offset 24
+  32              		.cfi_offset 4, -24
+  33              		.cfi_offset 5, -20
+  34              		.cfi_offset 6, -16
+  35              		.cfi_offset 7, -12
+  36              		.cfi_offset 8, -8
+  37              		.cfi_offset 14, -4
+ 599:Generated_Source\PSoC5/VFD_1.c ****     /* Chained TD pair is used to break previous AMux connection before
+ 600:Generated_Source\PSoC5/VFD_1.c ****     * making new connection, i.e. td0(break)->td1(make).
+ 601:Generated_Source\PSoC5/VFD_1.c ****     */
+ 602:Generated_Source\PSoC5/VFD_1.c ****     uint8 td0;
+ 603:Generated_Source\PSoC5/VFD_1.c ****     uint8 td1;
+ 604:Generated_Source\PSoC5/VFD_1.c ****     uint8 td;
+ 605:Generated_Source\PSoC5/VFD_1.c **** 
+ 606:Generated_Source\PSoC5/VFD_1.c ****     /* 0x00 is written into AMux port to break connection */
+ 607:Generated_Source\PSoC5/VFD_1.c ****     static uint8 amuxClear = 0u;
+ 608:Generated_Source\PSoC5/VFD_1.c **** 
+ 609:Generated_Source\PSoC5/VFD_1.c ****     /* Copy AMux mask table to SRAM to improve DMA transfer performance */
+ 610:Generated_Source\PSoC5/VFD_1.c ****     static uint8 amuxMaskTable[VFD_1_NUMBER_OF_VOLTAGES];
+ 611:Generated_Source\PSoC5/VFD_1.c ****     (void)memcpy((void *)amuxMaskTable, (const void *)VFD_1_AMux__maskTable, VFD_1_NUMBER_OF_VOLTAG
+  38              		.loc 1 611 0
+  39 0004 1F4C     		ldr	r4, .L6
+  40 0006 204B     		ldr	r3, .L6+4
+  41 0008 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+  42 000a 2370     		strb	r3, [r4]
+ 612:Generated_Source\PSoC5/VFD_1.c **** 
+ 613:Generated_Source\PSoC5/VFD_1.c ****     amuxDmaCh = VFD_1_DMA_CFG(MuxDMA, AMUX_DMA_DATA_SIZE, HI16(CYDEV_SRAM_BASE), HI16(CYDEV_PERIPH_
+  43              		.loc 1 613 0
+  44 000c 0120     		movs	r0, #1
+  45 000e 0146     		mov	r1, r0
+  46 0010 41F6FF72 		movw	r2, #8191
+  47 0014 4FF48043 		mov	r3, #16384
+  48 0018 FFF7FEFF 		bl	VFD_1_MuxDMA_DmaInitialize
+  49              	.LVL0:
+  50 001c 6070     		strb	r0, [r4, #1]
+  51              	.LVL1:
+ 614:Generated_Source\PSoC5/VFD_1.c **** 
+ 615:Generated_Source\PSoC5/VFD_1.c ****     td1 = CY_DMA_INVALID_TD;
+ 616:Generated_Source\PSoC5/VFD_1.c ****     for(td = 0u; td < VFD_1_NUMBER_OF_VOLTAGES; ++td)
+  52              		.loc 1 616 0
+  53 001e 0024     		movs	r4, #0
+ 615:Generated_Source\PSoC5/VFD_1.c ****     for(td = 0u; td < VFD_1_NUMBER_OF_VOLTAGES; ++td)
+  54              		.loc 1 615 0
+  55 0020 FF27     		movs	r7, #255
+  56              		.loc 1 616 0
+  57 0022 24E0     		b	.L2
+  58              	.LVL2:
+  59              	.L4:
+ 617:Generated_Source\PSoC5/VFD_1.c ****     {
+ 618:Generated_Source\PSoC5/VFD_1.c ****         /* TD0: Move 0 into channel being disconnected (break) */
+ 619:Generated_Source\PSoC5/VFD_1.c ****         td0 = CyDmaTdAllocate();
+  60              		.loc 1 619 0
+  61 0024 FFF7FEFF 		bl	CyDmaTdAllocate
+  62              	.LVL3:
+  63 0028 8046     		mov	r8, r0
+  64              	.LVL4:
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 13
+
+
+ 620:Generated_Source\PSoC5/VFD_1.c ****         (void)CyDmaTdSetAddress(td0, LO16((uint32)&amuxClear), LO16((uint32)VFD_1_AMux__addrTable[t
+  65              		.loc 1 620 0
+  66 002a 164D     		ldr	r5, .L6
+  67 002c A91C     		adds	r1, r5, #2
+  68 002e 174B     		ldr	r3, .L6+8
+  69 0030 33F82460 		ldrh	r6, [r3, r4, lsl #2]
+  70 0034 89B2     		uxth	r1, r1
+  71 0036 3246     		mov	r2, r6
+  72 0038 FFF7FEFF 		bl	CyDmaTdSetAddress
+  73              	.LVL5:
+ 621:Generated_Source\PSoC5/VFD_1.c ****         (void)CyDmaTdSetConfiguration(td0,  AMUX_DMA_DATA_NR, td1, CY_DMA_TD_AUTO_EXEC_NEXT);
+  74              		.loc 1 621 0
+  75 003c 4046     		mov	r0, r8
+  76 003e 0121     		movs	r1, #1
+  77 0040 3A46     		mov	r2, r7
+  78 0042 2023     		movs	r3, #32
+  79 0044 FFF7FEFF 		bl	CyDmaTdSetConfiguration
+  80              	.LVL6:
+ 622:Generated_Source\PSoC5/VFD_1.c ****         
+ 623:Generated_Source\PSoC5/VFD_1.c ****         /* TD1: Move proper AMux mask into channel being connected (make) */
+ 624:Generated_Source\PSoC5/VFD_1.c ****         td1 = CyDmaTdAllocate();
+  81              		.loc 1 624 0
+  82 0048 FFF7FEFF 		bl	CyDmaTdAllocate
+  83              	.LVL7:
+  84 004c 0746     		mov	r7, r0
+  85              	.LVL8:
+ 625:Generated_Source\PSoC5/VFD_1.c ****         (void)CyDmaTdSetAddress(td1, LO16((uint32)&amuxMaskTable[td]), LO16((uint32)VFD_1_AMux__add
+  86              		.loc 1 625 0
+  87 004e 2919     		adds	r1, r5, r4
+  88 0050 89B2     		uxth	r1, r1
+  89 0052 3246     		mov	r2, r6
+  90 0054 FFF7FEFF 		bl	CyDmaTdSetAddress
+  91              	.LVL9:
+ 626:Generated_Source\PSoC5/VFD_1.c ****         (void)CyDmaTdSetConfiguration(td1, AMUX_DMA_DATA_NR, td0, VFD_1_MuxDMA__TD_TERMOUT_EN);
+  92              		.loc 1 626 0
+  93 0058 3846     		mov	r0, r7
+  94 005a 0121     		movs	r1, #1
+  95 005c 4246     		mov	r2, r8
+  96 005e 0423     		movs	r3, #4
+  97 0060 FFF7FEFF 		bl	CyDmaTdSetConfiguration
+  98              	.LVL10:
+ 627:Generated_Source\PSoC5/VFD_1.c ****         
+ 628:Generated_Source\PSoC5/VFD_1.c ****         /* Store initial TD in chain */
+ 629:Generated_Source\PSoC5/VFD_1.c ****         if(td == 0u)
+  99              		.loc 1 629 0
+ 100 0064 0CB9     		cbnz	r4, .L3
+ 630:Generated_Source\PSoC5/VFD_1.c ****         {
+ 631:Generated_Source\PSoC5/VFD_1.c ****             amuxDmaTd = td0;
+ 101              		.loc 1 631 0
+ 102 0066 85F80380 		strb	r8, [r5, #3]
+ 103              	.L3:
+ 616:Generated_Source\PSoC5/VFD_1.c ****     {
+ 104              		.loc 1 616 0 discriminator 2
+ 105 006a 0134     		adds	r4, r4, #1
+ 106              	.LVL11:
+ 107 006c E4B2     		uxtb	r4, r4
+ 108              	.LVL12:
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 14
+
+
+ 109              	.L2:
+ 616:Generated_Source\PSoC5/VFD_1.c ****     {
+ 110              		.loc 1 616 0 is_stmt 0 discriminator 1
+ 111 006e 002C     		cmp	r4, #0
+ 112 0070 D8D0     		beq	.L4
+ 632:Generated_Source\PSoC5/VFD_1.c ****         }
+ 633:Generated_Source\PSoC5/VFD_1.c ****     }
+ 634:Generated_Source\PSoC5/VFD_1.c **** 
+ 635:Generated_Source\PSoC5/VFD_1.c ****     /* The initial TD is configured to join this TD chain into a ring.
+ 636:Generated_Source\PSoC5/VFD_1.c ****     * The TD execution order is as follows.
+ 637:Generated_Source\PSoC5/VFD_1.c ****     * break[0]->set[N-1]->break[N-1]->set[N-2]->...->break[1]->set[0]
+ 638:Generated_Source\PSoC5/VFD_1.c ****     * This matches the control logic that uses a down counter to track the
+ 639:Generated_Source\PSoC5/VFD_1.c ****     * voltage number being scanned. 
+ 640:Generated_Source\PSoC5/VFD_1.c ****     */
+ 641:Generated_Source\PSoC5/VFD_1.c ****     (void)CyDmaTdSetConfiguration(amuxDmaTd,  AMUX_DMA_DATA_NR, td1, CY_DMA_TD_AUTO_EXEC_NEXT);
+ 113              		.loc 1 641 0 is_stmt 1
+ 114 0072 044B     		ldr	r3, .L6
+ 115 0074 D878     		ldrb	r0, [r3, #3]	@ zero_extendqisi2
+ 116 0076 0121     		movs	r1, #1
+ 117 0078 3A46     		mov	r2, r7
+ 118 007a 2023     		movs	r3, #32
+ 119 007c FFF7FEFF 		bl	CyDmaTdSetConfiguration
+ 120              	.LVL13:
+ 121 0080 BDE8F081 		pop	{r4, r5, r6, r7, r8, pc}
+ 122              	.LVL14:
+ 123              	.L7:
+ 124              		.align	2
+ 125              	.L6:
+ 126 0084 00000000 		.word	.LANCHOR0
+ 127 0088 00000000 		.word	VFD_1_AMux__maskTable
+ 128 008c 00000000 		.word	VFD_1_AMux__addrTable
+ 129              		.cfi_endproc
+ 130              	.LFE7:
+ 131              		.size	VFD_1_AMuxDmaInit, .-VFD_1_AMuxDmaInit
+ 132              		.section	.text.VFD_1_GlitchFilterDmaInit,"ax",%progbits
+ 133              		.align	2
+ 134              		.thumb
+ 135              		.thumb_func
+ 136              		.type	VFD_1_GlitchFilterDmaInit, %function
+ 137              	VFD_1_GlitchFilterDmaInit:
+ 138              	.LFB8:
+ 642:Generated_Source\PSoC5/VFD_1.c **** }
+ 643:Generated_Source\PSoC5/VFD_1.c **** 
+ 644:Generated_Source\PSoC5/VFD_1.c **** 
+ 645:Generated_Source\PSoC5/VFD_1.c **** /***************************************************************************
+ 646:Generated_Source\PSoC5/VFD_1.c **** * Function Name: VFD_1_GlitchFilterDmaInit
+ 647:Generated_Source\PSoC5/VFD_1.c **** ****************************************************************************
+ 648:Generated_Source\PSoC5/VFD_1.c **** *
+ 649:Generated_Source\PSoC5/VFD_1.c **** * Summary:
+ 650:Generated_Source\PSoC5/VFD_1.c **** *  Initializes the glitch filter. The glitch filter outputs a 1 only when the 
+ 651:Generated_Source\PSoC5/VFD_1.c **** *  current and previous N samples are 1, and a 0 only when the current and
+ 652:Generated_Source\PSoC5/VFD_1.c **** *  previous N samples are 0. Otherwise the output is unchanged from its
+ 653:Generated_Source\PSoC5/VFD_1.c **** *  current value. The glitch filtering process uses a DMA controller to read
+ 654:Generated_Source\PSoC5/VFD_1.c **** *  the previous filter count for the current voltage from SRAM and write the
+ 655:Generated_Source\PSoC5/VFD_1.c **** *  updated filter count back to SRAM after the voltage is processed.
+ 656:Generated_Source\PSoC5/VFD_1.c **** *
+ 657:Generated_Source\PSoC5/VFD_1.c **** * Parameters:
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 15
+
+
+ 658:Generated_Source\PSoC5/VFD_1.c **** *  None.
+ 659:Generated_Source\PSoC5/VFD_1.c **** *
+ 660:Generated_Source\PSoC5/VFD_1.c **** * Return:
+ 661:Generated_Source\PSoC5/VFD_1.c **** *  None.
+ 662:Generated_Source\PSoC5/VFD_1.c **** *
+ 663:Generated_Source\PSoC5/VFD_1.c **** * Reentrant:
+ 664:Generated_Source\PSoC5/VFD_1.c **** *  No.
+ 665:Generated_Source\PSoC5/VFD_1.c **** *
+ 666:Generated_Source\PSoC5/VFD_1.c **** ***************************************************************************/
+ 667:Generated_Source\PSoC5/VFD_1.c **** static void VFD_1_GlitchFilterDmaInit(void) 
+ 668:Generated_Source\PSoC5/VFD_1.c **** {
+ 139              		.loc 1 668 0
+ 140              		.cfi_startproc
+ 141              		@ args = 0, pretend = 0, frame = 0
+ 142              		@ frame_needed = 0, uses_anonymous_args = 0
+ 143 0000 70B5     		push	{r4, r5, r6, lr}
+ 144              		.cfi_def_cfa_offset 16
+ 145              		.cfi_offset 4, -16
+ 146              		.cfi_offset 5, -12
+ 147              		.cfi_offset 6, -8
+ 148              		.cfi_offset 14, -4
+ 669:Generated_Source\PSoC5/VFD_1.c ****     uint8 td;
+ 670:Generated_Source\PSoC5/VFD_1.c **** 
+ 671:Generated_Source\PSoC5/VFD_1.c ****     /* Reads previous glitch filter count for current input from SRAM */
+ 672:Generated_Source\PSoC5/VFD_1.c ****     filtRdDmaCh = VFD_1_DMA_CFG(FiltRdDMA, FILT_DMA_DATA_SIZE, HI16(CYDEV_SRAM_BASE), HI16(CYDEV_PE
+ 149              		.loc 1 672 0
+ 150 0002 0220     		movs	r0, #2
+ 151 0004 0121     		movs	r1, #1
+ 152 0006 41F6FF72 		movw	r2, #8191
+ 153 000a 4FF48043 		mov	r3, #16384
+ 154 000e FFF7FEFF 		bl	VFD_1_FiltRdDMA_DmaInitialize
+ 155              	.LVL15:
+ 156 0012 194C     		ldr	r4, .L10
+ 157 0014 2071     		strb	r0, [r4, #4]
+ 673:Generated_Source\PSoC5/VFD_1.c ****     td = CyDmaTdAllocate();
+ 158              		.loc 1 673 0
+ 159 0016 FFF7FEFF 		bl	CyDmaTdAllocate
+ 160              	.LVL16:
+ 161 001a 0646     		mov	r6, r0
+ 162              	.LVL17:
+ 674:Generated_Source\PSoC5/VFD_1.c ****     (void)CyDmaTdSetConfiguration(td, sizeof(filtCount), td, CY_DMA_TD_INC_SRC_ADR);
+ 163              		.loc 1 674 0
+ 164 001c 0221     		movs	r1, #2
+ 165 001e 0246     		mov	r2, r0
+ 166 0020 0123     		movs	r3, #1
+ 167 0022 FFF7FEFF 		bl	CyDmaTdSetConfiguration
+ 168              	.LVL18:
+ 675:Generated_Source\PSoC5/VFD_1.c ****     (void)CyDmaTdSetAddress(td, LO16((uint32)filtCount), LO16((uint32)VFD_1_FILTER_IN_FIFO_PTR));
+ 169              		.loc 1 675 0
+ 170 0026 04F10805 		add	r5, r4, #8
+ 171 002a ADB2     		uxth	r5, r5
+ 172 002c 3046     		mov	r0, r6
+ 173 002e 2946     		mov	r1, r5
+ 174 0030 46F68402 		movw	r2, #26756
+ 175 0034 FFF7FEFF 		bl	CyDmaTdSetAddress
+ 176              	.LVL19:
+ 676:Generated_Source\PSoC5/VFD_1.c ****     (void)CyDmaChSetInitialTd(filtRdDmaCh, td);
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 16
+
+
+ 177              		.loc 1 676 0
+ 178 0038 2079     		ldrb	r0, [r4, #4]	@ zero_extendqisi2
+ 179 003a 3146     		mov	r1, r6
+ 180 003c FFF7FEFF 		bl	CyDmaChSetInitialTd
+ 181              	.LVL20:
+ 677:Generated_Source\PSoC5/VFD_1.c **** 
+ 678:Generated_Source\PSoC5/VFD_1.c ****     /* Moves updated glitch filter result back to SRAM */ 
+ 679:Generated_Source\PSoC5/VFD_1.c ****     filtWrDmaCh = VFD_1_DMA_CFG(FiltWrDMA, FILT_DMA_DATA_SIZE, HI16(CYDEV_PERIPH_BASE), HI16(CYDEV_
+ 182              		.loc 1 679 0
+ 183 0040 0220     		movs	r0, #2
+ 184 0042 0121     		movs	r1, #1
+ 185 0044 4FF48042 		mov	r2, #16384
+ 186 0048 41F6FF73 		movw	r3, #8191
+ 187 004c FFF7FEFF 		bl	VFD_1_FiltWrDMA_DmaInitialize
+ 188              	.LVL21:
+ 189 0050 A072     		strb	r0, [r4, #10]
+ 680:Generated_Source\PSoC5/VFD_1.c ****     td = CyDmaTdAllocate();
+ 190              		.loc 1 680 0
+ 191 0052 FFF7FEFF 		bl	CyDmaTdAllocate
+ 192              	.LVL22:
+ 193 0056 0646     		mov	r6, r0
+ 194              	.LVL23:
+ 681:Generated_Source\PSoC5/VFD_1.c ****     (void)CyDmaTdSetConfiguration(td, sizeof(filtCount), td, CY_DMA_TD_INC_DST_ADR);
+ 195              		.loc 1 681 0
+ 196 0058 0221     		movs	r1, #2
+ 197 005a 0246     		mov	r2, r0
+ 198 005c 0B46     		mov	r3, r1
+ 199 005e FFF7FEFF 		bl	CyDmaTdSetConfiguration
+ 200              	.LVL24:
+ 682:Generated_Source\PSoC5/VFD_1.c ****     (void)CyDmaTdSetAddress(td, LO16((uint32)VFD_1_FILTER_OUT_FIFO_PTR), LO16((uint32)filtCount));
+ 201              		.loc 1 682 0
+ 202 0062 3046     		mov	r0, r6
+ 203 0064 46F6A401 		movw	r1, #26788
+ 204 0068 2A46     		mov	r2, r5
+ 205 006a FFF7FEFF 		bl	CyDmaTdSetAddress
+ 206              	.LVL25:
+ 683:Generated_Source\PSoC5/VFD_1.c ****     (void)CyDmaChSetInitialTd(filtWrDmaCh, td);
+ 207              		.loc 1 683 0
+ 208 006e A07A     		ldrb	r0, [r4, #10]	@ zero_extendqisi2
+ 209 0070 3146     		mov	r1, r6
+ 210 0072 FFF7FEFF 		bl	CyDmaChSetInitialTd
+ 211              	.LVL26:
+ 212 0076 70BD     		pop	{r4, r5, r6, pc}
+ 213              	.L11:
+ 214              		.align	2
+ 215              	.L10:
+ 216 0078 00000000 		.word	.LANCHOR0
+ 217              		.cfi_endproc
+ 218              	.LFE8:
+ 219              		.size	VFD_1_GlitchFilterDmaInit, .-VFD_1_GlitchFilterDmaInit
+ 220              		.section	.text.VFD_1_Init,"ax",%progbits
+ 221              		.align	2
+ 222              		.global	VFD_1_Init
+ 223              		.thumb
+ 224              		.thumb_func
+ 225              		.type	VFD_1_Init, %function
+ 226              	VFD_1_Init:
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 17
+
+
+ 227              	.LFB0:
+ 130:Generated_Source\PSoC5/VFD_1.c ****     uint8 interruptState;
+ 228              		.loc 1 130 0
+ 229              		.cfi_startproc
+ 230              		@ args = 0, pretend = 0, frame = 0
+ 231              		@ frame_needed = 0, uses_anonymous_args = 0
+ 232 0000 08B5     		push	{r3, lr}
+ 233              		.cfi_def_cfa_offset 8
+ 234              		.cfi_offset 3, -8
+ 235              		.cfi_offset 14, -4
+ 136:Generated_Source\PSoC5/VFD_1.c ****     {
+ 236              		.loc 1 136 0
+ 237 0002 114B     		ldr	r3, .L15
+ 238 0004 DB7A     		ldrb	r3, [r3, #11]	@ zero_extendqisi2
+ 239 0006 33B9     		cbnz	r3, .L13
+ 138:Generated_Source\PSoC5/VFD_1.c ****         VFD_1_GlitchFilterDmaInit();
+ 240              		.loc 1 138 0
+ 241 0008 FFF7FEFF 		bl	VFD_1_AMuxDmaInit
+ 242              	.LVL27:
+ 139:Generated_Source\PSoC5/VFD_1.c ****         dmaInitDone = 1u;
+ 243              		.loc 1 139 0
+ 244 000c FFF7FEFF 		bl	VFD_1_GlitchFilterDmaInit
+ 245              	.LVL28:
+ 140:Generated_Source\PSoC5/VFD_1.c ****     }
+ 246              		.loc 1 140 0
+ 247 0010 0122     		movs	r2, #1
+ 248 0012 0D4B     		ldr	r3, .L15
+ 249 0014 DA72     		strb	r2, [r3, #11]
+ 250              	.L13:
+ 144:Generated_Source\PSoC5/VFD_1.c ****     #endif /* VFD_1_ENABLE_OV_DETECT */
+ 251              		.loc 1 144 0
+ 252 0016 FFF7FEFF 		bl	VFD_1_OVRefInit
+ 253              	.LVL29:
+ 254 001a FFF7FEFF 		bl	VFD_1_Comp_OV_Init
+ 255              	.LVL30:
+ 148:Generated_Source\PSoC5/VFD_1.c ****     #endif /* VFD_1_ENABLE_UV_DETECT */
+ 256              		.loc 1 148 0
+ 257 001e FFF7FEFF 		bl	VFD_1_UVRefInit
+ 258              	.LVL31:
+ 259 0022 FFF7FEFF 		bl	VFD_1_Comp_UV_Init
+ 260              	.LVL32:
+ 152:Generated_Source\PSoC5/VFD_1.c ****     #if (VFD_1_VIN_SETTLING_DELAY > VFD_1_VIN_SETTLING_DELAY_MIN)
+ 261              		.loc 1 152 0
+ 262 0026 FFF7FEFF 		bl	CyEnterCriticalSection
+ 263              	.LVL33:
+ 154:Generated_Source\PSoC5/VFD_1.c ****     #endif /* VFD_1_VIN_SETTLING_DELAY > VFD_1_VIN_SETTLING_DELAY_MIN */
+ 264              		.loc 1 154 0
+ 265 002a 084A     		ldr	r2, .L15+4
+ 266 002c 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 267 002e 43F02003 		orr	r3, r3, #32
+ 268 0032 1370     		strb	r3, [r2]
+ 156:Generated_Source\PSoC5/VFD_1.c ****     CyExitCriticalSection(interruptState);
+ 269              		.loc 1 156 0
+ 270 0034 02F58072 		add	r2, r2, #256
+ 271 0038 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 272 003a 43F02003 		orr	r3, r3, #32
+ 273 003e 1370     		strb	r3, [r2]
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 18
+
+
+ 157:Generated_Source\PSoC5/VFD_1.c **** }
+ 274              		.loc 1 157 0
+ 275 0040 FFF7FEFF 		bl	CyExitCriticalSection
+ 276              	.LVL34:
+ 277 0044 08BD     		pop	{r3, pc}
+ 278              	.L16:
+ 279 0046 00BF     		.align	2
+ 280              	.L15:
+ 281 0048 00000000 		.word	.LANCHOR0
+ 282 004c 95640040 		.word	1073767573
+ 283              		.cfi_endproc
+ 284              	.LFE0:
+ 285              		.size	VFD_1_Init, .-VFD_1_Init
+ 286              		.section	.text.VFD_1_Enable,"ax",%progbits
+ 287              		.align	2
+ 288              		.global	VFD_1_Enable
+ 289              		.thumb
+ 290              		.thumb_func
+ 291              		.type	VFD_1_Enable, %function
+ 292              	VFD_1_Enable:
+ 293              	.LFB1:
+ 187:Generated_Source\PSoC5/VFD_1.c ****     /* AMux control uses TD chain. Set initial TD in chain. */
+ 294              		.loc 1 187 0
+ 295              		.cfi_startproc
+ 296              		@ args = 0, pretend = 0, frame = 0
+ 297              		@ frame_needed = 0, uses_anonymous_args = 0
+ 298 0000 10B5     		push	{r4, lr}
+ 299              		.cfi_def_cfa_offset 8
+ 300              		.cfi_offset 4, -8
+ 301              		.cfi_offset 14, -4
+ 189:Generated_Source\PSoC5/VFD_1.c ****     (void)CyDmaChEnable(amuxDmaCh, 1u);
+ 302              		.loc 1 189 0
+ 303 0002 104C     		ldr	r4, .L19
+ 304 0004 6078     		ldrb	r0, [r4, #1]	@ zero_extendqisi2
+ 305 0006 E178     		ldrb	r1, [r4, #3]	@ zero_extendqisi2
+ 306 0008 FFF7FEFF 		bl	CyDmaChSetInitialTd
+ 307              	.LVL35:
+ 190:Generated_Source\PSoC5/VFD_1.c ****     (void)CyDmaChEnable(filtRdDmaCh, 1u);
+ 308              		.loc 1 190 0
+ 309 000c 6078     		ldrb	r0, [r4, #1]	@ zero_extendqisi2
+ 310 000e 0121     		movs	r1, #1
+ 311 0010 FFF7FEFF 		bl	CyDmaChEnable
+ 312              	.LVL36:
+ 191:Generated_Source\PSoC5/VFD_1.c ****     (void)CyDmaChEnable(filtWrDmaCh, 1u);
+ 313              		.loc 1 191 0
+ 314 0014 2079     		ldrb	r0, [r4, #4]	@ zero_extendqisi2
+ 315 0016 0121     		movs	r1, #1
+ 316 0018 FFF7FEFF 		bl	CyDmaChEnable
+ 317              	.LVL37:
+ 192:Generated_Source\PSoC5/VFD_1.c ****        
+ 318              		.loc 1 192 0
+ 319 001c A07A     		ldrb	r0, [r4, #10]	@ zero_extendqisi2
+ 320 001e 0121     		movs	r1, #1
+ 321 0020 FFF7FEFF 		bl	CyDmaChEnable
+ 322              	.LVL38:
+ 195:Generated_Source\PSoC5/VFD_1.c ****     #endif /* VFD_1_ENABLE_OV_DETECT */
+ 323              		.loc 1 195 0
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 19
+
+
+ 324 0024 FFF7FEFF 		bl	VFD_1_OVRefEnable
+ 325              	.LVL39:
+ 326 0028 FFF7FEFF 		bl	VFD_1_Comp_OV_Enable
+ 327              	.LVL40:
+ 199:Generated_Source\PSoC5/VFD_1.c ****     #endif /* VFD_1_ENABLE_UV_DETECT */
+ 328              		.loc 1 199 0
+ 329 002c FFF7FEFF 		bl	VFD_1_UVRefEnable
+ 330              	.LVL41:
+ 331 0030 FFF7FEFF 		bl	VFD_1_Comp_UV_Enable
+ 332              	.LVL42:
+ 203:Generated_Source\PSoC5/VFD_1.c **** 
+ 333              		.loc 1 203 0
+ 334 0034 0023     		movs	r3, #0
+ 335 0036 2381     		strh	r3, [r4, #8]	@ movhi
+ 206:Generated_Source\PSoC5/VFD_1.c **** 
+ 336              		.loc 1 206 0
+ 337 0038 034A     		ldr	r2, .L19+4
+ 338 003a 1370     		strb	r3, [r2]
+ 209:Generated_Source\PSoC5/VFD_1.c **** }
+ 339              		.loc 1 209 0
+ 340 003c 0122     		movs	r2, #1
+ 341 003e 034B     		ldr	r3, .L19+8
+ 342 0040 1A70     		strb	r2, [r3]
+ 343 0042 10BD     		pop	{r4, pc}
+ 344              	.L20:
+ 345              		.align	2
+ 346              	.L19:
+ 347 0044 00000000 		.word	.LANCHOR0
+ 348 0048 75650040 		.word	1073767797
+ 349 004c 72640040 		.word	1073767538
+ 350              		.cfi_endproc
+ 351              	.LFE1:
+ 352              		.size	VFD_1_Enable, .-VFD_1_Enable
+ 353              		.section	.text.VFD_1_Stop,"ax",%progbits
+ 354              		.align	2
+ 355              		.global	VFD_1_Stop
+ 356              		.thumb
+ 357              		.thumb_func
+ 358              		.type	VFD_1_Stop, %function
+ 359              	VFD_1_Stop:
+ 360              	.LFB3:
+ 272:Generated_Source\PSoC5/VFD_1.c ****     uint8 indx;
+ 361              		.loc 1 272 0
+ 362              		.cfi_startproc
+ 363              		@ args = 0, pretend = 0, frame = 0
+ 364              		@ frame_needed = 0, uses_anonymous_args = 0
+ 365 0000 38B5     		push	{r3, r4, r5, lr}
+ 366              		.cfi_def_cfa_offset 16
+ 367              		.cfi_offset 3, -16
+ 368              		.cfi_offset 4, -12
+ 369              		.cfi_offset 5, -8
+ 370              		.cfi_offset 14, -4
+ 277:Generated_Source\PSoC5/VFD_1.c ****     
+ 371              		.loc 1 277 0
+ 372 0002 0024     		movs	r4, #0
+ 373 0004 204B     		ldr	r3, .L25
+ 374 0006 1C70     		strb	r4, [r3]
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 20
+
+
+ 280:Generated_Source\PSoC5/VFD_1.c ****     (void)CyDmaChSetRequest(filtRdDmaCh, CY_DMA_CPU_TERM_CHAIN);
+ 375              		.loc 1 280 0
+ 376 0008 204D     		ldr	r5, .L25+4
+ 377 000a 6878     		ldrb	r0, [r5, #1]	@ zero_extendqisi2
+ 378 000c 0421     		movs	r1, #4
+ 379 000e FFF7FEFF 		bl	CyDmaChSetRequest
+ 380              	.LVL43:
+ 281:Generated_Source\PSoC5/VFD_1.c ****     (void)CyDmaChSetRequest(filtWrDmaCh, CY_DMA_CPU_TERM_CHAIN);
+ 381              		.loc 1 281 0
+ 382 0012 2879     		ldrb	r0, [r5, #4]	@ zero_extendqisi2
+ 383 0014 0421     		movs	r1, #4
+ 384 0016 FFF7FEFF 		bl	CyDmaChSetRequest
+ 385              	.LVL44:
+ 282:Generated_Source\PSoC5/VFD_1.c ****         
+ 386              		.loc 1 282 0
+ 387 001a A87A     		ldrb	r0, [r5, #10]	@ zero_extendqisi2
+ 388 001c 0421     		movs	r1, #4
+ 389 001e FFF7FEFF 		bl	CyDmaChSetRequest
+ 390              	.LVL45:
+ 285:Generated_Source\PSoC5/VFD_1.c ****     (void)CyDmaClearPendingDrq(filtRdDmaCh);
+ 391              		.loc 1 285 0
+ 392 0022 6878     		ldrb	r0, [r5, #1]	@ zero_extendqisi2
+ 393 0024 FFF7FEFF 		bl	CyDmaClearPendingDrq
+ 394              	.LVL46:
+ 286:Generated_Source\PSoC5/VFD_1.c ****     (void)CyDmaClearPendingDrq(filtWrDmaCh);
+ 395              		.loc 1 286 0
+ 396 0028 2879     		ldrb	r0, [r5, #4]	@ zero_extendqisi2
+ 397 002a FFF7FEFF 		bl	CyDmaClearPendingDrq
+ 398              	.LVL47:
+ 287:Generated_Source\PSoC5/VFD_1.c **** 
+ 399              		.loc 1 287 0
+ 400 002e A87A     		ldrb	r0, [r5, #10]	@ zero_extendqisi2
+ 401 0030 FFF7FEFF 		bl	CyDmaClearPendingDrq
+ 402              	.LVL48:
+ 290:Generated_Source\PSoC5/VFD_1.c ****     #endif /* VFD_1_ENABLE_OV_DETECT */
+ 403              		.loc 1 290 0
+ 404 0034 FFF7FEFF 		bl	VFD_1_OVRefStop
+ 405              	.LVL49:
+ 406 0038 FFF7FEFF 		bl	VFD_1_Comp_OV_Stop
+ 407              	.LVL50:
+ 294:Generated_Source\PSoC5/VFD_1.c ****     #endif /* VFD_1_ENABLE_UV_DETECT */
+ 408              		.loc 1 294 0
+ 409 003c FFF7FEFF 		bl	VFD_1_UVRefStop
+ 410              	.LVL51:
+ 411 0040 FFF7FEFF 		bl	VFD_1_Comp_UV_Stop
+ 412              	.LVL52:
+ 298:Generated_Source\PSoC5/VFD_1.c ****     {
+ 413              		.loc 1 298 0
+ 414 0044 2346     		mov	r3, r4
+ 415 0046 06E0     		b	.L22
+ 416              	.LVL53:
+ 417              	.L23:
+ 300:Generated_Source\PSoC5/VFD_1.c ****     }
+ 418              		.loc 1 300 0 discriminator 3
+ 419 0048 114A     		ldr	r2, .L25+8
+ 420 004a 52F82320 		ldr	r2, [r2, r3, lsl #2]
+ 421 004e 0021     		movs	r1, #0
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 21
+
+
+ 422 0050 1170     		strb	r1, [r2]
+ 298:Generated_Source\PSoC5/VFD_1.c ****     {
+ 423              		.loc 1 298 0 discriminator 3
+ 424 0052 0133     		adds	r3, r3, #1
+ 425              	.LVL54:
+ 426 0054 DBB2     		uxtb	r3, r3
+ 427              	.LVL55:
+ 428              	.L22:
+ 298:Generated_Source\PSoC5/VFD_1.c ****     {
+ 429              		.loc 1 298 0 is_stmt 0 discriminator 1
+ 430 0056 002B     		cmp	r3, #0
+ 431 0058 F6D0     		beq	.L23
+ 303:Generated_Source\PSoC5/VFD_1.c ****     VFD_1_PG_FILTER_FIFO_ACTL_REG |= VFD_1_FIFO_CLR;
+ 432              		.loc 1 303 0 is_stmt 1
+ 433 005a FFF7FEFF 		bl	CyEnterCriticalSection
+ 434              	.LVL56:
+ 304:Generated_Source\PSoC5/VFD_1.c ****     VFD_1_PG_FILTER_FIFO_ACTL_REG &= (uint8)~VFD_1_FIFO_CLR;
+ 435              		.loc 1 304 0
+ 436 005e 0D4B     		ldr	r3, .L25+12
+ 437 0060 1A78     		ldrb	r2, [r3]	@ zero_extendqisi2
+ 438 0062 42F00302 		orr	r2, r2, #3
+ 439 0066 1A70     		strb	r2, [r3]
+ 305:Generated_Source\PSoC5/VFD_1.c ****     #if (VFD_1_ENABLE_OV_DETECT)
+ 440              		.loc 1 305 0
+ 441 0068 1A78     		ldrb	r2, [r3]	@ zero_extendqisi2
+ 442 006a 02F0FC02 		and	r2, r2, #252
+ 443 006e 1A70     		strb	r2, [r3]
+ 307:Generated_Source\PSoC5/VFD_1.c ****         VFD_1_OV_FILTER_FIFO_ACTL_REG &= (uint8)~VFD_1_FIFO_CLR;
+ 444              		.loc 1 307 0
+ 445 0070 0133     		adds	r3, r3, #1
+ 446 0072 1A78     		ldrb	r2, [r3]	@ zero_extendqisi2
+ 447 0074 42F00302 		orr	r2, r2, #3
+ 448 0078 1A70     		strb	r2, [r3]
+ 308:Generated_Source\PSoC5/VFD_1.c ****     #endif /* VFD_1_ENABLE_OV_DETECT */
+ 449              		.loc 1 308 0
+ 450 007a 1A78     		ldrb	r2, [r3]	@ zero_extendqisi2
+ 451 007c 02F0FC02 		and	r2, r2, #252
+ 452 0080 1A70     		strb	r2, [r3]
+ 310:Generated_Source\PSoC5/VFD_1.c **** }
+ 453              		.loc 1 310 0
+ 454 0082 FFF7FEFF 		bl	CyExitCriticalSection
+ 455              	.LVL57:
+ 456 0086 38BD     		pop	{r3, r4, r5, pc}
+ 457              	.L26:
+ 458              		.align	2
+ 459              	.L25:
+ 460 0088 72640040 		.word	1073767538
+ 461 008c 00000000 		.word	.LANCHOR0
+ 462 0090 00000000 		.word	VFD_1_AMux__addrTable
+ 463 0094 92640040 		.word	1073767570
+ 464              		.cfi_endproc
+ 465              	.LFE3:
+ 466              		.size	VFD_1_Stop, .-VFD_1_Stop
+ 467              		.section	.text.VFD_1_GetOVUVFaultStatus,"ax",%progbits
+ 468              		.align	2
+ 469              		.global	VFD_1_GetOVUVFaultStatus
+ 470              		.thumb
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 22
+
+
+ 471              		.thumb_func
+ 472              		.type	VFD_1_GetOVUVFaultStatus, %function
+ 473              	VFD_1_GetOVUVFaultStatus:
+ 474              	.LFB4:
+ 340:Generated_Source\PSoC5/VFD_1.c ****     FAULT_STS ovLocal;
+ 475              		.loc 1 340 0
+ 476              		.cfi_startproc
+ 477              		@ args = 0, pretend = 0, frame = 0
+ 478              		@ frame_needed = 0, uses_anonymous_args = 0
+ 479              		@ link register save eliminated.
+ 480              	.LVL58:
+ 481 0000 10B4     		push	{r4}
+ 482              		.cfi_def_cfa_offset 4
+ 483              		.cfi_offset 4, -4
+ 354:Generated_Source\PSoC5/VFD_1.c ****         uvLocal.bytes[STS_B1] = (uint8)~(VFD_1_PG_STS8_STATUS_REG | ovLocal.bytes[STS_B1]);
+ 484              		.loc 1 354 0
+ 485 0002 0F4B     		ldr	r3, .L29
+ 486 0004 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 487 0006 0022     		movs	r2, #0
+ 488              	.LVL59:
+ 489 0008 63F30702 		bfi	r2, r3, #0, #8
+ 490              	.LVL60:
+ 355:Generated_Source\PSoC5/VFD_1.c ****     #endif /* VFD_1_PG_STS8_STATUS_REG */
+ 491              		.loc 1 355 0
+ 492 000c 0D4B     		ldr	r3, .L29+4
+ 493 000e 1C78     		ldrb	r4, [r3]	@ zero_extendqisi2
+ 494 0010 D3B2     		uxtb	r3, r2
+ 495 0012 2343     		orrs	r3, r3, r4
+ 496 0014 DB43     		mvns	r3, r3
+ 497 0016 DBB2     		uxtb	r3, r3
+ 498 0018 0024     		movs	r4, #0
+ 499              	.LVL61:
+ 500 001a 63F30704 		bfi	r4, r3, #0, #8
+ 501              	.LVL62:
+ 361:Generated_Source\PSoC5/VFD_1.c ****         uvLocal.bytes[STS_B2] = 0u;
+ 502              		.loc 1 361 0
+ 503 001e 6FF30F22 		bfc	r2, #8, #8
+ 362:Generated_Source\PSoC5/VFD_1.c ****     #endif /* VFD_1_PG_STS16_STATUS_REG */
+ 504              		.loc 1 362 0
+ 505 0022 6FF30F24 		bfc	r4, #8, #8
+ 368:Generated_Source\PSoC5/VFD_1.c ****         uvLocal.bytes[STS_B3] = 0u;
+ 506              		.loc 1 368 0
+ 507 0026 6FF31742 		bfc	r2, #16, #8
+ 369:Generated_Source\PSoC5/VFD_1.c ****     #endif /* VFD_1_PG_STS24_STATUS_REG */
+ 508              		.loc 1 369 0
+ 509 002a 6FF31744 		bfc	r4, #16, #8
+ 375:Generated_Source\PSoC5/VFD_1.c ****         uvLocal.bytes[STS_B4] = 0u;
+ 510              		.loc 1 375 0
+ 511 002e 6FF31F62 		bfc	r2, #24, #8
+ 376:Generated_Source\PSoC5/VFD_1.c ****     #endif /* VFD_1_PG_STS32_STATUS_REG */
+ 512              		.loc 1 376 0
+ 513 0032 6FF31F64 		bfc	r4, #24, #8
+ 379:Generated_Source\PSoC5/VFD_1.c ****     *uvStatus = uvLocal.word;
+ 514              		.loc 1 379 0
+ 515 0036 0260     		str	r2, [r0]
+ 380:Generated_Source\PSoC5/VFD_1.c **** }
+ 516              		.loc 1 380 0
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 23
+
+
+ 517 0038 0C60     		str	r4, [r1]
+ 381:Generated_Source\PSoC5/VFD_1.c **** 
+ 518              		.loc 1 381 0
+ 519 003a 5DF8044B 		ldr	r4, [sp], #4
+ 520              		.cfi_restore 4
+ 521              		.cfi_def_cfa_offset 0
+ 522              	.LVL63:
+ 523 003e 7047     		bx	lr
+ 524              	.L30:
+ 525              		.align	2
+ 526              	.L29:
+ 527 0040 66650040 		.word	1073767782
+ 528 0044 64650040 		.word	1073767780
+ 529              		.cfi_endproc
+ 530              	.LFE4:
+ 531              		.size	VFD_1_GetOVUVFaultStatus, .-VFD_1_GetOVUVFaultStatus
+ 532              		.section	.text.VFD_1_ComparatorCal,"ax",%progbits
+ 533              		.align	2
+ 534              		.global	VFD_1_ComparatorCal
+ 535              		.thumb
+ 536              		.thumb_func
+ 537              		.type	VFD_1_ComparatorCal, %function
+ 538              	VFD_1_ComparatorCal:
+ 539              	.LFB5:
+ 517:Generated_Source\PSoC5/VFD_1.c ****     #if (VFD_1_ENABLE_OV_DETECT)
+ 540              		.loc 1 517 0
+ 541              		.cfi_startproc
+ 542              		@ args = 0, pretend = 0, frame = 0
+ 543              		@ frame_needed = 0, uses_anonymous_args = 0
+ 544              	.LVL64:
+ 545 0000 10B5     		push	{r4, lr}
+ 546              		.cfi_def_cfa_offset 8
+ 547              		.cfi_offset 4, -8
+ 548              		.cfi_offset 14, -4
+ 549 0002 0446     		mov	r4, r0
+ 519:Generated_Source\PSoC5/VFD_1.c ****         {
+ 550              		.loc 1 519 0
+ 551 0004 0128     		cmp	r0, #1
+ 552 0006 01D1     		bne	.L32
+ 521:Generated_Source\PSoC5/VFD_1.c ****         }
+ 553              		.loc 1 521 0
+ 554 0008 FFF7FEFF 		bl	VFD_1_Comp_OV_ZeroCal
+ 555              	.LVL65:
+ 556              	.L32:
+ 526:Generated_Source\PSoC5/VFD_1.c ****         {
+ 557              		.loc 1 526 0
+ 558 000c 022C     		cmp	r4, #2
+ 559 000e 01D1     		bne	.L31
+ 528:Generated_Source\PSoC5/VFD_1.c ****         }
+ 560              		.loc 1 528 0
+ 561 0010 FFF7FEFF 		bl	VFD_1_Comp_UV_ZeroCal
+ 562              	.LVL66:
+ 563              	.L31:
+ 564 0014 10BD     		pop	{r4, pc}
+ 565              		.cfi_endproc
+ 566              	.LFE5:
+ 567              		.size	VFD_1_ComparatorCal, .-VFD_1_ComparatorCal
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 24
+
+
+ 568 0016 00BF     		.section	.text.VFD_1_Start,"ax",%progbits
+ 569              		.align	2
+ 570              		.global	VFD_1_Start
+ 571              		.thumb
+ 572              		.thumb_func
+ 573              		.type	VFD_1_Start, %function
+ 574              	VFD_1_Start:
+ 575              	.LFB2:
+ 237:Generated_Source\PSoC5/VFD_1.c ****     if(VFD_1_initVar == 0u)
+ 576              		.loc 1 237 0
+ 577              		.cfi_startproc
+ 578              		@ args = 0, pretend = 0, frame = 0
+ 579              		@ frame_needed = 0, uses_anonymous_args = 0
+ 580 0000 08B5     		push	{r3, lr}
+ 581              		.cfi_def_cfa_offset 8
+ 582              		.cfi_offset 3, -8
+ 583              		.cfi_offset 14, -4
+ 238:Generated_Source\PSoC5/VFD_1.c ****     {
+ 584              		.loc 1 238 0
+ 585 0002 084B     		ldr	r3, .L38
+ 586 0004 1B7B     		ldrb	r3, [r3, #12]	@ zero_extendqisi2
+ 587 0006 23B9     		cbnz	r3, .L36
+ 240:Generated_Source\PSoC5/VFD_1.c ****         VFD_1_initVar = 1u;
+ 588              		.loc 1 240 0
+ 589 0008 FFF7FEFF 		bl	VFD_1_Init
+ 590              	.LVL67:
+ 241:Generated_Source\PSoC5/VFD_1.c ****     }
+ 591              		.loc 1 241 0
+ 592 000c 0122     		movs	r2, #1
+ 593 000e 054B     		ldr	r3, .L38
+ 594 0010 1A73     		strb	r2, [r3, #12]
+ 595              	.L36:
+ 244:Generated_Source\PSoC5/VFD_1.c ****     VFD_1_ComparatorCal(VFD_1_UV);
+ 596              		.loc 1 244 0
+ 597 0012 0120     		movs	r0, #1
+ 598 0014 FFF7FEFF 		bl	VFD_1_ComparatorCal
+ 599              	.LVL68:
+ 245:Generated_Source\PSoC5/VFD_1.c ****     VFD_1_Enable();
+ 600              		.loc 1 245 0
+ 601 0018 0220     		movs	r0, #2
+ 602 001a FFF7FEFF 		bl	VFD_1_ComparatorCal
+ 603              	.LVL69:
+ 246:Generated_Source\PSoC5/VFD_1.c **** }
+ 604              		.loc 1 246 0
+ 605 001e FFF7FEFF 		bl	VFD_1_Enable
+ 606              	.LVL70:
+ 607 0022 08BD     		pop	{r3, pc}
+ 608              	.L39:
+ 609              		.align	2
+ 610              	.L38:
+ 611 0024 00000000 		.word	.LANCHOR0
+ 612              		.cfi_endproc
+ 613              	.LFE2:
+ 614              		.size	VFD_1_Start, .-VFD_1_Start
+ 615              		.section	.text.VFD_1_SetSpeed,"ax",%progbits
+ 616              		.align	2
+ 617              		.global	VFD_1_SetSpeed
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 25
+
+
+ 618              		.thumb
+ 619              		.thumb_func
+ 620              		.type	VFD_1_SetSpeed, %function
+ 621              	VFD_1_SetSpeed:
+ 622              	.LFB6:
+ 553:Generated_Source\PSoC5/VFD_1.c ****     if(speedMode == VFD_1_LOW_SPEED)
+ 623              		.loc 1 553 0
+ 624              		.cfi_startproc
+ 625              		@ args = 0, pretend = 0, frame = 0
+ 626              		@ frame_needed = 0, uses_anonymous_args = 0
+ 627              	.LVL71:
+ 628 0000 08B5     		push	{r3, lr}
+ 629              		.cfi_def_cfa_offset 8
+ 630              		.cfi_offset 3, -8
+ 631              		.cfi_offset 14, -4
+ 554:Generated_Source\PSoC5/VFD_1.c ****     {
+ 632              		.loc 1 554 0
+ 633 0002 58B9     		cbnz	r0, .L41
+ 557:Generated_Source\PSoC5/VFD_1.c ****         #endif /* VFD_1_ENABLE_OV_DETECT */
+ 634              		.loc 1 557 0
+ 635 0004 FFF7FEFF 		bl	VFD_1_Comp_OV_SetSpeed
+ 636              	.LVL72:
+ 637 0008 0020     		movs	r0, #0
+ 638 000a FFF7FEFF 		bl	VFD_1_VDAC_OV_SetSpeed
+ 639              	.LVL73:
+ 561:Generated_Source\PSoC5/VFD_1.c ****         #endif /* VFD_1_ENABLE_UV_DETECT */
+ 640              		.loc 1 561 0
+ 641 000e 0020     		movs	r0, #0
+ 642 0010 FFF7FEFF 		bl	VFD_1_Comp_UV_SetSpeed
+ 643              	.LVL74:
+ 644 0014 0020     		movs	r0, #0
+ 645 0016 FFF7FEFF 		bl	VFD_1_VDAC_UV_SetSpeed
+ 646              	.LVL75:
+ 647 001a 08BD     		pop	{r3, pc}
+ 648              	.LVL76:
+ 649              	.L41:
+ 567:Generated_Source\PSoC5/VFD_1.c ****         #endif /* VFD_1_ENABLE_OV_DETECT */
+ 650              		.loc 1 567 0
+ 651 001c 0120     		movs	r0, #1
+ 652              	.LVL77:
+ 653 001e FFF7FEFF 		bl	VFD_1_Comp_OV_SetSpeed
+ 654              	.LVL78:
+ 655 0022 0220     		movs	r0, #2
+ 656 0024 FFF7FEFF 		bl	VFD_1_VDAC_OV_SetSpeed
+ 657              	.LVL79:
+ 571:Generated_Source\PSoC5/VFD_1.c ****         #endif /* VFD_1_ENABLE_UV_DETECT */
+ 658              		.loc 1 571 0
+ 659 0028 0120     		movs	r0, #1
+ 660 002a FFF7FEFF 		bl	VFD_1_Comp_UV_SetSpeed
+ 661              	.LVL80:
+ 662 002e 0220     		movs	r0, #2
+ 663 0030 FFF7FEFF 		bl	VFD_1_VDAC_UV_SetSpeed
+ 664              	.LVL81:
+ 665 0034 08BD     		pop	{r3, pc}
+ 666              		.cfi_endproc
+ 667              	.LFE6:
+ 668              		.size	VFD_1_SetSpeed, .-VFD_1_SetSpeed
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 26
+
+
+ 669              		.global	VFD_1_VoltageScale
+ 670              		.global	VFD_1_initVar
+ 671 0036 00BF     		.section	.rodata
+ 672              		.align	2
+ 673              		.type	VFD_1_VoltageScale, %object
+ 674              		.size	VFD_1_VoltageScale, 2
+ 675              	VFD_1_VoltageScale:
+ 676 0000 E803     		.short	1000
+ 677 0002 0000     		.bss
+ 678              		.align	2
+ 679              		.set	.LANCHOR0,. + 0
+ 680              		.type	amuxMaskTable.5150, %object
+ 681              		.size	amuxMaskTable.5150, 1
+ 682              	amuxMaskTable.5150:
+ 683 0000 00       		.space	1
+ 684              		.type	amuxDmaCh, %object
+ 685              		.size	amuxDmaCh, 1
+ 686              	amuxDmaCh:
+ 687 0001 00       		.space	1
+ 688              		.type	amuxClear.5149, %object
+ 689              		.size	amuxClear.5149, 1
+ 690              	amuxClear.5149:
+ 691 0002 00       		.space	1
+ 692              		.type	amuxDmaTd, %object
+ 693              		.size	amuxDmaTd, 1
+ 694              	amuxDmaTd:
+ 695 0003 00       		.space	1
+ 696              		.type	filtRdDmaCh, %object
+ 697              		.size	filtRdDmaCh, 1
+ 698              	filtRdDmaCh:
+ 699 0004 00       		.space	1
+ 700 0005 000000   		.space	3
+ 701              		.type	filtCount, %object
+ 702              		.size	filtCount, 2
+ 703              	filtCount:
+ 704 0008 0000     		.space	2
+ 705              		.type	filtWrDmaCh, %object
+ 706              		.size	filtWrDmaCh, 1
+ 707              	filtWrDmaCh:
+ 708 000a 00       		.space	1
+ 709              		.type	dmaInitDone.5116, %object
+ 710              		.size	dmaInitDone.5116, 1
+ 711              	dmaInitDone.5116:
+ 712 000b 00       		.space	1
+ 713              		.type	VFD_1_initVar, %object
+ 714              		.size	VFD_1_initVar, 1
+ 715              	VFD_1_initVar:
+ 716 000c 00       		.space	1
+ 717 000d 000000   		.text
+ 718              	.Letext0:
+ 719              		.file 2 "Generated_Source\\PSoC5\\cytypes.h"
+ 720              		.file 3 "Generated_Source\\PSoC5\\VFD_1_PVT.h"
+ 721              		.file 4 "Generated_Source\\PSoC5\\VFD_1_MuxDMA_dma.h"
+ 722              		.file 5 "Generated_Source\\PSoC5/CYDMAC.H"
+ 723              		.file 6 "Generated_Source\\PSoC5\\VFD_1_FiltRdDMA_dma.h"
+ 724              		.file 7 "Generated_Source\\PSoC5\\VFD_1_FiltWrDMA_dma.h"
+ 725              		.file 8 "Generated_Source\\PSoC5\\VFD_1_OV.h"
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 27
+
+
+ 726              		.file 9 "Generated_Source\\PSoC5\\VFD_1_Comp_OV.h"
+ 727              		.file 10 "Generated_Source\\PSoC5\\VFD_1_UV.h"
+ 728              		.file 11 "Generated_Source\\PSoC5\\VFD_1_Comp_UV.h"
+ 729              		.file 12 "Generated_Source\\PSoC5/CyLib.h"
+ 730              		.file 13 "Generated_Source\\PSoC5\\VFD_1_VDAC_OV.h"
+ 731              		.file 14 "Generated_Source\\PSoC5\\VFD_1_VDAC_UV.h"
+ 732              		.section	.debug_info,"",%progbits
+ 733              	.Ldebug_info0:
+ 734 0000 9C090000 		.4byte	0x99c
+ 735 0004 0400     		.2byte	0x4
+ 736 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 737 000a 04       		.byte	0x4
+ 738 000b 01       		.uleb128 0x1
+ 739 000c AC040000 		.4byte	.LASF80
+ 740 0010 01       		.byte	0x1
+ 741 0011 8D000000 		.4byte	.LASF81
+ 742 0015 A9020000 		.4byte	.LASF82
+ 743 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 744 001d 00000000 		.4byte	0
+ 745 0021 00000000 		.4byte	.Ldebug_line0
+ 746 0025 02       		.uleb128 0x2
+ 747 0026 01       		.byte	0x1
+ 748 0027 06       		.byte	0x6
+ 749 0028 2A010000 		.4byte	.LASF0
+ 750 002c 02       		.uleb128 0x2
+ 751 002d 01       		.byte	0x1
+ 752 002e 08       		.byte	0x8
+ 753 002f D0030000 		.4byte	.LASF1
+ 754 0033 02       		.uleb128 0x2
+ 755 0034 02       		.byte	0x2
+ 756 0035 05       		.byte	0x5
+ 757 0036 13040000 		.4byte	.LASF2
+ 758 003a 02       		.uleb128 0x2
+ 759 003b 02       		.byte	0x2
+ 760 003c 07       		.byte	0x7
+ 761 003d 42020000 		.4byte	.LASF3
+ 762 0041 02       		.uleb128 0x2
+ 763 0042 04       		.byte	0x4
+ 764 0043 05       		.byte	0x5
+ 765 0044 68010000 		.4byte	.LASF4
+ 766 0048 02       		.uleb128 0x2
+ 767 0049 04       		.byte	0x4
+ 768 004a 07       		.byte	0x7
+ 769 004b 19020000 		.4byte	.LASF5
+ 770 004f 02       		.uleb128 0x2
+ 771 0050 08       		.byte	0x8
+ 772 0051 05       		.byte	0x5
+ 773 0052 1C010000 		.4byte	.LASF6
+ 774 0056 02       		.uleb128 0x2
+ 775 0057 08       		.byte	0x8
+ 776 0058 07       		.byte	0x7
+ 777 0059 BA000000 		.4byte	.LASF7
+ 778 005d 03       		.uleb128 0x3
+ 779 005e 04       		.byte	0x4
+ 780 005f 05       		.byte	0x5
+ 781 0060 696E7400 		.ascii	"int\000"
+ 782 0064 02       		.uleb128 0x2
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 28
+
+
+ 783 0065 04       		.byte	0x4
+ 784 0066 07       		.byte	0x7
+ 785 0067 04020000 		.4byte	.LASF8
+ 786 006b 04       		.uleb128 0x4
+ 787 006c 8E010000 		.4byte	.LASF9
+ 788 0070 02       		.byte	0x2
+ 789 0071 9201     		.2byte	0x192
+ 790 0073 2C000000 		.4byte	0x2c
+ 791 0077 04       		.uleb128 0x4
+ 792 0078 0A000000 		.4byte	.LASF10
+ 793 007c 02       		.byte	0x2
+ 794 007d 9301     		.2byte	0x193
+ 795 007f 3A000000 		.4byte	0x3a
+ 796 0083 04       		.uleb128 0x4
+ 797 0084 D0010000 		.4byte	.LASF11
+ 798 0088 02       		.byte	0x2
+ 799 0089 9401     		.2byte	0x194
+ 800 008b 48000000 		.4byte	0x48
+ 801 008f 02       		.uleb128 0x2
+ 802 0090 04       		.byte	0x4
+ 803 0091 04       		.byte	0x4
+ 804 0092 99030000 		.4byte	.LASF12
+ 805 0096 02       		.uleb128 0x2
+ 806 0097 08       		.byte	0x8
+ 807 0098 04       		.byte	0x4
+ 808 0099 9E010000 		.4byte	.LASF13
+ 809 009d 02       		.uleb128 0x2
+ 810 009e 01       		.byte	0x1
+ 811 009f 08       		.byte	0x8
+ 812 00a0 57040000 		.4byte	.LASF14
+ 813 00a4 04       		.uleb128 0x4
+ 814 00a5 6F050000 		.4byte	.LASF15
+ 815 00a9 02       		.byte	0x2
+ 816 00aa 3402     		.2byte	0x234
+ 817 00ac 48000000 		.4byte	0x48
+ 818 00b0 04       		.uleb128 0x4
+ 819 00b1 AE030000 		.4byte	.LASF16
+ 820 00b5 02       		.byte	0x2
+ 821 00b6 3C02     		.2byte	0x23c
+ 822 00b8 BC000000 		.4byte	0xbc
+ 823 00bc 05       		.uleb128 0x5
+ 824 00bd 6B000000 		.4byte	0x6b
+ 825 00c1 04       		.uleb128 0x4
+ 826 00c2 88010000 		.4byte	.LASF17
+ 827 00c6 02       		.byte	0x2
+ 828 00c7 3D02     		.2byte	0x23d
+ 829 00c9 CD000000 		.4byte	0xcd
+ 830 00cd 05       		.uleb128 0x5
+ 831 00ce 77000000 		.4byte	0x77
+ 832 00d2 02       		.uleb128 0x2
+ 833 00d3 04       		.byte	0x4
+ 834 00d4 07       		.byte	0x7
+ 835 00d5 FC020000 		.4byte	.LASF18
+ 836 00d9 06       		.uleb128 0x6
+ 837 00da 6B000000 		.4byte	0x6b
+ 838 00de E9000000 		.4byte	0xe9
+ 839 00e2 07       		.uleb128 0x7
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 29
+
+
+ 840 00e3 D2000000 		.4byte	0xd2
+ 841 00e7 03       		.byte	0x3
+ 842 00e8 00       		.byte	0
+ 843 00e9 08       		.uleb128 0x8
+ 844 00ea 04       		.byte	0x4
+ 845 00eb 01       		.byte	0x1
+ 846 00ec 42       		.byte	0x42
+ 847 00ed 08010000 		.4byte	0x108
+ 848 00f1 09       		.uleb128 0x9
+ 849 00f2 87040000 		.4byte	.LASF19
+ 850 00f6 01       		.byte	0x1
+ 851 00f7 44       		.byte	0x44
+ 852 00f8 83000000 		.4byte	0x83
+ 853 00fc 09       		.uleb128 0x9
+ 854 00fd D7010000 		.4byte	.LASF20
+ 855 0101 01       		.byte	0x1
+ 856 0102 45       		.byte	0x45
+ 857 0103 D9000000 		.4byte	0xd9
+ 858 0107 00       		.byte	0
+ 859 0108 0A       		.uleb128 0xa
+ 860 0109 5A020000 		.4byte	.LASF21
+ 861 010d 01       		.byte	0x1
+ 862 010e 46       		.byte	0x46
+ 863 010f E9000000 		.4byte	0xe9
+ 864 0113 0B       		.uleb128 0xb
+ 865 0114 01040000 		.4byte	.LASF24
+ 866 0118 01       		.byte	0x1
+ 867 0119 5502     		.2byte	0x255
+ 868 011b 00000000 		.4byte	.LFB7
+ 869 011f 90000000 		.4byte	.LFE7-.LFB7
+ 870 0123 01       		.uleb128 0x1
+ 871 0124 9C       		.byte	0x9c
+ 872 0125 5C020000 		.4byte	0x25c
+ 873 0129 0C       		.uleb128 0xc
+ 874 012a 74643000 		.ascii	"td0\000"
+ 875 012e 01       		.byte	0x1
+ 876 012f 5A02     		.2byte	0x25a
+ 877 0131 6B000000 		.4byte	0x6b
+ 878 0135 00000000 		.4byte	.LLST0
+ 879 0139 0C       		.uleb128 0xc
+ 880 013a 74643100 		.ascii	"td1\000"
+ 881 013e 01       		.byte	0x1
+ 882 013f 5B02     		.2byte	0x25b
+ 883 0141 6B000000 		.4byte	0x6b
+ 884 0145 13000000 		.4byte	.LLST1
+ 885 0149 0C       		.uleb128 0xc
+ 886 014a 746400   		.ascii	"td\000"
+ 887 014d 01       		.byte	0x1
+ 888 014e 5C02     		.2byte	0x25c
+ 889 0150 6B000000 		.4byte	0x6b
+ 890 0154 33000000 		.4byte	.LLST2
+ 891 0158 0D       		.uleb128 0xd
+ 892 0159 1D040000 		.4byte	.LASF22
+ 893 015d 01       		.byte	0x1
+ 894 015e 5F02     		.2byte	0x25f
+ 895 0160 6B000000 		.4byte	0x6b
+ 896 0164 05       		.uleb128 0x5
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 30
+
+
+ 897 0165 03       		.byte	0x3
+ 898 0166 02000000 		.4byte	amuxClear.5149
+ 899 016a 0D       		.uleb128 0xd
+ 900 016b F6010000 		.4byte	.LASF23
+ 901 016f 01       		.byte	0x1
+ 902 0170 6202     		.2byte	0x262
+ 903 0172 5C020000 		.4byte	0x25c
+ 904 0176 05       		.uleb128 0x5
+ 905 0177 03       		.byte	0x3
+ 906 0178 00000000 		.4byte	amuxMaskTable.5150
+ 907 017c 0E       		.uleb128 0xe
+ 908 017d 1C000000 		.4byte	.LVL0
+ 909 0181 BC070000 		.4byte	0x7bc
+ 910 0185 A2010000 		.4byte	0x1a2
+ 911 0189 0F       		.uleb128 0xf
+ 912 018a 01       		.uleb128 0x1
+ 913 018b 53       		.byte	0x53
+ 914 018c 03       		.uleb128 0x3
+ 915 018d 0A       		.byte	0xa
+ 916 018e 0040     		.2byte	0x4000
+ 917 0190 0F       		.uleb128 0xf
+ 918 0191 01       		.uleb128 0x1
+ 919 0192 52       		.byte	0x52
+ 920 0193 03       		.uleb128 0x3
+ 921 0194 0A       		.byte	0xa
+ 922 0195 FF1F     		.2byte	0x1fff
+ 923 0197 0F       		.uleb128 0xf
+ 924 0198 01       		.uleb128 0x1
+ 925 0199 51       		.byte	0x51
+ 926 019a 01       		.uleb128 0x1
+ 927 019b 31       		.byte	0x31
+ 928 019c 0F       		.uleb128 0xf
+ 929 019d 01       		.uleb128 0x1
+ 930 019e 50       		.byte	0x50
+ 931 019f 01       		.uleb128 0x1
+ 932 01a0 31       		.byte	0x31
+ 933 01a1 00       		.byte	0
+ 934 01a2 10       		.uleb128 0x10
+ 935 01a3 28000000 		.4byte	.LVL3
+ 936 01a7 E0070000 		.4byte	0x7e0
+ 937 01ab 0E       		.uleb128 0xe
+ 938 01ac 3C000000 		.4byte	.LVL5
+ 939 01b0 EB070000 		.4byte	0x7eb
+ 940 01b4 CB010000 		.4byte	0x1cb
+ 941 01b8 0F       		.uleb128 0xf
+ 942 01b9 01       		.uleb128 0x1
+ 943 01ba 52       		.byte	0x52
+ 944 01bb 02       		.uleb128 0x2
+ 945 01bc 76       		.byte	0x76
+ 946 01bd 00       		.sleb128 0
+ 947 01be 0F       		.uleb128 0xf
+ 948 01bf 01       		.uleb128 0x1
+ 949 01c0 51       		.byte	0x51
+ 950 01c1 02       		.uleb128 0x2
+ 951 01c2 75       		.byte	0x75
+ 952 01c3 02       		.sleb128 2
+ 953 01c4 0F       		.uleb128 0xf
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 31
+
+
+ 954 01c5 01       		.uleb128 0x1
+ 955 01c6 50       		.byte	0x50
+ 956 01c7 02       		.uleb128 0x2
+ 957 01c8 78       		.byte	0x78
+ 958 01c9 00       		.sleb128 0
+ 959 01ca 00       		.byte	0
+ 960 01cb 0E       		.uleb128 0xe
+ 961 01cc 48000000 		.4byte	.LVL6
+ 962 01d0 0A080000 		.4byte	0x80a
+ 963 01d4 F0010000 		.4byte	0x1f0
+ 964 01d8 0F       		.uleb128 0xf
+ 965 01d9 01       		.uleb128 0x1
+ 966 01da 53       		.byte	0x53
+ 967 01db 02       		.uleb128 0x2
+ 968 01dc 08       		.byte	0x8
+ 969 01dd 20       		.byte	0x20
+ 970 01de 0F       		.uleb128 0xf
+ 971 01df 01       		.uleb128 0x1
+ 972 01e0 52       		.byte	0x52
+ 973 01e1 02       		.uleb128 0x2
+ 974 01e2 77       		.byte	0x77
+ 975 01e3 00       		.sleb128 0
+ 976 01e4 0F       		.uleb128 0xf
+ 977 01e5 01       		.uleb128 0x1
+ 978 01e6 51       		.byte	0x51
+ 979 01e7 01       		.uleb128 0x1
+ 980 01e8 31       		.byte	0x31
+ 981 01e9 0F       		.uleb128 0xf
+ 982 01ea 01       		.uleb128 0x1
+ 983 01eb 50       		.byte	0x50
+ 984 01ec 02       		.uleb128 0x2
+ 985 01ed 78       		.byte	0x78
+ 986 01ee 00       		.sleb128 0
+ 987 01ef 00       		.byte	0
+ 988 01f0 10       		.uleb128 0x10
+ 989 01f1 4C000000 		.4byte	.LVL7
+ 990 01f5 E0070000 		.4byte	0x7e0
+ 991 01f9 0E       		.uleb128 0xe
+ 992 01fa 58000000 		.4byte	.LVL9
+ 993 01fe EB070000 		.4byte	0x7eb
+ 994 0202 1C020000 		.4byte	0x21c
+ 995 0206 0F       		.uleb128 0xf
+ 996 0207 01       		.uleb128 0x1
+ 997 0208 52       		.byte	0x52
+ 998 0209 02       		.uleb128 0x2
+ 999 020a 76       		.byte	0x76
+ 1000 020b 00       		.sleb128 0
+ 1001 020c 0F       		.uleb128 0xf
+ 1002 020d 01       		.uleb128 0x1
+ 1003 020e 51       		.byte	0x51
+ 1004 020f 05       		.uleb128 0x5
+ 1005 0210 75       		.byte	0x75
+ 1006 0211 00       		.sleb128 0
+ 1007 0212 74       		.byte	0x74
+ 1008 0213 00       		.sleb128 0
+ 1009 0214 22       		.byte	0x22
+ 1010 0215 0F       		.uleb128 0xf
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 32
+
+
+ 1011 0216 01       		.uleb128 0x1
+ 1012 0217 50       		.byte	0x50
+ 1013 0218 02       		.uleb128 0x2
+ 1014 0219 77       		.byte	0x77
+ 1015 021a 00       		.sleb128 0
+ 1016 021b 00       		.byte	0
+ 1017 021c 0E       		.uleb128 0xe
+ 1018 021d 64000000 		.4byte	.LVL10
+ 1019 0221 0A080000 		.4byte	0x80a
+ 1020 0225 40020000 		.4byte	0x240
+ 1021 0229 0F       		.uleb128 0xf
+ 1022 022a 01       		.uleb128 0x1
+ 1023 022b 53       		.byte	0x53
+ 1024 022c 01       		.uleb128 0x1
+ 1025 022d 34       		.byte	0x34
+ 1026 022e 0F       		.uleb128 0xf
+ 1027 022f 01       		.uleb128 0x1
+ 1028 0230 52       		.byte	0x52
+ 1029 0231 02       		.uleb128 0x2
+ 1030 0232 78       		.byte	0x78
+ 1031 0233 00       		.sleb128 0
+ 1032 0234 0F       		.uleb128 0xf
+ 1033 0235 01       		.uleb128 0x1
+ 1034 0236 51       		.byte	0x51
+ 1035 0237 01       		.uleb128 0x1
+ 1036 0238 31       		.byte	0x31
+ 1037 0239 0F       		.uleb128 0xf
+ 1038 023a 01       		.uleb128 0x1
+ 1039 023b 50       		.byte	0x50
+ 1040 023c 02       		.uleb128 0x2
+ 1041 023d 77       		.byte	0x77
+ 1042 023e 00       		.sleb128 0
+ 1043 023f 00       		.byte	0
+ 1044 0240 11       		.uleb128 0x11
+ 1045 0241 80000000 		.4byte	.LVL13
+ 1046 0245 0A080000 		.4byte	0x80a
+ 1047 0249 0F       		.uleb128 0xf
+ 1048 024a 01       		.uleb128 0x1
+ 1049 024b 53       		.byte	0x53
+ 1050 024c 02       		.uleb128 0x2
+ 1051 024d 08       		.byte	0x8
+ 1052 024e 20       		.byte	0x20
+ 1053 024f 0F       		.uleb128 0xf
+ 1054 0250 01       		.uleb128 0x1
+ 1055 0251 52       		.byte	0x52
+ 1056 0252 02       		.uleb128 0x2
+ 1057 0253 77       		.byte	0x77
+ 1058 0254 00       		.sleb128 0
+ 1059 0255 0F       		.uleb128 0xf
+ 1060 0256 01       		.uleb128 0x1
+ 1061 0257 51       		.byte	0x51
+ 1062 0258 01       		.uleb128 0x1
+ 1063 0259 31       		.byte	0x31
+ 1064 025a 00       		.byte	0
+ 1065 025b 00       		.byte	0
+ 1066 025c 06       		.uleb128 0x6
+ 1067 025d 6B000000 		.4byte	0x6b
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 33
+
+
+ 1068 0261 6C020000 		.4byte	0x26c
+ 1069 0265 07       		.uleb128 0x7
+ 1070 0266 D2000000 		.4byte	0xd2
+ 1071 026a 00       		.byte	0
+ 1072 026b 00       		.byte	0
+ 1073 026c 0B       		.uleb128 0xb
+ 1074 026d 8F050000 		.4byte	.LASF25
+ 1075 0271 01       		.byte	0x1
+ 1076 0272 9B02     		.2byte	0x29b
+ 1077 0274 00000000 		.4byte	.LFB8
+ 1078 0278 7C000000 		.4byte	.LFE8-.LFB8
+ 1079 027c 01       		.uleb128 0x1
+ 1080 027d 9C       		.byte	0x9c
+ 1081 027e 9E030000 		.4byte	0x39e
+ 1082 0282 0C       		.uleb128 0xc
+ 1083 0283 746400   		.ascii	"td\000"
+ 1084 0286 01       		.byte	0x1
+ 1085 0287 9D02     		.2byte	0x29d
+ 1086 0289 6B000000 		.4byte	0x6b
+ 1087 028d 5D000000 		.4byte	.LLST3
+ 1088 0291 0E       		.uleb128 0xe
+ 1089 0292 12000000 		.4byte	.LVL15
+ 1090 0296 2E080000 		.4byte	0x82e
+ 1091 029a B7020000 		.4byte	0x2b7
+ 1092 029e 0F       		.uleb128 0xf
+ 1093 029f 01       		.uleb128 0x1
+ 1094 02a0 53       		.byte	0x53
+ 1095 02a1 03       		.uleb128 0x3
+ 1096 02a2 0A       		.byte	0xa
+ 1097 02a3 0040     		.2byte	0x4000
+ 1098 02a5 0F       		.uleb128 0xf
+ 1099 02a6 01       		.uleb128 0x1
+ 1100 02a7 52       		.byte	0x52
+ 1101 02a8 03       		.uleb128 0x3
+ 1102 02a9 0A       		.byte	0xa
+ 1103 02aa FF1F     		.2byte	0x1fff
+ 1104 02ac 0F       		.uleb128 0xf
+ 1105 02ad 01       		.uleb128 0x1
+ 1106 02ae 51       		.byte	0x51
+ 1107 02af 01       		.uleb128 0x1
+ 1108 02b0 31       		.byte	0x31
+ 1109 02b1 0F       		.uleb128 0xf
+ 1110 02b2 01       		.uleb128 0x1
+ 1111 02b3 50       		.byte	0x50
+ 1112 02b4 01       		.uleb128 0x1
+ 1113 02b5 32       		.byte	0x32
+ 1114 02b6 00       		.byte	0
+ 1115 02b7 10       		.uleb128 0x10
+ 1116 02b8 1A000000 		.4byte	.LVL16
+ 1117 02bc E0070000 		.4byte	0x7e0
+ 1118 02c0 0E       		.uleb128 0xe
+ 1119 02c1 26000000 		.4byte	.LVL18
+ 1120 02c5 0A080000 		.4byte	0x80a
+ 1121 02c9 E4020000 		.4byte	0x2e4
+ 1122 02cd 0F       		.uleb128 0xf
+ 1123 02ce 01       		.uleb128 0x1
+ 1124 02cf 53       		.byte	0x53
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 34
+
+
+ 1125 02d0 01       		.uleb128 0x1
+ 1126 02d1 31       		.byte	0x31
+ 1127 02d2 0F       		.uleb128 0xf
+ 1128 02d3 01       		.uleb128 0x1
+ 1129 02d4 52       		.byte	0x52
+ 1130 02d5 02       		.uleb128 0x2
+ 1131 02d6 76       		.byte	0x76
+ 1132 02d7 00       		.sleb128 0
+ 1133 02d8 0F       		.uleb128 0xf
+ 1134 02d9 01       		.uleb128 0x1
+ 1135 02da 51       		.byte	0x51
+ 1136 02db 01       		.uleb128 0x1
+ 1137 02dc 32       		.byte	0x32
+ 1138 02dd 0F       		.uleb128 0xf
+ 1139 02de 01       		.uleb128 0x1
+ 1140 02df 50       		.byte	0x50
+ 1141 02e0 02       		.uleb128 0x2
+ 1142 02e1 76       		.byte	0x76
+ 1143 02e2 00       		.sleb128 0
+ 1144 02e3 00       		.byte	0
+ 1145 02e4 0E       		.uleb128 0xe
+ 1146 02e5 38000000 		.4byte	.LVL19
+ 1147 02e9 EB070000 		.4byte	0x7eb
+ 1148 02ed 05030000 		.4byte	0x305
+ 1149 02f1 0F       		.uleb128 0xf
+ 1150 02f2 01       		.uleb128 0x1
+ 1151 02f3 52       		.byte	0x52
+ 1152 02f4 03       		.uleb128 0x3
+ 1153 02f5 0A       		.byte	0xa
+ 1154 02f6 8468     		.2byte	0x6884
+ 1155 02f8 0F       		.uleb128 0xf
+ 1156 02f9 01       		.uleb128 0x1
+ 1157 02fa 51       		.byte	0x51
+ 1158 02fb 02       		.uleb128 0x2
+ 1159 02fc 75       		.byte	0x75
+ 1160 02fd 00       		.sleb128 0
+ 1161 02fe 0F       		.uleb128 0xf
+ 1162 02ff 01       		.uleb128 0x1
+ 1163 0300 50       		.byte	0x50
+ 1164 0301 02       		.uleb128 0x2
+ 1165 0302 76       		.byte	0x76
+ 1166 0303 00       		.sleb128 0
+ 1167 0304 00       		.byte	0
+ 1168 0305 0E       		.uleb128 0xe
+ 1169 0306 40000000 		.4byte	.LVL20
+ 1170 030a 52080000 		.4byte	0x852
+ 1171 030e 19030000 		.4byte	0x319
+ 1172 0312 0F       		.uleb128 0xf
+ 1173 0313 01       		.uleb128 0x1
+ 1174 0314 51       		.byte	0x51
+ 1175 0315 02       		.uleb128 0x2
+ 1176 0316 76       		.byte	0x76
+ 1177 0317 00       		.sleb128 0
+ 1178 0318 00       		.byte	0
+ 1179 0319 0E       		.uleb128 0xe
+ 1180 031a 50000000 		.4byte	.LVL21
+ 1181 031e 6C080000 		.4byte	0x86c
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 35
+
+
+ 1182 0322 3F030000 		.4byte	0x33f
+ 1183 0326 0F       		.uleb128 0xf
+ 1184 0327 01       		.uleb128 0x1
+ 1185 0328 53       		.byte	0x53
+ 1186 0329 03       		.uleb128 0x3
+ 1187 032a 0A       		.byte	0xa
+ 1188 032b FF1F     		.2byte	0x1fff
+ 1189 032d 0F       		.uleb128 0xf
+ 1190 032e 01       		.uleb128 0x1
+ 1191 032f 52       		.byte	0x52
+ 1192 0330 03       		.uleb128 0x3
+ 1193 0331 0A       		.byte	0xa
+ 1194 0332 0040     		.2byte	0x4000
+ 1195 0334 0F       		.uleb128 0xf
+ 1196 0335 01       		.uleb128 0x1
+ 1197 0336 51       		.byte	0x51
+ 1198 0337 01       		.uleb128 0x1
+ 1199 0338 31       		.byte	0x31
+ 1200 0339 0F       		.uleb128 0xf
+ 1201 033a 01       		.uleb128 0x1
+ 1202 033b 50       		.byte	0x50
+ 1203 033c 01       		.uleb128 0x1
+ 1204 033d 32       		.byte	0x32
+ 1205 033e 00       		.byte	0
+ 1206 033f 10       		.uleb128 0x10
+ 1207 0340 56000000 		.4byte	.LVL22
+ 1208 0344 E0070000 		.4byte	0x7e0
+ 1209 0348 0E       		.uleb128 0xe
+ 1210 0349 62000000 		.4byte	.LVL24
+ 1211 034d 0A080000 		.4byte	0x80a
+ 1212 0351 6C030000 		.4byte	0x36c
+ 1213 0355 0F       		.uleb128 0xf
+ 1214 0356 01       		.uleb128 0x1
+ 1215 0357 53       		.byte	0x53
+ 1216 0358 01       		.uleb128 0x1
+ 1217 0359 32       		.byte	0x32
+ 1218 035a 0F       		.uleb128 0xf
+ 1219 035b 01       		.uleb128 0x1
+ 1220 035c 52       		.byte	0x52
+ 1221 035d 02       		.uleb128 0x2
+ 1222 035e 76       		.byte	0x76
+ 1223 035f 00       		.sleb128 0
+ 1224 0360 0F       		.uleb128 0xf
+ 1225 0361 01       		.uleb128 0x1
+ 1226 0362 51       		.byte	0x51
+ 1227 0363 01       		.uleb128 0x1
+ 1228 0364 32       		.byte	0x32
+ 1229 0365 0F       		.uleb128 0xf
+ 1230 0366 01       		.uleb128 0x1
+ 1231 0367 50       		.byte	0x50
+ 1232 0368 02       		.uleb128 0x2
+ 1233 0369 76       		.byte	0x76
+ 1234 036a 00       		.sleb128 0
+ 1235 036b 00       		.byte	0
+ 1236 036c 0E       		.uleb128 0xe
+ 1237 036d 6E000000 		.4byte	.LVL25
+ 1238 0371 EB070000 		.4byte	0x7eb
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 36
+
+
+ 1239 0375 8D030000 		.4byte	0x38d
+ 1240 0379 0F       		.uleb128 0xf
+ 1241 037a 01       		.uleb128 0x1
+ 1242 037b 52       		.byte	0x52
+ 1243 037c 02       		.uleb128 0x2
+ 1244 037d 75       		.byte	0x75
+ 1245 037e 00       		.sleb128 0
+ 1246 037f 0F       		.uleb128 0xf
+ 1247 0380 01       		.uleb128 0x1
+ 1248 0381 51       		.byte	0x51
+ 1249 0382 03       		.uleb128 0x3
+ 1250 0383 0A       		.byte	0xa
+ 1251 0384 A468     		.2byte	0x68a4
+ 1252 0386 0F       		.uleb128 0xf
+ 1253 0387 01       		.uleb128 0x1
+ 1254 0388 50       		.byte	0x50
+ 1255 0389 02       		.uleb128 0x2
+ 1256 038a 76       		.byte	0x76
+ 1257 038b 00       		.sleb128 0
+ 1258 038c 00       		.byte	0
+ 1259 038d 11       		.uleb128 0x11
+ 1260 038e 76000000 		.4byte	.LVL26
+ 1261 0392 52080000 		.4byte	0x852
+ 1262 0396 0F       		.uleb128 0xf
+ 1263 0397 01       		.uleb128 0x1
+ 1264 0398 51       		.byte	0x51
+ 1265 0399 02       		.uleb128 0x2
+ 1266 039a 76       		.byte	0x76
+ 1267 039b 00       		.sleb128 0
+ 1268 039c 00       		.byte	0
+ 1269 039d 00       		.byte	0
+ 1270 039e 12       		.uleb128 0x12
+ 1271 039f 59000000 		.4byte	.LASF28
+ 1272 03a3 01       		.byte	0x1
+ 1273 03a4 81       		.byte	0x81
+ 1274 03a5 00000000 		.4byte	.LFB0
+ 1275 03a9 50000000 		.4byte	.LFE0-.LFB0
+ 1276 03ad 01       		.uleb128 0x1
+ 1277 03ae 9C       		.byte	0x9c
+ 1278 03af 1C040000 		.4byte	0x41c
+ 1279 03b3 13       		.uleb128 0x13
+ 1280 03b4 59010000 		.4byte	.LASF26
+ 1281 03b8 01       		.byte	0x1
+ 1282 03b9 83       		.byte	0x83
+ 1283 03ba 6B000000 		.4byte	0x6b
+ 1284 03be 7B000000 		.4byte	.LLST4
+ 1285 03c2 14       		.uleb128 0x14
+ 1286 03c3 05030000 		.4byte	.LASF27
+ 1287 03c7 01       		.byte	0x1
+ 1288 03c8 84       		.byte	0x84
+ 1289 03c9 6B000000 		.4byte	0x6b
+ 1290 03cd 05       		.uleb128 0x5
+ 1291 03ce 03       		.byte	0x3
+ 1292 03cf 0B000000 		.4byte	dmaInitDone.5116
+ 1293 03d3 10       		.uleb128 0x10
+ 1294 03d4 0C000000 		.4byte	.LVL27
+ 1295 03d8 13010000 		.4byte	0x113
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 37
+
+
+ 1296 03dc 10       		.uleb128 0x10
+ 1297 03dd 10000000 		.4byte	.LVL28
+ 1298 03e1 6C020000 		.4byte	0x26c
+ 1299 03e5 10       		.uleb128 0x10
+ 1300 03e6 1A000000 		.4byte	.LVL29
+ 1301 03ea 90080000 		.4byte	0x890
+ 1302 03ee 10       		.uleb128 0x10
+ 1303 03ef 1E000000 		.4byte	.LVL30
+ 1304 03f3 97080000 		.4byte	0x897
+ 1305 03f7 10       		.uleb128 0x10
+ 1306 03f8 22000000 		.4byte	.LVL31
+ 1307 03fc 9E080000 		.4byte	0x89e
+ 1308 0400 10       		.uleb128 0x10
+ 1309 0401 26000000 		.4byte	.LVL32
+ 1310 0405 A5080000 		.4byte	0x8a5
+ 1311 0409 10       		.uleb128 0x10
+ 1312 040a 2A000000 		.4byte	.LVL33
+ 1313 040e AC080000 		.4byte	0x8ac
+ 1314 0412 10       		.uleb128 0x10
+ 1315 0413 44000000 		.4byte	.LVL34
+ 1316 0417 B7080000 		.4byte	0x8b7
+ 1317 041b 00       		.byte	0
+ 1318 041c 12       		.uleb128 0x12
+ 1319 041d EF020000 		.4byte	.LASF29
+ 1320 0421 01       		.byte	0x1
+ 1321 0422 BA       		.byte	0xba
+ 1322 0423 00000000 		.4byte	.LFB1
+ 1323 0427 50000000 		.4byte	.LFE1-.LFB1
+ 1324 042b 01       		.uleb128 0x1
+ 1325 042c 9C       		.byte	0x9c
+ 1326 042d 98040000 		.4byte	0x498
+ 1327 0431 10       		.uleb128 0x10
+ 1328 0432 0C000000 		.4byte	.LVL35
+ 1329 0436 52080000 		.4byte	0x852
+ 1330 043a 0E       		.uleb128 0xe
+ 1331 043b 14000000 		.4byte	.LVL36
+ 1332 043f C8080000 		.4byte	0x8c8
+ 1333 0443 4D040000 		.4byte	0x44d
+ 1334 0447 0F       		.uleb128 0xf
+ 1335 0448 01       		.uleb128 0x1
+ 1336 0449 51       		.byte	0x51
+ 1337 044a 01       		.uleb128 0x1
+ 1338 044b 31       		.byte	0x31
+ 1339 044c 00       		.byte	0
+ 1340 044d 0E       		.uleb128 0xe
+ 1341 044e 1C000000 		.4byte	.LVL37
+ 1342 0452 C8080000 		.4byte	0x8c8
+ 1343 0456 60040000 		.4byte	0x460
+ 1344 045a 0F       		.uleb128 0xf
+ 1345 045b 01       		.uleb128 0x1
+ 1346 045c 51       		.byte	0x51
+ 1347 045d 01       		.uleb128 0x1
+ 1348 045e 31       		.byte	0x31
+ 1349 045f 00       		.byte	0
+ 1350 0460 0E       		.uleb128 0xe
+ 1351 0461 24000000 		.4byte	.LVL38
+ 1352 0465 C8080000 		.4byte	0x8c8
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 38
+
+
+ 1353 0469 73040000 		.4byte	0x473
+ 1354 046d 0F       		.uleb128 0xf
+ 1355 046e 01       		.uleb128 0x1
+ 1356 046f 51       		.byte	0x51
+ 1357 0470 01       		.uleb128 0x1
+ 1358 0471 31       		.byte	0x31
+ 1359 0472 00       		.byte	0
+ 1360 0473 10       		.uleb128 0x10
+ 1361 0474 28000000 		.4byte	.LVL39
+ 1362 0478 E2080000 		.4byte	0x8e2
+ 1363 047c 10       		.uleb128 0x10
+ 1364 047d 2C000000 		.4byte	.LVL40
+ 1365 0481 E9080000 		.4byte	0x8e9
+ 1366 0485 10       		.uleb128 0x10
+ 1367 0486 30000000 		.4byte	.LVL41
+ 1368 048a F0080000 		.4byte	0x8f0
+ 1369 048e 10       		.uleb128 0x10
+ 1370 048f 34000000 		.4byte	.LVL42
+ 1371 0493 F7080000 		.4byte	0x8f7
+ 1372 0497 00       		.byte	0
+ 1373 0498 15       		.uleb128 0x15
+ 1374 0499 C5030000 		.4byte	.LASF30
+ 1375 049d 01       		.byte	0x1
+ 1376 049e 0F01     		.2byte	0x10f
+ 1377 04a0 00000000 		.4byte	.LFB3
+ 1378 04a4 98000000 		.4byte	.LFE3-.LFB3
+ 1379 04a8 01       		.uleb128 0x1
+ 1380 04a9 9C       		.byte	0x9c
+ 1381 04aa 59050000 		.4byte	0x559
+ 1382 04ae 16       		.uleb128 0x16
+ 1383 04af 55020000 		.4byte	.LASF31
+ 1384 04b3 01       		.byte	0x1
+ 1385 04b4 1101     		.2byte	0x111
+ 1386 04b6 6B000000 		.4byte	0x6b
+ 1387 04ba 8E000000 		.4byte	.LLST5
+ 1388 04be 16       		.uleb128 0x16
+ 1389 04bf 59010000 		.4byte	.LASF26
+ 1390 04c3 01       		.byte	0x1
+ 1391 04c4 1201     		.2byte	0x112
+ 1392 04c6 6B000000 		.4byte	0x6b
+ 1393 04ca B8000000 		.4byte	.LLST6
+ 1394 04ce 0E       		.uleb128 0xe
+ 1395 04cf 12000000 		.4byte	.LVL43
+ 1396 04d3 FE080000 		.4byte	0x8fe
+ 1397 04d7 E1040000 		.4byte	0x4e1
+ 1398 04db 0F       		.uleb128 0xf
+ 1399 04dc 01       		.uleb128 0x1
+ 1400 04dd 51       		.byte	0x51
+ 1401 04de 01       		.uleb128 0x1
+ 1402 04df 34       		.byte	0x34
+ 1403 04e0 00       		.byte	0
+ 1404 04e1 0E       		.uleb128 0xe
+ 1405 04e2 1A000000 		.4byte	.LVL44
+ 1406 04e6 FE080000 		.4byte	0x8fe
+ 1407 04ea F4040000 		.4byte	0x4f4
+ 1408 04ee 0F       		.uleb128 0xf
+ 1409 04ef 01       		.uleb128 0x1
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 39
+
+
+ 1410 04f0 51       		.byte	0x51
+ 1411 04f1 01       		.uleb128 0x1
+ 1412 04f2 34       		.byte	0x34
+ 1413 04f3 00       		.byte	0
+ 1414 04f4 0E       		.uleb128 0xe
+ 1415 04f5 22000000 		.4byte	.LVL45
+ 1416 04f9 FE080000 		.4byte	0x8fe
+ 1417 04fd 07050000 		.4byte	0x507
+ 1418 0501 0F       		.uleb128 0xf
+ 1419 0502 01       		.uleb128 0x1
+ 1420 0503 51       		.byte	0x51
+ 1421 0504 01       		.uleb128 0x1
+ 1422 0505 34       		.byte	0x34
+ 1423 0506 00       		.byte	0
+ 1424 0507 10       		.uleb128 0x10
+ 1425 0508 28000000 		.4byte	.LVL46
+ 1426 050c 18090000 		.4byte	0x918
+ 1427 0510 10       		.uleb128 0x10
+ 1428 0511 2E000000 		.4byte	.LVL47
+ 1429 0515 18090000 		.4byte	0x918
+ 1430 0519 10       		.uleb128 0x10
+ 1431 051a 34000000 		.4byte	.LVL48
+ 1432 051e 18090000 		.4byte	0x918
+ 1433 0522 10       		.uleb128 0x10
+ 1434 0523 38000000 		.4byte	.LVL49
+ 1435 0527 2D090000 		.4byte	0x92d
+ 1436 052b 10       		.uleb128 0x10
+ 1437 052c 3C000000 		.4byte	.LVL50
+ 1438 0530 34090000 		.4byte	0x934
+ 1439 0534 10       		.uleb128 0x10
+ 1440 0535 40000000 		.4byte	.LVL51
+ 1441 0539 3B090000 		.4byte	0x93b
+ 1442 053d 10       		.uleb128 0x10
+ 1443 053e 44000000 		.4byte	.LVL52
+ 1444 0542 42090000 		.4byte	0x942
+ 1445 0546 10       		.uleb128 0x10
+ 1446 0547 5E000000 		.4byte	.LVL56
+ 1447 054b AC080000 		.4byte	0x8ac
+ 1448 054f 10       		.uleb128 0x10
+ 1449 0550 86000000 		.4byte	.LVL57
+ 1450 0554 B7080000 		.4byte	0x8b7
+ 1451 0558 00       		.byte	0
+ 1452 0559 15       		.uleb128 0x15
+ 1453 055a DD010000 		.4byte	.LASF32
+ 1454 055e 01       		.byte	0x1
+ 1455 055f 5301     		.2byte	0x153
+ 1456 0561 00000000 		.4byte	.LFB4
+ 1457 0565 48000000 		.4byte	.LFE4-.LFB4
+ 1458 0569 01       		.uleb128 0x1
+ 1459 056a 9C       		.byte	0x9c
+ 1460 056b AC050000 		.4byte	0x5ac
+ 1461 056f 17       		.uleb128 0x17
+ 1462 0570 13010000 		.4byte	.LASF33
+ 1463 0574 01       		.byte	0x1
+ 1464 0575 5301     		.2byte	0x153
+ 1465 0577 AC050000 		.4byte	0x5ac
+ 1466 057b 01       		.uleb128 0x1
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 40
+
+
+ 1467 057c 50       		.byte	0x50
+ 1468 057d 17       		.uleb128 0x17
+ 1469 057e 85020000 		.4byte	.LASF34
+ 1470 0582 01       		.byte	0x1
+ 1471 0583 5301     		.2byte	0x153
+ 1472 0585 AC050000 		.4byte	0x5ac
+ 1473 0589 01       		.uleb128 0x1
+ 1474 058a 51       		.byte	0x51
+ 1475 058b 16       		.uleb128 0x16
+ 1476 058c B8010000 		.4byte	.LASF35
+ 1477 0590 01       		.byte	0x1
+ 1478 0591 5501     		.2byte	0x155
+ 1479 0593 08010000 		.4byte	0x108
+ 1480 0597 CB000000 		.4byte	.LLST7
+ 1481 059b 16       		.uleb128 0x16
+ 1482 059c 11020000 		.4byte	.LASF36
+ 1483 05a0 01       		.byte	0x1
+ 1484 05a1 5601     		.2byte	0x156
+ 1485 05a3 08010000 		.4byte	0x108
+ 1486 05a7 DE000000 		.4byte	.LLST8
+ 1487 05ab 00       		.byte	0
+ 1488 05ac 18       		.uleb128 0x18
+ 1489 05ad 04       		.byte	0x4
+ 1490 05ae 83000000 		.4byte	0x83
+ 1491 05b2 15       		.uleb128 0x15
+ 1492 05b3 5C040000 		.4byte	.LASF37
+ 1493 05b7 01       		.byte	0x1
+ 1494 05b8 0402     		.2byte	0x204
+ 1495 05ba 00000000 		.4byte	.LFB5
+ 1496 05be 16000000 		.4byte	.LFE5-.LFB5
+ 1497 05c2 01       		.uleb128 0x1
+ 1498 05c3 9C       		.byte	0x9c
+ 1499 05c4 EB050000 		.4byte	0x5eb
+ 1500 05c8 19       		.uleb128 0x19
+ 1501 05c9 A0020000 		.4byte	.LASF38
+ 1502 05cd 01       		.byte	0x1
+ 1503 05ce 0402     		.2byte	0x204
+ 1504 05d0 6B000000 		.4byte	0x6b
+ 1505 05d4 F1000000 		.4byte	.LLST9
+ 1506 05d8 10       		.uleb128 0x10
+ 1507 05d9 0C000000 		.4byte	.LVL65
+ 1508 05dd 49090000 		.4byte	0x949
+ 1509 05e1 10       		.uleb128 0x10
+ 1510 05e2 14000000 		.4byte	.LVL66
+ 1511 05e6 54090000 		.4byte	0x954
+ 1512 05ea 00       		.byte	0
+ 1513 05eb 12       		.uleb128 0x12
+ 1514 05ec 3D000000 		.4byte	.LASF39
+ 1515 05f0 01       		.byte	0x1
+ 1516 05f1 EC       		.byte	0xec
+ 1517 05f2 00000000 		.4byte	.LFB2
+ 1518 05f6 28000000 		.4byte	.LFE2-.LFB2
+ 1519 05fa 01       		.uleb128 0x1
+ 1520 05fb 9C       		.byte	0x9c
+ 1521 05fc 39060000 		.4byte	0x639
+ 1522 0600 10       		.uleb128 0x10
+ 1523 0601 0C000000 		.4byte	.LVL67
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 41
+
+
+ 1524 0605 9E030000 		.4byte	0x39e
+ 1525 0609 0E       		.uleb128 0xe
+ 1526 060a 18000000 		.4byte	.LVL68
+ 1527 060e B2050000 		.4byte	0x5b2
+ 1528 0612 1C060000 		.4byte	0x61c
+ 1529 0616 0F       		.uleb128 0xf
+ 1530 0617 01       		.uleb128 0x1
+ 1531 0618 50       		.byte	0x50
+ 1532 0619 01       		.uleb128 0x1
+ 1533 061a 31       		.byte	0x31
+ 1534 061b 00       		.byte	0
+ 1535 061c 0E       		.uleb128 0xe
+ 1536 061d 1E000000 		.4byte	.LVL69
+ 1537 0621 B2050000 		.4byte	0x5b2
+ 1538 0625 2F060000 		.4byte	0x62f
+ 1539 0629 0F       		.uleb128 0xf
+ 1540 062a 01       		.uleb128 0x1
+ 1541 062b 50       		.byte	0x50
+ 1542 062c 01       		.uleb128 0x1
+ 1543 062d 32       		.byte	0x32
+ 1544 062e 00       		.byte	0
+ 1545 062f 10       		.uleb128 0x10
+ 1546 0630 22000000 		.4byte	.LVL70
+ 1547 0634 1C040000 		.4byte	0x41c
+ 1548 0638 00       		.byte	0
+ 1549 0639 15       		.uleb128 0x15
+ 1550 063a 9F030000 		.4byte	.LASF40
+ 1551 063e 01       		.byte	0x1
+ 1552 063f 2802     		.2byte	0x228
+ 1553 0641 00000000 		.4byte	.LFB6
+ 1554 0645 36000000 		.4byte	.LFE6-.LFB6
+ 1555 0649 01       		.uleb128 0x1
+ 1556 064a 9C       		.byte	0x9c
+ 1557 064b EA060000 		.4byte	0x6ea
+ 1558 064f 19       		.uleb128 0x19
+ 1559 0650 A2040000 		.4byte	.LASF41
+ 1560 0654 01       		.byte	0x1
+ 1561 0655 2802     		.2byte	0x228
+ 1562 0657 6B000000 		.4byte	0x6b
+ 1563 065b 12010000 		.4byte	.LLST10
+ 1564 065f 10       		.uleb128 0x10
+ 1565 0660 08000000 		.4byte	.LVL72
+ 1566 0664 5F090000 		.4byte	0x95f
+ 1567 0668 0E       		.uleb128 0xe
+ 1568 0669 0E000000 		.4byte	.LVL73
+ 1569 066d 70090000 		.4byte	0x970
+ 1570 0671 7B060000 		.4byte	0x67b
+ 1571 0675 0F       		.uleb128 0xf
+ 1572 0676 01       		.uleb128 0x1
+ 1573 0677 50       		.byte	0x50
+ 1574 0678 01       		.uleb128 0x1
+ 1575 0679 30       		.byte	0x30
+ 1576 067a 00       		.byte	0
+ 1577 067b 0E       		.uleb128 0xe
+ 1578 067c 14000000 		.4byte	.LVL74
+ 1579 0680 81090000 		.4byte	0x981
+ 1580 0684 8E060000 		.4byte	0x68e
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 42
+
+
+ 1581 0688 0F       		.uleb128 0xf
+ 1582 0689 01       		.uleb128 0x1
+ 1583 068a 50       		.byte	0x50
+ 1584 068b 01       		.uleb128 0x1
+ 1585 068c 30       		.byte	0x30
+ 1586 068d 00       		.byte	0
+ 1587 068e 0E       		.uleb128 0xe
+ 1588 068f 1A000000 		.4byte	.LVL75
+ 1589 0693 92090000 		.4byte	0x992
+ 1590 0697 A1060000 		.4byte	0x6a1
+ 1591 069b 0F       		.uleb128 0xf
+ 1592 069c 01       		.uleb128 0x1
+ 1593 069d 50       		.byte	0x50
+ 1594 069e 01       		.uleb128 0x1
+ 1595 069f 30       		.byte	0x30
+ 1596 06a0 00       		.byte	0
+ 1597 06a1 0E       		.uleb128 0xe
+ 1598 06a2 22000000 		.4byte	.LVL78
+ 1599 06a6 5F090000 		.4byte	0x95f
+ 1600 06aa B4060000 		.4byte	0x6b4
+ 1601 06ae 0F       		.uleb128 0xf
+ 1602 06af 01       		.uleb128 0x1
+ 1603 06b0 50       		.byte	0x50
+ 1604 06b1 01       		.uleb128 0x1
+ 1605 06b2 31       		.byte	0x31
+ 1606 06b3 00       		.byte	0
+ 1607 06b4 0E       		.uleb128 0xe
+ 1608 06b5 28000000 		.4byte	.LVL79
+ 1609 06b9 70090000 		.4byte	0x970
+ 1610 06bd C7060000 		.4byte	0x6c7
+ 1611 06c1 0F       		.uleb128 0xf
+ 1612 06c2 01       		.uleb128 0x1
+ 1613 06c3 50       		.byte	0x50
+ 1614 06c4 01       		.uleb128 0x1
+ 1615 06c5 32       		.byte	0x32
+ 1616 06c6 00       		.byte	0
+ 1617 06c7 0E       		.uleb128 0xe
+ 1618 06c8 2E000000 		.4byte	.LVL80
+ 1619 06cc 81090000 		.4byte	0x981
+ 1620 06d0 DA060000 		.4byte	0x6da
+ 1621 06d4 0F       		.uleb128 0xf
+ 1622 06d5 01       		.uleb128 0x1
+ 1623 06d6 50       		.byte	0x50
+ 1624 06d7 01       		.uleb128 0x1
+ 1625 06d8 31       		.byte	0x31
+ 1626 06d9 00       		.byte	0
+ 1627 06da 11       		.uleb128 0x11
+ 1628 06db 34000000 		.4byte	.LVL81
+ 1629 06df 92090000 		.4byte	0x992
+ 1630 06e3 0F       		.uleb128 0xf
+ 1631 06e4 01       		.uleb128 0x1
+ 1632 06e5 50       		.byte	0x50
+ 1633 06e6 01       		.uleb128 0x1
+ 1634 06e7 32       		.byte	0x32
+ 1635 06e8 00       		.byte	0
+ 1636 06e9 00       		.byte	0
+ 1637 06ea 14       		.uleb128 0x14
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 43
+
+
+ 1638 06eb 00000000 		.4byte	.LASF42
+ 1639 06ef 01       		.byte	0x1
+ 1640 06f0 4D       		.byte	0x4d
+ 1641 06f1 6B000000 		.4byte	0x6b
+ 1642 06f5 05       		.uleb128 0x5
+ 1643 06f6 03       		.byte	0x3
+ 1644 06f7 01000000 		.4byte	amuxDmaCh
+ 1645 06fb 14       		.uleb128 0x14
+ 1646 06fc 94010000 		.4byte	.LASF43
+ 1647 0700 01       		.byte	0x1
+ 1648 0701 4E       		.byte	0x4e
+ 1649 0702 6B000000 		.4byte	0x6b
+ 1650 0706 05       		.uleb128 0x5
+ 1651 0707 03       		.byte	0x3
+ 1652 0708 03000000 		.4byte	amuxDmaTd
+ 1653 070c 14       		.uleb128 0x14
+ 1654 070d D1000000 		.4byte	.LASF44
+ 1655 0711 01       		.byte	0x1
+ 1656 0712 50       		.byte	0x50
+ 1657 0713 6B000000 		.4byte	0x6b
+ 1658 0717 05       		.uleb128 0x5
+ 1659 0718 03       		.byte	0x3
+ 1660 0719 04000000 		.4byte	filtRdDmaCh
+ 1661 071d 14       		.uleb128 0x14
+ 1662 071e 3A050000 		.4byte	.LASF45
+ 1663 0722 01       		.byte	0x1
+ 1664 0723 51       		.byte	0x51
+ 1665 0724 6B000000 		.4byte	0x6b
+ 1666 0728 05       		.uleb128 0x5
+ 1667 0729 03       		.byte	0x3
+ 1668 072a 0A000000 		.4byte	filtWrDmaCh
+ 1669 072e 06       		.uleb128 0x6
+ 1670 072f 77000000 		.4byte	0x77
+ 1671 0733 3E070000 		.4byte	0x73e
+ 1672 0737 07       		.uleb128 0x7
+ 1673 0738 D2000000 		.4byte	0xd2
+ 1674 073c 00       		.byte	0
+ 1675 073d 00       		.byte	0
+ 1676 073e 14       		.uleb128 0x14
+ 1677 073f 7B020000 		.4byte	.LASF46
+ 1678 0743 01       		.byte	0x1
+ 1679 0744 52       		.byte	0x52
+ 1680 0745 2E070000 		.4byte	0x72e
+ 1681 0749 05       		.uleb128 0x5
+ 1682 074a 03       		.byte	0x3
+ 1683 074b 08000000 		.4byte	filtCount
+ 1684 074f 06       		.uleb128 0x6
+ 1685 0750 5F070000 		.4byte	0x75f
+ 1686 0754 5F070000 		.4byte	0x75f
+ 1687 0758 07       		.uleb128 0x7
+ 1688 0759 D2000000 		.4byte	0xd2
+ 1689 075d 1F       		.byte	0x1f
+ 1690 075e 00       		.byte	0
+ 1691 075f 18       		.uleb128 0x18
+ 1692 0760 04       		.byte	0x4
+ 1693 0761 6B000000 		.4byte	0x6b
+ 1694 0765 1A       		.uleb128 0x1a
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 44
+
+
+ 1695 0766 11000000 		.4byte	.LASF47
+ 1696 076a 03       		.byte	0x3
+ 1697 076b 20       		.byte	0x20
+ 1698 076c 70070000 		.4byte	0x770
+ 1699 0770 1B       		.uleb128 0x1b
+ 1700 0771 4F070000 		.4byte	0x74f
+ 1701 0775 06       		.uleb128 0x6
+ 1702 0776 6B000000 		.4byte	0x6b
+ 1703 077a 85070000 		.4byte	0x785
+ 1704 077e 07       		.uleb128 0x7
+ 1705 077f D2000000 		.4byte	0xd2
+ 1706 0783 1F       		.byte	0x1f
+ 1707 0784 00       		.byte	0
+ 1708 0785 1A       		.uleb128 0x1a
+ 1709 0786 A9050000 		.4byte	.LASF48
+ 1710 078a 03       		.byte	0x3
+ 1711 078b 23       		.byte	0x23
+ 1712 078c 90070000 		.4byte	0x790
+ 1713 0790 1B       		.uleb128 0x1b
+ 1714 0791 75070000 		.4byte	0x775
+ 1715 0795 1C       		.uleb128 0x1c
+ 1716 0796 86030000 		.4byte	.LASF49
+ 1717 079a 01       		.byte	0x1
+ 1718 079b 62       		.byte	0x62
+ 1719 079c A6070000 		.4byte	0x7a6
+ 1720 07a0 05       		.uleb128 0x5
+ 1721 07a1 03       		.byte	0x3
+ 1722 07a2 00000000 		.4byte	VFD_1_VoltageScale
+ 1723 07a6 1B       		.uleb128 0x1b
+ 1724 07a7 2E070000 		.4byte	0x72e
+ 1725 07ab 1C       		.uleb128 0x1c
+ 1726 07ac 7F000000 		.4byte	.LASF50
+ 1727 07b0 01       		.byte	0x1
+ 1728 07b1 61       		.byte	0x61
+ 1729 07b2 6B000000 		.4byte	0x6b
+ 1730 07b6 05       		.uleb128 0x5
+ 1731 07b7 03       		.byte	0x3
+ 1732 07b8 00000000 		.4byte	VFD_1_initVar
+ 1733 07bc 1D       		.uleb128 0x1d
+ 1734 07bd 64000000 		.4byte	.LASF51
+ 1735 07c1 04       		.byte	0x4
+ 1736 07c2 1E       		.byte	0x1e
+ 1737 07c3 6B000000 		.4byte	0x6b
+ 1738 07c7 E0070000 		.4byte	0x7e0
+ 1739 07cb 1E       		.uleb128 0x1e
+ 1740 07cc 6B000000 		.4byte	0x6b
+ 1741 07d0 1E       		.uleb128 0x1e
+ 1742 07d1 6B000000 		.4byte	0x6b
+ 1743 07d5 1E       		.uleb128 0x1e
+ 1744 07d6 77000000 		.4byte	0x77
+ 1745 07da 1E       		.uleb128 0x1e
+ 1746 07db 77000000 		.4byte	0x77
+ 1747 07df 00       		.byte	0
+ 1748 07e0 1F       		.uleb128 0x1f
+ 1749 07e1 49000000 		.4byte	.LASF61
+ 1750 07e5 05       		.byte	0x5
+ 1751 07e6 38       		.byte	0x38
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 45
+
+
+ 1752 07e7 6B000000 		.4byte	0x6b
+ 1753 07eb 1D       		.uleb128 0x1d
+ 1754 07ec 27030000 		.4byte	.LASF52
+ 1755 07f0 05       		.byte	0x5
+ 1756 07f1 3F       		.byte	0x3f
+ 1757 07f2 A4000000 		.4byte	0xa4
+ 1758 07f6 0A080000 		.4byte	0x80a
+ 1759 07fa 1E       		.uleb128 0x1e
+ 1760 07fb 6B000000 		.4byte	0x6b
+ 1761 07ff 1E       		.uleb128 0x1e
+ 1762 0800 77000000 		.4byte	0x77
+ 1763 0804 1E       		.uleb128 0x1e
+ 1764 0805 77000000 		.4byte	0x77
+ 1765 0809 00       		.byte	0
+ 1766 080a 1D       		.uleb128 0x1d
+ 1767 080b DD000000 		.4byte	.LASF53
+ 1768 080f 05       		.byte	0x5
+ 1769 0810 3B       		.byte	0x3b
+ 1770 0811 A4000000 		.4byte	0xa4
+ 1771 0815 2E080000 		.4byte	0x82e
+ 1772 0819 1E       		.uleb128 0x1e
+ 1773 081a 6B000000 		.4byte	0x6b
+ 1774 081e 1E       		.uleb128 0x1e
+ 1775 081f 77000000 		.4byte	0x77
+ 1776 0823 1E       		.uleb128 0x1e
+ 1777 0824 6B000000 		.4byte	0x6b
+ 1778 0828 1E       		.uleb128 0x1e
+ 1779 0829 6B000000 		.4byte	0x6b
+ 1780 082d 00       		.byte	0
+ 1781 082e 1D       		.uleb128 0x1d
+ 1782 082f F5000000 		.4byte	.LASF54
+ 1783 0833 06       		.byte	0x6
+ 1784 0834 1E       		.byte	0x1e
+ 1785 0835 6B000000 		.4byte	0x6b
+ 1786 0839 52080000 		.4byte	0x852
+ 1787 083d 1E       		.uleb128 0x1e
+ 1788 083e 6B000000 		.4byte	0x6b
+ 1789 0842 1E       		.uleb128 0x1e
+ 1790 0843 6B000000 		.4byte	0x6b
+ 1791 0847 1E       		.uleb128 0x1e
+ 1792 0848 77000000 		.4byte	0x77
+ 1793 084c 1E       		.uleb128 0x1e
+ 1794 084d 77000000 		.4byte	0x77
+ 1795 0851 00       		.byte	0
+ 1796 0852 1D       		.uleb128 0x1d
+ 1797 0853 5B050000 		.4byte	.LASF55
+ 1798 0857 05       		.byte	0x5
+ 1799 0858 2F       		.byte	0x2f
+ 1800 0859 A4000000 		.4byte	0xa4
+ 1801 085d 6C080000 		.4byte	0x86c
+ 1802 0861 1E       		.uleb128 0x1e
+ 1803 0862 6B000000 		.4byte	0x6b
+ 1804 0866 1E       		.uleb128 0x1e
+ 1805 0867 6B000000 		.4byte	0x6b
+ 1806 086b 00       		.byte	0
+ 1807 086c 1D       		.uleb128 0x1d
+ 1808 086d 27040000 		.4byte	.LASF56
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 46
+
+
+ 1809 0871 07       		.byte	0x7
+ 1810 0872 1E       		.byte	0x1e
+ 1811 0873 6B000000 		.4byte	0x6b
+ 1812 0877 90080000 		.4byte	0x890
+ 1813 087b 1E       		.uleb128 0x1e
+ 1814 087c 6B000000 		.4byte	0x6b
+ 1815 0880 1E       		.uleb128 0x1e
+ 1816 0881 6B000000 		.4byte	0x6b
+ 1817 0885 1E       		.uleb128 0x1e
+ 1818 0886 77000000 		.4byte	0x77
+ 1819 088a 1E       		.uleb128 0x1e
+ 1820 088b 77000000 		.4byte	0x77
+ 1821 088f 00       		.byte	0
+ 1822 0890 20       		.uleb128 0x20
+ 1823 0891 F1030000 		.4byte	.LASF57
+ 1824 0895 08       		.byte	0x8
+ 1825 0896 30       		.byte	0x30
+ 1826 0897 20       		.uleb128 0x20
+ 1827 0898 5E030000 		.4byte	.LASF58
+ 1828 089c 09       		.byte	0x9
+ 1829 089d 45       		.byte	0x45
+ 1830 089e 20       		.uleb128 0x20
+ 1831 089f 4E030000 		.4byte	.LASF59
+ 1832 08a3 0A       		.byte	0xa
+ 1833 08a4 30       		.byte	0x30
+ 1834 08a5 20       		.uleb128 0x20
+ 1835 08a6 DE030000 		.4byte	.LASF60
+ 1836 08aa 0B       		.byte	0xb
+ 1837 08ab 45       		.byte	0x45
+ 1838 08ac 1F       		.uleb128 0x1f
+ 1839 08ad 2B020000 		.4byte	.LASF62
+ 1840 08b1 0C       		.byte	0xc
+ 1841 08b2 7D       		.byte	0x7d
+ 1842 08b3 6B000000 		.4byte	0x6b
+ 1843 08b7 21       		.uleb128 0x21
+ 1844 08b8 27000000 		.4byte	.LASF76
+ 1845 08bc 0C       		.byte	0xc
+ 1846 08bd 7E       		.byte	0x7e
+ 1847 08be C8080000 		.4byte	0x8c8
+ 1848 08c2 1E       		.uleb128 0x1e
+ 1849 08c3 6B000000 		.4byte	0x6b
+ 1850 08c7 00       		.byte	0
+ 1851 08c8 1D       		.uleb128 0x1d
+ 1852 08c9 AC000000 		.4byte	.LASF63
+ 1853 08cd 05       		.byte	0x5
+ 1854 08ce 29       		.byte	0x29
+ 1855 08cf A4000000 		.4byte	0xa4
+ 1856 08d3 E2080000 		.4byte	0x8e2
+ 1857 08d7 1E       		.uleb128 0x1e
+ 1858 08d8 6B000000 		.4byte	0x6b
+ 1859 08dc 1E       		.uleb128 0x1e
+ 1860 08dd 6B000000 		.4byte	0x6b
+ 1861 08e1 00       		.byte	0
+ 1862 08e2 20       		.uleb128 0x20
+ 1863 08e3 8E020000 		.4byte	.LASF64
+ 1864 08e7 08       		.byte	0x8
+ 1865 08e8 31       		.byte	0x31
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 47
+
+
+ 1866 08e9 20       		.uleb128 0x20
+ 1867 08ea 46050000 		.4byte	.LASF65
+ 1868 08ee 09       		.byte	0x9
+ 1869 08ef 46       		.byte	0x46
+ 1870 08f0 20       		.uleb128 0x20
+ 1871 08f1 45040000 		.4byte	.LASF66
+ 1872 08f5 0A       		.byte	0xa
+ 1873 08f6 31       		.byte	0x31
+ 1874 08f7 20       		.uleb128 0x20
+ 1875 08f8 39030000 		.4byte	.LASF67
+ 1876 08fc 0B       		.byte	0xb
+ 1877 08fd 46       		.byte	0x46
+ 1878 08fe 1D       		.uleb128 0x1d
+ 1879 08ff B3030000 		.4byte	.LASF68
+ 1880 0903 05       		.byte	0x5
+ 1881 0904 30       		.byte	0x30
+ 1882 0905 A4000000 		.4byte	0xa4
+ 1883 0909 18090000 		.4byte	0x918
+ 1884 090d 1E       		.uleb128 0x1e
+ 1885 090e 6B000000 		.4byte	0x6b
+ 1886 0912 1E       		.uleb128 0x1e
+ 1887 0913 6B000000 		.4byte	0x6b
+ 1888 0917 00       		.byte	0
+ 1889 0918 1D       		.uleb128 0x1d
+ 1890 0919 71030000 		.4byte	.LASF69
+ 1891 091d 05       		.byte	0x5
+ 1892 091e 2B       		.byte	0x2b
+ 1893 091f A4000000 		.4byte	0xa4
+ 1894 0923 2D090000 		.4byte	0x92d
+ 1895 0927 1E       		.uleb128 0x1e
+ 1896 0928 6B000000 		.4byte	0x6b
+ 1897 092c 00       		.byte	0
+ 1898 092d 20       		.uleb128 0x20
+ 1899 092e C0010000 		.4byte	.LASF70
+ 1900 0932 08       		.byte	0x8
+ 1901 0933 32       		.byte	0x32
+ 1902 0934 20       		.uleb128 0x20
+ 1903 0935 46010000 		.4byte	.LASF71
+ 1904 0939 09       		.byte	0x9
+ 1905 093a 40       		.byte	0x40
+ 1906 093b 20       		.uleb128 0x20
+ 1907 093c 36010000 		.4byte	.LASF72
+ 1908 0940 0A       		.byte	0xa
+ 1909 0941 32       		.byte	0x32
+ 1910 0942 20       		.uleb128 0x20
+ 1911 0943 A5010000 		.4byte	.LASF73
+ 1912 0947 0B       		.byte	0xb
+ 1913 0948 40       		.byte	0x40
+ 1914 0949 1F       		.uleb128 0x1f
+ 1915 094a 11030000 		.4byte	.LASF74
+ 1916 094e 09       		.byte	0x9
+ 1917 094f 43       		.byte	0x43
+ 1918 0950 77000000 		.4byte	0x77
+ 1919 0954 1F       		.uleb128 0x1f
+ 1920 0955 8C040000 		.4byte	.LASF75
+ 1921 0959 0B       		.byte	0xb
+ 1922 095a 43       		.byte	0x43
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 48
+
+
+ 1923 095b 77000000 		.4byte	0x77
+ 1924 095f 21       		.uleb128 0x21
+ 1925 0960 70040000 		.4byte	.LASF77
+ 1926 0964 09       		.byte	0x9
+ 1927 0965 41       		.byte	0x41
+ 1928 0966 70090000 		.4byte	0x970
+ 1929 096a 1E       		.uleb128 0x1e
+ 1930 096b 6B000000 		.4byte	0x6b
+ 1931 096f 00       		.byte	0
+ 1932 0970 21       		.uleb128 0x21
+ 1933 0971 71010000 		.4byte	.LASF78
+ 1934 0975 0D       		.byte	0xd
+ 1935 0976 35       		.byte	0x35
+ 1936 0977 81090000 		.4byte	0x981
+ 1937 097b 1E       		.uleb128 0x1e
+ 1938 097c 6B000000 		.4byte	0x6b
+ 1939 0980 00       		.byte	0
+ 1940 0981 21       		.uleb128 0x21
+ 1941 0982 78050000 		.4byte	.LASF79
+ 1942 0986 0B       		.byte	0xb
+ 1943 0987 41       		.byte	0x41
+ 1944 0988 92090000 		.4byte	0x992
+ 1945 098c 1E       		.uleb128 0x1e
+ 1946 098d 6B000000 		.4byte	0x6b
+ 1947 0991 00       		.byte	0
+ 1948 0992 22       		.uleb128 0x22
+ 1949 0993 64020000 		.4byte	.LASF83
+ 1950 0997 0E       		.byte	0xe
+ 1951 0998 35       		.byte	0x35
+ 1952 0999 1E       		.uleb128 0x1e
+ 1953 099a 6B000000 		.4byte	0x6b
+ 1954 099e 00       		.byte	0
+ 1955 099f 00       		.byte	0
+ 1956              		.section	.debug_abbrev,"",%progbits
+ 1957              	.Ldebug_abbrev0:
+ 1958 0000 01       		.uleb128 0x1
+ 1959 0001 11       		.uleb128 0x11
+ 1960 0002 01       		.byte	0x1
+ 1961 0003 25       		.uleb128 0x25
+ 1962 0004 0E       		.uleb128 0xe
+ 1963 0005 13       		.uleb128 0x13
+ 1964 0006 0B       		.uleb128 0xb
+ 1965 0007 03       		.uleb128 0x3
+ 1966 0008 0E       		.uleb128 0xe
+ 1967 0009 1B       		.uleb128 0x1b
+ 1968 000a 0E       		.uleb128 0xe
+ 1969 000b 55       		.uleb128 0x55
+ 1970 000c 17       		.uleb128 0x17
+ 1971 000d 11       		.uleb128 0x11
+ 1972 000e 01       		.uleb128 0x1
+ 1973 000f 10       		.uleb128 0x10
+ 1974 0010 17       		.uleb128 0x17
+ 1975 0011 00       		.byte	0
+ 1976 0012 00       		.byte	0
+ 1977 0013 02       		.uleb128 0x2
+ 1978 0014 24       		.uleb128 0x24
+ 1979 0015 00       		.byte	0
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 49
+
+
+ 1980 0016 0B       		.uleb128 0xb
+ 1981 0017 0B       		.uleb128 0xb
+ 1982 0018 3E       		.uleb128 0x3e
+ 1983 0019 0B       		.uleb128 0xb
+ 1984 001a 03       		.uleb128 0x3
+ 1985 001b 0E       		.uleb128 0xe
+ 1986 001c 00       		.byte	0
+ 1987 001d 00       		.byte	0
+ 1988 001e 03       		.uleb128 0x3
+ 1989 001f 24       		.uleb128 0x24
+ 1990 0020 00       		.byte	0
+ 1991 0021 0B       		.uleb128 0xb
+ 1992 0022 0B       		.uleb128 0xb
+ 1993 0023 3E       		.uleb128 0x3e
+ 1994 0024 0B       		.uleb128 0xb
+ 1995 0025 03       		.uleb128 0x3
+ 1996 0026 08       		.uleb128 0x8
+ 1997 0027 00       		.byte	0
+ 1998 0028 00       		.byte	0
+ 1999 0029 04       		.uleb128 0x4
+ 2000 002a 16       		.uleb128 0x16
+ 2001 002b 00       		.byte	0
+ 2002 002c 03       		.uleb128 0x3
+ 2003 002d 0E       		.uleb128 0xe
+ 2004 002e 3A       		.uleb128 0x3a
+ 2005 002f 0B       		.uleb128 0xb
+ 2006 0030 3B       		.uleb128 0x3b
+ 2007 0031 05       		.uleb128 0x5
+ 2008 0032 49       		.uleb128 0x49
+ 2009 0033 13       		.uleb128 0x13
+ 2010 0034 00       		.byte	0
+ 2011 0035 00       		.byte	0
+ 2012 0036 05       		.uleb128 0x5
+ 2013 0037 35       		.uleb128 0x35
+ 2014 0038 00       		.byte	0
+ 2015 0039 49       		.uleb128 0x49
+ 2016 003a 13       		.uleb128 0x13
+ 2017 003b 00       		.byte	0
+ 2018 003c 00       		.byte	0
+ 2019 003d 06       		.uleb128 0x6
+ 2020 003e 01       		.uleb128 0x1
+ 2021 003f 01       		.byte	0x1
+ 2022 0040 49       		.uleb128 0x49
+ 2023 0041 13       		.uleb128 0x13
+ 2024 0042 01       		.uleb128 0x1
+ 2025 0043 13       		.uleb128 0x13
+ 2026 0044 00       		.byte	0
+ 2027 0045 00       		.byte	0
+ 2028 0046 07       		.uleb128 0x7
+ 2029 0047 21       		.uleb128 0x21
+ 2030 0048 00       		.byte	0
+ 2031 0049 49       		.uleb128 0x49
+ 2032 004a 13       		.uleb128 0x13
+ 2033 004b 2F       		.uleb128 0x2f
+ 2034 004c 0B       		.uleb128 0xb
+ 2035 004d 00       		.byte	0
+ 2036 004e 00       		.byte	0
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 50
+
+
+ 2037 004f 08       		.uleb128 0x8
+ 2038 0050 17       		.uleb128 0x17
+ 2039 0051 01       		.byte	0x1
+ 2040 0052 0B       		.uleb128 0xb
+ 2041 0053 0B       		.uleb128 0xb
+ 2042 0054 3A       		.uleb128 0x3a
+ 2043 0055 0B       		.uleb128 0xb
+ 2044 0056 3B       		.uleb128 0x3b
+ 2045 0057 0B       		.uleb128 0xb
+ 2046 0058 01       		.uleb128 0x1
+ 2047 0059 13       		.uleb128 0x13
+ 2048 005a 00       		.byte	0
+ 2049 005b 00       		.byte	0
+ 2050 005c 09       		.uleb128 0x9
+ 2051 005d 0D       		.uleb128 0xd
+ 2052 005e 00       		.byte	0
+ 2053 005f 03       		.uleb128 0x3
+ 2054 0060 0E       		.uleb128 0xe
+ 2055 0061 3A       		.uleb128 0x3a
+ 2056 0062 0B       		.uleb128 0xb
+ 2057 0063 3B       		.uleb128 0x3b
+ 2058 0064 0B       		.uleb128 0xb
+ 2059 0065 49       		.uleb128 0x49
+ 2060 0066 13       		.uleb128 0x13
+ 2061 0067 00       		.byte	0
+ 2062 0068 00       		.byte	0
+ 2063 0069 0A       		.uleb128 0xa
+ 2064 006a 16       		.uleb128 0x16
+ 2065 006b 00       		.byte	0
+ 2066 006c 03       		.uleb128 0x3
+ 2067 006d 0E       		.uleb128 0xe
+ 2068 006e 3A       		.uleb128 0x3a
+ 2069 006f 0B       		.uleb128 0xb
+ 2070 0070 3B       		.uleb128 0x3b
+ 2071 0071 0B       		.uleb128 0xb
+ 2072 0072 49       		.uleb128 0x49
+ 2073 0073 13       		.uleb128 0x13
+ 2074 0074 00       		.byte	0
+ 2075 0075 00       		.byte	0
+ 2076 0076 0B       		.uleb128 0xb
+ 2077 0077 2E       		.uleb128 0x2e
+ 2078 0078 01       		.byte	0x1
+ 2079 0079 03       		.uleb128 0x3
+ 2080 007a 0E       		.uleb128 0xe
+ 2081 007b 3A       		.uleb128 0x3a
+ 2082 007c 0B       		.uleb128 0xb
+ 2083 007d 3B       		.uleb128 0x3b
+ 2084 007e 05       		.uleb128 0x5
+ 2085 007f 27       		.uleb128 0x27
+ 2086 0080 19       		.uleb128 0x19
+ 2087 0081 11       		.uleb128 0x11
+ 2088 0082 01       		.uleb128 0x1
+ 2089 0083 12       		.uleb128 0x12
+ 2090 0084 06       		.uleb128 0x6
+ 2091 0085 40       		.uleb128 0x40
+ 2092 0086 18       		.uleb128 0x18
+ 2093 0087 9742     		.uleb128 0x2117
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 51
+
+
+ 2094 0089 19       		.uleb128 0x19
+ 2095 008a 01       		.uleb128 0x1
+ 2096 008b 13       		.uleb128 0x13
+ 2097 008c 00       		.byte	0
+ 2098 008d 00       		.byte	0
+ 2099 008e 0C       		.uleb128 0xc
+ 2100 008f 34       		.uleb128 0x34
+ 2101 0090 00       		.byte	0
+ 2102 0091 03       		.uleb128 0x3
+ 2103 0092 08       		.uleb128 0x8
+ 2104 0093 3A       		.uleb128 0x3a
+ 2105 0094 0B       		.uleb128 0xb
+ 2106 0095 3B       		.uleb128 0x3b
+ 2107 0096 05       		.uleb128 0x5
+ 2108 0097 49       		.uleb128 0x49
+ 2109 0098 13       		.uleb128 0x13
+ 2110 0099 02       		.uleb128 0x2
+ 2111 009a 17       		.uleb128 0x17
+ 2112 009b 00       		.byte	0
+ 2113 009c 00       		.byte	0
+ 2114 009d 0D       		.uleb128 0xd
+ 2115 009e 34       		.uleb128 0x34
+ 2116 009f 00       		.byte	0
+ 2117 00a0 03       		.uleb128 0x3
+ 2118 00a1 0E       		.uleb128 0xe
+ 2119 00a2 3A       		.uleb128 0x3a
+ 2120 00a3 0B       		.uleb128 0xb
+ 2121 00a4 3B       		.uleb128 0x3b
+ 2122 00a5 05       		.uleb128 0x5
+ 2123 00a6 49       		.uleb128 0x49
+ 2124 00a7 13       		.uleb128 0x13
+ 2125 00a8 02       		.uleb128 0x2
+ 2126 00a9 18       		.uleb128 0x18
+ 2127 00aa 00       		.byte	0
+ 2128 00ab 00       		.byte	0
+ 2129 00ac 0E       		.uleb128 0xe
+ 2130 00ad 898201   		.uleb128 0x4109
+ 2131 00b0 01       		.byte	0x1
+ 2132 00b1 11       		.uleb128 0x11
+ 2133 00b2 01       		.uleb128 0x1
+ 2134 00b3 31       		.uleb128 0x31
+ 2135 00b4 13       		.uleb128 0x13
+ 2136 00b5 01       		.uleb128 0x1
+ 2137 00b6 13       		.uleb128 0x13
+ 2138 00b7 00       		.byte	0
+ 2139 00b8 00       		.byte	0
+ 2140 00b9 0F       		.uleb128 0xf
+ 2141 00ba 8A8201   		.uleb128 0x410a
+ 2142 00bd 00       		.byte	0
+ 2143 00be 02       		.uleb128 0x2
+ 2144 00bf 18       		.uleb128 0x18
+ 2145 00c0 9142     		.uleb128 0x2111
+ 2146 00c2 18       		.uleb128 0x18
+ 2147 00c3 00       		.byte	0
+ 2148 00c4 00       		.byte	0
+ 2149 00c5 10       		.uleb128 0x10
+ 2150 00c6 898201   		.uleb128 0x4109
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 52
+
+
+ 2151 00c9 00       		.byte	0
+ 2152 00ca 11       		.uleb128 0x11
+ 2153 00cb 01       		.uleb128 0x1
+ 2154 00cc 31       		.uleb128 0x31
+ 2155 00cd 13       		.uleb128 0x13
+ 2156 00ce 00       		.byte	0
+ 2157 00cf 00       		.byte	0
+ 2158 00d0 11       		.uleb128 0x11
+ 2159 00d1 898201   		.uleb128 0x4109
+ 2160 00d4 01       		.byte	0x1
+ 2161 00d5 11       		.uleb128 0x11
+ 2162 00d6 01       		.uleb128 0x1
+ 2163 00d7 31       		.uleb128 0x31
+ 2164 00d8 13       		.uleb128 0x13
+ 2165 00d9 00       		.byte	0
+ 2166 00da 00       		.byte	0
+ 2167 00db 12       		.uleb128 0x12
+ 2168 00dc 2E       		.uleb128 0x2e
+ 2169 00dd 01       		.byte	0x1
+ 2170 00de 3F       		.uleb128 0x3f
+ 2171 00df 19       		.uleb128 0x19
+ 2172 00e0 03       		.uleb128 0x3
+ 2173 00e1 0E       		.uleb128 0xe
+ 2174 00e2 3A       		.uleb128 0x3a
+ 2175 00e3 0B       		.uleb128 0xb
+ 2176 00e4 3B       		.uleb128 0x3b
+ 2177 00e5 0B       		.uleb128 0xb
+ 2178 00e6 27       		.uleb128 0x27
+ 2179 00e7 19       		.uleb128 0x19
+ 2180 00e8 11       		.uleb128 0x11
+ 2181 00e9 01       		.uleb128 0x1
+ 2182 00ea 12       		.uleb128 0x12
+ 2183 00eb 06       		.uleb128 0x6
+ 2184 00ec 40       		.uleb128 0x40
+ 2185 00ed 18       		.uleb128 0x18
+ 2186 00ee 9742     		.uleb128 0x2117
+ 2187 00f0 19       		.uleb128 0x19
+ 2188 00f1 01       		.uleb128 0x1
+ 2189 00f2 13       		.uleb128 0x13
+ 2190 00f3 00       		.byte	0
+ 2191 00f4 00       		.byte	0
+ 2192 00f5 13       		.uleb128 0x13
+ 2193 00f6 34       		.uleb128 0x34
+ 2194 00f7 00       		.byte	0
+ 2195 00f8 03       		.uleb128 0x3
+ 2196 00f9 0E       		.uleb128 0xe
+ 2197 00fa 3A       		.uleb128 0x3a
+ 2198 00fb 0B       		.uleb128 0xb
+ 2199 00fc 3B       		.uleb128 0x3b
+ 2200 00fd 0B       		.uleb128 0xb
+ 2201 00fe 49       		.uleb128 0x49
+ 2202 00ff 13       		.uleb128 0x13
+ 2203 0100 02       		.uleb128 0x2
+ 2204 0101 17       		.uleb128 0x17
+ 2205 0102 00       		.byte	0
+ 2206 0103 00       		.byte	0
+ 2207 0104 14       		.uleb128 0x14
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 53
+
+
+ 2208 0105 34       		.uleb128 0x34
+ 2209 0106 00       		.byte	0
+ 2210 0107 03       		.uleb128 0x3
+ 2211 0108 0E       		.uleb128 0xe
+ 2212 0109 3A       		.uleb128 0x3a
+ 2213 010a 0B       		.uleb128 0xb
+ 2214 010b 3B       		.uleb128 0x3b
+ 2215 010c 0B       		.uleb128 0xb
+ 2216 010d 49       		.uleb128 0x49
+ 2217 010e 13       		.uleb128 0x13
+ 2218 010f 02       		.uleb128 0x2
+ 2219 0110 18       		.uleb128 0x18
+ 2220 0111 00       		.byte	0
+ 2221 0112 00       		.byte	0
+ 2222 0113 15       		.uleb128 0x15
+ 2223 0114 2E       		.uleb128 0x2e
+ 2224 0115 01       		.byte	0x1
+ 2225 0116 3F       		.uleb128 0x3f
+ 2226 0117 19       		.uleb128 0x19
+ 2227 0118 03       		.uleb128 0x3
+ 2228 0119 0E       		.uleb128 0xe
+ 2229 011a 3A       		.uleb128 0x3a
+ 2230 011b 0B       		.uleb128 0xb
+ 2231 011c 3B       		.uleb128 0x3b
+ 2232 011d 05       		.uleb128 0x5
+ 2233 011e 27       		.uleb128 0x27
+ 2234 011f 19       		.uleb128 0x19
+ 2235 0120 11       		.uleb128 0x11
+ 2236 0121 01       		.uleb128 0x1
+ 2237 0122 12       		.uleb128 0x12
+ 2238 0123 06       		.uleb128 0x6
+ 2239 0124 40       		.uleb128 0x40
+ 2240 0125 18       		.uleb128 0x18
+ 2241 0126 9742     		.uleb128 0x2117
+ 2242 0128 19       		.uleb128 0x19
+ 2243 0129 01       		.uleb128 0x1
+ 2244 012a 13       		.uleb128 0x13
+ 2245 012b 00       		.byte	0
+ 2246 012c 00       		.byte	0
+ 2247 012d 16       		.uleb128 0x16
+ 2248 012e 34       		.uleb128 0x34
+ 2249 012f 00       		.byte	0
+ 2250 0130 03       		.uleb128 0x3
+ 2251 0131 0E       		.uleb128 0xe
+ 2252 0132 3A       		.uleb128 0x3a
+ 2253 0133 0B       		.uleb128 0xb
+ 2254 0134 3B       		.uleb128 0x3b
+ 2255 0135 05       		.uleb128 0x5
+ 2256 0136 49       		.uleb128 0x49
+ 2257 0137 13       		.uleb128 0x13
+ 2258 0138 02       		.uleb128 0x2
+ 2259 0139 17       		.uleb128 0x17
+ 2260 013a 00       		.byte	0
+ 2261 013b 00       		.byte	0
+ 2262 013c 17       		.uleb128 0x17
+ 2263 013d 05       		.uleb128 0x5
+ 2264 013e 00       		.byte	0
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 54
+
+
+ 2265 013f 03       		.uleb128 0x3
+ 2266 0140 0E       		.uleb128 0xe
+ 2267 0141 3A       		.uleb128 0x3a
+ 2268 0142 0B       		.uleb128 0xb
+ 2269 0143 3B       		.uleb128 0x3b
+ 2270 0144 05       		.uleb128 0x5
+ 2271 0145 49       		.uleb128 0x49
+ 2272 0146 13       		.uleb128 0x13
+ 2273 0147 02       		.uleb128 0x2
+ 2274 0148 18       		.uleb128 0x18
+ 2275 0149 00       		.byte	0
+ 2276 014a 00       		.byte	0
+ 2277 014b 18       		.uleb128 0x18
+ 2278 014c 0F       		.uleb128 0xf
+ 2279 014d 00       		.byte	0
+ 2280 014e 0B       		.uleb128 0xb
+ 2281 014f 0B       		.uleb128 0xb
+ 2282 0150 49       		.uleb128 0x49
+ 2283 0151 13       		.uleb128 0x13
+ 2284 0152 00       		.byte	0
+ 2285 0153 00       		.byte	0
+ 2286 0154 19       		.uleb128 0x19
+ 2287 0155 05       		.uleb128 0x5
+ 2288 0156 00       		.byte	0
+ 2289 0157 03       		.uleb128 0x3
+ 2290 0158 0E       		.uleb128 0xe
+ 2291 0159 3A       		.uleb128 0x3a
+ 2292 015a 0B       		.uleb128 0xb
+ 2293 015b 3B       		.uleb128 0x3b
+ 2294 015c 05       		.uleb128 0x5
+ 2295 015d 49       		.uleb128 0x49
+ 2296 015e 13       		.uleb128 0x13
+ 2297 015f 02       		.uleb128 0x2
+ 2298 0160 17       		.uleb128 0x17
+ 2299 0161 00       		.byte	0
+ 2300 0162 00       		.byte	0
+ 2301 0163 1A       		.uleb128 0x1a
+ 2302 0164 34       		.uleb128 0x34
+ 2303 0165 00       		.byte	0
+ 2304 0166 03       		.uleb128 0x3
+ 2305 0167 0E       		.uleb128 0xe
+ 2306 0168 3A       		.uleb128 0x3a
+ 2307 0169 0B       		.uleb128 0xb
+ 2308 016a 3B       		.uleb128 0x3b
+ 2309 016b 0B       		.uleb128 0xb
+ 2310 016c 49       		.uleb128 0x49
+ 2311 016d 13       		.uleb128 0x13
+ 2312 016e 3F       		.uleb128 0x3f
+ 2313 016f 19       		.uleb128 0x19
+ 2314 0170 3C       		.uleb128 0x3c
+ 2315 0171 19       		.uleb128 0x19
+ 2316 0172 00       		.byte	0
+ 2317 0173 00       		.byte	0
+ 2318 0174 1B       		.uleb128 0x1b
+ 2319 0175 26       		.uleb128 0x26
+ 2320 0176 00       		.byte	0
+ 2321 0177 49       		.uleb128 0x49
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 55
+
+
+ 2322 0178 13       		.uleb128 0x13
+ 2323 0179 00       		.byte	0
+ 2324 017a 00       		.byte	0
+ 2325 017b 1C       		.uleb128 0x1c
+ 2326 017c 34       		.uleb128 0x34
+ 2327 017d 00       		.byte	0
+ 2328 017e 03       		.uleb128 0x3
+ 2329 017f 0E       		.uleb128 0xe
+ 2330 0180 3A       		.uleb128 0x3a
+ 2331 0181 0B       		.uleb128 0xb
+ 2332 0182 3B       		.uleb128 0x3b
+ 2333 0183 0B       		.uleb128 0xb
+ 2334 0184 49       		.uleb128 0x49
+ 2335 0185 13       		.uleb128 0x13
+ 2336 0186 3F       		.uleb128 0x3f
+ 2337 0187 19       		.uleb128 0x19
+ 2338 0188 02       		.uleb128 0x2
+ 2339 0189 18       		.uleb128 0x18
+ 2340 018a 00       		.byte	0
+ 2341 018b 00       		.byte	0
+ 2342 018c 1D       		.uleb128 0x1d
+ 2343 018d 2E       		.uleb128 0x2e
+ 2344 018e 01       		.byte	0x1
+ 2345 018f 3F       		.uleb128 0x3f
+ 2346 0190 19       		.uleb128 0x19
+ 2347 0191 03       		.uleb128 0x3
+ 2348 0192 0E       		.uleb128 0xe
+ 2349 0193 3A       		.uleb128 0x3a
+ 2350 0194 0B       		.uleb128 0xb
+ 2351 0195 3B       		.uleb128 0x3b
+ 2352 0196 0B       		.uleb128 0xb
+ 2353 0197 27       		.uleb128 0x27
+ 2354 0198 19       		.uleb128 0x19
+ 2355 0199 49       		.uleb128 0x49
+ 2356 019a 13       		.uleb128 0x13
+ 2357 019b 3C       		.uleb128 0x3c
+ 2358 019c 19       		.uleb128 0x19
+ 2359 019d 01       		.uleb128 0x1
+ 2360 019e 13       		.uleb128 0x13
+ 2361 019f 00       		.byte	0
+ 2362 01a0 00       		.byte	0
+ 2363 01a1 1E       		.uleb128 0x1e
+ 2364 01a2 05       		.uleb128 0x5
+ 2365 01a3 00       		.byte	0
+ 2366 01a4 49       		.uleb128 0x49
+ 2367 01a5 13       		.uleb128 0x13
+ 2368 01a6 00       		.byte	0
+ 2369 01a7 00       		.byte	0
+ 2370 01a8 1F       		.uleb128 0x1f
+ 2371 01a9 2E       		.uleb128 0x2e
+ 2372 01aa 00       		.byte	0
+ 2373 01ab 3F       		.uleb128 0x3f
+ 2374 01ac 19       		.uleb128 0x19
+ 2375 01ad 03       		.uleb128 0x3
+ 2376 01ae 0E       		.uleb128 0xe
+ 2377 01af 3A       		.uleb128 0x3a
+ 2378 01b0 0B       		.uleb128 0xb
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 56
+
+
+ 2379 01b1 3B       		.uleb128 0x3b
+ 2380 01b2 0B       		.uleb128 0xb
+ 2381 01b3 27       		.uleb128 0x27
+ 2382 01b4 19       		.uleb128 0x19
+ 2383 01b5 49       		.uleb128 0x49
+ 2384 01b6 13       		.uleb128 0x13
+ 2385 01b7 3C       		.uleb128 0x3c
+ 2386 01b8 19       		.uleb128 0x19
+ 2387 01b9 00       		.byte	0
+ 2388 01ba 00       		.byte	0
+ 2389 01bb 20       		.uleb128 0x20
+ 2390 01bc 2E       		.uleb128 0x2e
+ 2391 01bd 00       		.byte	0
+ 2392 01be 3F       		.uleb128 0x3f
+ 2393 01bf 19       		.uleb128 0x19
+ 2394 01c0 03       		.uleb128 0x3
+ 2395 01c1 0E       		.uleb128 0xe
+ 2396 01c2 3A       		.uleb128 0x3a
+ 2397 01c3 0B       		.uleb128 0xb
+ 2398 01c4 3B       		.uleb128 0x3b
+ 2399 01c5 0B       		.uleb128 0xb
+ 2400 01c6 27       		.uleb128 0x27
+ 2401 01c7 19       		.uleb128 0x19
+ 2402 01c8 3C       		.uleb128 0x3c
+ 2403 01c9 19       		.uleb128 0x19
+ 2404 01ca 00       		.byte	0
+ 2405 01cb 00       		.byte	0
+ 2406 01cc 21       		.uleb128 0x21
+ 2407 01cd 2E       		.uleb128 0x2e
+ 2408 01ce 01       		.byte	0x1
+ 2409 01cf 3F       		.uleb128 0x3f
+ 2410 01d0 19       		.uleb128 0x19
+ 2411 01d1 03       		.uleb128 0x3
+ 2412 01d2 0E       		.uleb128 0xe
+ 2413 01d3 3A       		.uleb128 0x3a
+ 2414 01d4 0B       		.uleb128 0xb
+ 2415 01d5 3B       		.uleb128 0x3b
+ 2416 01d6 0B       		.uleb128 0xb
+ 2417 01d7 27       		.uleb128 0x27
+ 2418 01d8 19       		.uleb128 0x19
+ 2419 01d9 3C       		.uleb128 0x3c
+ 2420 01da 19       		.uleb128 0x19
+ 2421 01db 01       		.uleb128 0x1
+ 2422 01dc 13       		.uleb128 0x13
+ 2423 01dd 00       		.byte	0
+ 2424 01de 00       		.byte	0
+ 2425 01df 22       		.uleb128 0x22
+ 2426 01e0 2E       		.uleb128 0x2e
+ 2427 01e1 01       		.byte	0x1
+ 2428 01e2 3F       		.uleb128 0x3f
+ 2429 01e3 19       		.uleb128 0x19
+ 2430 01e4 03       		.uleb128 0x3
+ 2431 01e5 0E       		.uleb128 0xe
+ 2432 01e6 3A       		.uleb128 0x3a
+ 2433 01e7 0B       		.uleb128 0xb
+ 2434 01e8 3B       		.uleb128 0x3b
+ 2435 01e9 0B       		.uleb128 0xb
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 57
+
+
+ 2436 01ea 27       		.uleb128 0x27
+ 2437 01eb 19       		.uleb128 0x19
+ 2438 01ec 3C       		.uleb128 0x3c
+ 2439 01ed 19       		.uleb128 0x19
+ 2440 01ee 00       		.byte	0
+ 2441 01ef 00       		.byte	0
+ 2442 01f0 00       		.byte	0
+ 2443              		.section	.debug_loc,"",%progbits
+ 2444              	.Ldebug_loc0:
+ 2445              	.LLST0:
+ 2446 0000 2A000000 		.4byte	.LVL4
+ 2447 0004 6E000000 		.4byte	.LVL12
+ 2448 0008 0100     		.2byte	0x1
+ 2449 000a 58       		.byte	0x58
+ 2450 000b 00000000 		.4byte	0
+ 2451 000f 00000000 		.4byte	0
+ 2452              	.LLST1:
+ 2453 0013 1E000000 		.4byte	.LVL1
+ 2454 0017 24000000 		.4byte	.LVL2
+ 2455 001b 0300     		.2byte	0x3
+ 2456 001d 09       		.byte	0x9
+ 2457 001e FF       		.byte	0xff
+ 2458 001f 9F       		.byte	0x9f
+ 2459 0020 24000000 		.4byte	.LVL2
+ 2460 0024 84000000 		.4byte	.LVL14
+ 2461 0028 0100     		.2byte	0x1
+ 2462 002a 57       		.byte	0x57
+ 2463 002b 00000000 		.4byte	0
+ 2464 002f 00000000 		.4byte	0
+ 2465              	.LLST2:
+ 2466 0033 1E000000 		.4byte	.LVL1
+ 2467 0037 24000000 		.4byte	.LVL2
+ 2468 003b 0200     		.2byte	0x2
+ 2469 003d 30       		.byte	0x30
+ 2470 003e 9F       		.byte	0x9f
+ 2471 003f 24000000 		.4byte	.LVL2
+ 2472 0043 6C000000 		.4byte	.LVL11
+ 2473 0047 0100     		.2byte	0x1
+ 2474 0049 54       		.byte	0x54
+ 2475 004a 6E000000 		.4byte	.LVL12
+ 2476 004e 84000000 		.4byte	.LVL14
+ 2477 0052 0100     		.2byte	0x1
+ 2478 0054 54       		.byte	0x54
+ 2479 0055 00000000 		.4byte	0
+ 2480 0059 00000000 		.4byte	0
+ 2481              	.LLST3:
+ 2482 005d 1C000000 		.4byte	.LVL17
+ 2483 0061 25000000 		.4byte	.LVL18-1
+ 2484 0065 0100     		.2byte	0x1
+ 2485 0067 50       		.byte	0x50
+ 2486 0068 58000000 		.4byte	.LVL23
+ 2487 006c 61000000 		.4byte	.LVL24-1
+ 2488 0070 0100     		.2byte	0x1
+ 2489 0072 50       		.byte	0x50
+ 2490 0073 00000000 		.4byte	0
+ 2491 0077 00000000 		.4byte	0
+ 2492              	.LLST4:
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 58
+
+
+ 2493 007b 2A000000 		.4byte	.LVL33
+ 2494 007f 43000000 		.4byte	.LVL34-1
+ 2495 0083 0100     		.2byte	0x1
+ 2496 0085 50       		.byte	0x50
+ 2497 0086 00000000 		.4byte	0
+ 2498 008a 00000000 		.4byte	0
+ 2499              	.LLST5:
+ 2500 008e 44000000 		.4byte	.LVL52
+ 2501 0092 48000000 		.4byte	.LVL53
+ 2502 0096 0200     		.2byte	0x2
+ 2503 0098 30       		.byte	0x30
+ 2504 0099 9F       		.byte	0x9f
+ 2505 009a 48000000 		.4byte	.LVL53
+ 2506 009e 54000000 		.4byte	.LVL54
+ 2507 00a2 0100     		.2byte	0x1
+ 2508 00a4 53       		.byte	0x53
+ 2509 00a5 56000000 		.4byte	.LVL55
+ 2510 00a9 5D000000 		.4byte	.LVL56-1
+ 2511 00ad 0100     		.2byte	0x1
+ 2512 00af 53       		.byte	0x53
+ 2513 00b0 00000000 		.4byte	0
+ 2514 00b4 00000000 		.4byte	0
+ 2515              	.LLST6:
+ 2516 00b8 5E000000 		.4byte	.LVL56
+ 2517 00bc 85000000 		.4byte	.LVL57-1
+ 2518 00c0 0100     		.2byte	0x1
+ 2519 00c2 50       		.byte	0x50
+ 2520 00c3 00000000 		.4byte	0
+ 2521 00c7 00000000 		.4byte	0
+ 2522              	.LLST7:
+ 2523 00cb 0C000000 		.4byte	.LVL60
+ 2524 00cf 48000000 		.4byte	.LFE4
+ 2525 00d3 0100     		.2byte	0x1
+ 2526 00d5 52       		.byte	0x52
+ 2527 00d6 00000000 		.4byte	0
+ 2528 00da 00000000 		.4byte	0
+ 2529              	.LLST8:
+ 2530 00de 1E000000 		.4byte	.LVL62
+ 2531 00e2 3E000000 		.4byte	.LVL63
+ 2532 00e6 0100     		.2byte	0x1
+ 2533 00e8 54       		.byte	0x54
+ 2534 00e9 00000000 		.4byte	0
+ 2535 00ed 00000000 		.4byte	0
+ 2536              	.LLST9:
+ 2537 00f1 00000000 		.4byte	.LVL64
+ 2538 00f5 0B000000 		.4byte	.LVL65-1
+ 2539 00f9 0100     		.2byte	0x1
+ 2540 00fb 50       		.byte	0x50
+ 2541 00fc 0B000000 		.4byte	.LVL65-1
+ 2542 0100 16000000 		.4byte	.LFE5
+ 2543 0104 0400     		.2byte	0x4
+ 2544 0106 F3       		.byte	0xf3
+ 2545 0107 01       		.uleb128 0x1
+ 2546 0108 50       		.byte	0x50
+ 2547 0109 9F       		.byte	0x9f
+ 2548 010a 00000000 		.4byte	0
+ 2549 010e 00000000 		.4byte	0
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 59
+
+
+ 2550              	.LLST10:
+ 2551 0112 00000000 		.4byte	.LVL71
+ 2552 0116 07000000 		.4byte	.LVL72-1
+ 2553 011a 0100     		.2byte	0x1
+ 2554 011c 50       		.byte	0x50
+ 2555 011d 07000000 		.4byte	.LVL72-1
+ 2556 0121 1C000000 		.4byte	.LVL76
+ 2557 0125 0400     		.2byte	0x4
+ 2558 0127 F3       		.byte	0xf3
+ 2559 0128 01       		.uleb128 0x1
+ 2560 0129 50       		.byte	0x50
+ 2561 012a 9F       		.byte	0x9f
+ 2562 012b 1C000000 		.4byte	.LVL76
+ 2563 012f 1E000000 		.4byte	.LVL77
+ 2564 0133 0100     		.2byte	0x1
+ 2565 0135 50       		.byte	0x50
+ 2566 0136 1E000000 		.4byte	.LVL77
+ 2567 013a 36000000 		.4byte	.LFE6
+ 2568 013e 0400     		.2byte	0x4
+ 2569 0140 F3       		.byte	0xf3
+ 2570 0141 01       		.uleb128 0x1
+ 2571 0142 50       		.byte	0x50
+ 2572 0143 9F       		.byte	0x9f
+ 2573 0144 00000000 		.4byte	0
+ 2574 0148 00000000 		.4byte	0
+ 2575              		.section	.debug_aranges,"",%progbits
+ 2576 0000 5C000000 		.4byte	0x5c
+ 2577 0004 0200     		.2byte	0x2
+ 2578 0006 00000000 		.4byte	.Ldebug_info0
+ 2579 000a 04       		.byte	0x4
+ 2580 000b 00       		.byte	0
+ 2581 000c 0000     		.2byte	0
+ 2582 000e 0000     		.2byte	0
+ 2583 0010 00000000 		.4byte	.LFB7
+ 2584 0014 90000000 		.4byte	.LFE7-.LFB7
+ 2585 0018 00000000 		.4byte	.LFB8
+ 2586 001c 7C000000 		.4byte	.LFE8-.LFB8
+ 2587 0020 00000000 		.4byte	.LFB0
+ 2588 0024 50000000 		.4byte	.LFE0-.LFB0
+ 2589 0028 00000000 		.4byte	.LFB1
+ 2590 002c 50000000 		.4byte	.LFE1-.LFB1
+ 2591 0030 00000000 		.4byte	.LFB3
+ 2592 0034 98000000 		.4byte	.LFE3-.LFB3
+ 2593 0038 00000000 		.4byte	.LFB4
+ 2594 003c 48000000 		.4byte	.LFE4-.LFB4
+ 2595 0040 00000000 		.4byte	.LFB5
+ 2596 0044 16000000 		.4byte	.LFE5-.LFB5
+ 2597 0048 00000000 		.4byte	.LFB2
+ 2598 004c 28000000 		.4byte	.LFE2-.LFB2
+ 2599 0050 00000000 		.4byte	.LFB6
+ 2600 0054 36000000 		.4byte	.LFE6-.LFB6
+ 2601 0058 00000000 		.4byte	0
+ 2602 005c 00000000 		.4byte	0
+ 2603              		.section	.debug_ranges,"",%progbits
+ 2604              	.Ldebug_ranges0:
+ 2605 0000 00000000 		.4byte	.LFB7
+ 2606 0004 90000000 		.4byte	.LFE7
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 60
+
+
+ 2607 0008 00000000 		.4byte	.LFB8
+ 2608 000c 7C000000 		.4byte	.LFE8
+ 2609 0010 00000000 		.4byte	.LFB0
+ 2610 0014 50000000 		.4byte	.LFE0
+ 2611 0018 00000000 		.4byte	.LFB1
+ 2612 001c 50000000 		.4byte	.LFE1
+ 2613 0020 00000000 		.4byte	.LFB3
+ 2614 0024 98000000 		.4byte	.LFE3
+ 2615 0028 00000000 		.4byte	.LFB4
+ 2616 002c 48000000 		.4byte	.LFE4
+ 2617 0030 00000000 		.4byte	.LFB5
+ 2618 0034 16000000 		.4byte	.LFE5
+ 2619 0038 00000000 		.4byte	.LFB2
+ 2620 003c 28000000 		.4byte	.LFE2
+ 2621 0040 00000000 		.4byte	.LFB6
+ 2622 0044 36000000 		.4byte	.LFE6
+ 2623 0048 00000000 		.4byte	0
+ 2624 004c 00000000 		.4byte	0
+ 2625              		.section	.debug_line,"",%progbits
+ 2626              	.Ldebug_line0:
+ 2627 0000 28020000 		.section	.debug_str,"MS",%progbits,1
+ 2627      02001801 
+ 2627      00000201 
+ 2627      FB0E0D00 
+ 2627      01010101 
+ 2628              	.LASF42:
+ 2629 0000 616D7578 		.ascii	"amuxDmaCh\000"
+ 2629      446D6143 
+ 2629      6800
+ 2630              	.LASF10:
+ 2631 000a 75696E74 		.ascii	"uint16\000"
+ 2631      313600
+ 2632              	.LASF47:
+ 2633 0011 5646445F 		.ascii	"VFD_1_AMux__addrTable\000"
+ 2633      315F414D 
+ 2633      75785F5F 
+ 2633      61646472 
+ 2633      5461626C 
+ 2634              	.LASF76:
+ 2635 0027 43794578 		.ascii	"CyExitCriticalSection\000"
+ 2635      69744372 
+ 2635      69746963 
+ 2635      616C5365 
+ 2635      6374696F 
+ 2636              	.LASF39:
+ 2637 003d 5646445F 		.ascii	"VFD_1_Start\000"
+ 2637      315F5374 
+ 2637      61727400 
+ 2638              	.LASF61:
+ 2639 0049 4379446D 		.ascii	"CyDmaTdAllocate\000"
+ 2639      61546441 
+ 2639      6C6C6F63 
+ 2639      61746500 
+ 2640              	.LASF28:
+ 2641 0059 5646445F 		.ascii	"VFD_1_Init\000"
+ 2641      315F496E 
+ 2641      697400
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 61
+
+
+ 2642              	.LASF51:
+ 2643 0064 5646445F 		.ascii	"VFD_1_MuxDMA_DmaInitialize\000"
+ 2643      315F4D75 
+ 2643      78444D41 
+ 2643      5F446D61 
+ 2643      496E6974 
+ 2644              	.LASF50:
+ 2645 007f 5646445F 		.ascii	"VFD_1_initVar\000"
+ 2645      315F696E 
+ 2645      69745661 
+ 2645      7200
+ 2646              	.LASF81:
+ 2647 008d 47656E65 		.ascii	"Generated_Source\\PSoC5\\VFD_1.c\000"
+ 2647      72617465 
+ 2647      645F536F 
+ 2647      75726365 
+ 2647      5C50536F 
+ 2648              	.LASF63:
+ 2649 00ac 4379446D 		.ascii	"CyDmaChEnable\000"
+ 2649      61436845 
+ 2649      6E61626C 
+ 2649      6500
+ 2650              	.LASF7:
+ 2651 00ba 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 2651      206C6F6E 
+ 2651      6720756E 
+ 2651      7369676E 
+ 2651      65642069 
+ 2652              	.LASF44:
+ 2653 00d1 66696C74 		.ascii	"filtRdDmaCh\000"
+ 2653      5264446D 
+ 2653      61436800 
+ 2654              	.LASF53:
+ 2655 00dd 4379446D 		.ascii	"CyDmaTdSetConfiguration\000"
+ 2655      61546453 
+ 2655      6574436F 
+ 2655      6E666967 
+ 2655      75726174 
+ 2656              	.LASF54:
+ 2657 00f5 5646445F 		.ascii	"VFD_1_FiltRdDMA_DmaInitialize\000"
+ 2657      315F4669 
+ 2657      6C745264 
+ 2657      444D415F 
+ 2657      446D6149 
+ 2658              	.LASF33:
+ 2659 0113 6F765374 		.ascii	"ovStatus\000"
+ 2659      61747573 
+ 2659      00
+ 2660              	.LASF6:
+ 2661 011c 6C6F6E67 		.ascii	"long long int\000"
+ 2661      206C6F6E 
+ 2661      6720696E 
+ 2661      7400
+ 2662              	.LASF0:
+ 2663 012a 7369676E 		.ascii	"signed char\000"
+ 2663      65642063 
+ 2663      68617200 
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 62
+
+
+ 2664              	.LASF72:
+ 2665 0136 5646445F 		.ascii	"VFD_1_UVRefStop\000"
+ 2665      315F5556 
+ 2665      52656653 
+ 2665      746F7000 
+ 2666              	.LASF71:
+ 2667 0146 5646445F 		.ascii	"VFD_1_Comp_OV_Stop\000"
+ 2667      315F436F 
+ 2667      6D705F4F 
+ 2667      565F5374 
+ 2667      6F7000
+ 2668              	.LASF26:
+ 2669 0159 696E7465 		.ascii	"interruptState\000"
+ 2669      72727570 
+ 2669      74537461 
+ 2669      746500
+ 2670              	.LASF4:
+ 2671 0168 6C6F6E67 		.ascii	"long int\000"
+ 2671      20696E74 
+ 2671      00
+ 2672              	.LASF78:
+ 2673 0171 5646445F 		.ascii	"VFD_1_VDAC_OV_SetSpeed\000"
+ 2673      315F5644 
+ 2673      41435F4F 
+ 2673      565F5365 
+ 2673      74537065 
+ 2674              	.LASF17:
+ 2675 0188 72656731 		.ascii	"reg16\000"
+ 2675      3600
+ 2676              	.LASF9:
+ 2677 018e 75696E74 		.ascii	"uint8\000"
+ 2677      3800
+ 2678              	.LASF43:
+ 2679 0194 616D7578 		.ascii	"amuxDmaTd\000"
+ 2679      446D6154 
+ 2679      6400
+ 2680              	.LASF13:
+ 2681 019e 646F7562 		.ascii	"double\000"
+ 2681      6C6500
+ 2682              	.LASF73:
+ 2683 01a5 5646445F 		.ascii	"VFD_1_Comp_UV_Stop\000"
+ 2683      315F436F 
+ 2683      6D705F55 
+ 2683      565F5374 
+ 2683      6F7000
+ 2684              	.LASF35:
+ 2685 01b8 6F764C6F 		.ascii	"ovLocal\000"
+ 2685      63616C00 
+ 2686              	.LASF70:
+ 2687 01c0 5646445F 		.ascii	"VFD_1_OVRefStop\000"
+ 2687      315F4F56 
+ 2687      52656653 
+ 2687      746F7000 
+ 2688              	.LASF11:
+ 2689 01d0 75696E74 		.ascii	"uint32\000"
+ 2689      333200
+ 2690              	.LASF20:
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 63
+
+
+ 2691 01d7 62797465 		.ascii	"bytes\000"
+ 2691      7300
+ 2692              	.LASF32:
+ 2693 01dd 5646445F 		.ascii	"VFD_1_GetOVUVFaultStatus\000"
+ 2693      315F4765 
+ 2693      744F5655 
+ 2693      56466175 
+ 2693      6C745374 
+ 2694              	.LASF23:
+ 2695 01f6 616D7578 		.ascii	"amuxMaskTable\000"
+ 2695      4D61736B 
+ 2695      5461626C 
+ 2695      6500
+ 2696              	.LASF8:
+ 2697 0204 756E7369 		.ascii	"unsigned int\000"
+ 2697      676E6564 
+ 2697      20696E74 
+ 2697      00
+ 2698              	.LASF36:
+ 2699 0211 75764C6F 		.ascii	"uvLocal\000"
+ 2699      63616C00 
+ 2700              	.LASF5:
+ 2701 0219 6C6F6E67 		.ascii	"long unsigned int\000"
+ 2701      20756E73 
+ 2701      69676E65 
+ 2701      6420696E 
+ 2701      7400
+ 2702              	.LASF62:
+ 2703 022b 4379456E 		.ascii	"CyEnterCriticalSection\000"
+ 2703      74657243 
+ 2703      72697469 
+ 2703      63616C53 
+ 2703      65637469 
+ 2704              	.LASF3:
+ 2705 0242 73686F72 		.ascii	"short unsigned int\000"
+ 2705      7420756E 
+ 2705      7369676E 
+ 2705      65642069 
+ 2705      6E7400
+ 2706              	.LASF31:
+ 2707 0255 696E6478 		.ascii	"indx\000"
+ 2707      00
+ 2708              	.LASF21:
+ 2709 025a 4641554C 		.ascii	"FAULT_STS\000"
+ 2709      545F5354 
+ 2709      5300
+ 2710              	.LASF83:
+ 2711 0264 5646445F 		.ascii	"VFD_1_VDAC_UV_SetSpeed\000"
+ 2711      315F5644 
+ 2711      41435F55 
+ 2711      565F5365 
+ 2711      74537065 
+ 2712              	.LASF46:
+ 2713 027b 66696C74 		.ascii	"filtCount\000"
+ 2713      436F756E 
+ 2713      7400
+ 2714              	.LASF34:
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 64
+
+
+ 2715 0285 75765374 		.ascii	"uvStatus\000"
+ 2715      61747573 
+ 2715      00
+ 2716              	.LASF64:
+ 2717 028e 5646445F 		.ascii	"VFD_1_OVRefEnable\000"
+ 2717      315F4F56 
+ 2717      52656645 
+ 2717      6E61626C 
+ 2717      6500
+ 2718              	.LASF38:
+ 2719 02a0 636F6D70 		.ascii	"compType\000"
+ 2719      54797065 
+ 2719      00
+ 2720              	.LASF82:
+ 2721 02a9 433A5C55 		.ascii	"C:\\Users\\dph5ah\\Documents\\PSoC Creator\\Workspa"
+ 2721      73657273 
+ 2721      5C647068 
+ 2721      3561685C 
+ 2721      446F6375 
+ 2722 02d7 63653031 		.ascii	"ce01\\galton board.cydsn\000"
+ 2722      5C67616C 
+ 2722      746F6E20 
+ 2722      626F6172 
+ 2722      642E6379 
+ 2723              	.LASF29:
+ 2724 02ef 5646445F 		.ascii	"VFD_1_Enable\000"
+ 2724      315F456E 
+ 2724      61626C65 
+ 2724      00
+ 2725              	.LASF18:
+ 2726 02fc 73697A65 		.ascii	"sizetype\000"
+ 2726      74797065 
+ 2726      00
+ 2727              	.LASF27:
+ 2728 0305 646D6149 		.ascii	"dmaInitDone\000"
+ 2728      6E697444 
+ 2728      6F6E6500 
+ 2729              	.LASF74:
+ 2730 0311 5646445F 		.ascii	"VFD_1_Comp_OV_ZeroCal\000"
+ 2730      315F436F 
+ 2730      6D705F4F 
+ 2730      565F5A65 
+ 2730      726F4361 
+ 2731              	.LASF52:
+ 2732 0327 4379446D 		.ascii	"CyDmaTdSetAddress\000"
+ 2732      61546453 
+ 2732      65744164 
+ 2732      64726573 
+ 2732      7300
+ 2733              	.LASF67:
+ 2734 0339 5646445F 		.ascii	"VFD_1_Comp_UV_Enable\000"
+ 2734      315F436F 
+ 2734      6D705F55 
+ 2734      565F456E 
+ 2734      61626C65 
+ 2735              	.LASF59:
+ 2736 034e 5646445F 		.ascii	"VFD_1_UVRefInit\000"
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 65
+
+
+ 2736      315F5556 
+ 2736      52656649 
+ 2736      6E697400 
+ 2737              	.LASF58:
+ 2738 035e 5646445F 		.ascii	"VFD_1_Comp_OV_Init\000"
+ 2738      315F436F 
+ 2738      6D705F4F 
+ 2738      565F496E 
+ 2738      697400
+ 2739              	.LASF69:
+ 2740 0371 4379446D 		.ascii	"CyDmaClearPendingDrq\000"
+ 2740      61436C65 
+ 2740      61725065 
+ 2740      6E64696E 
+ 2740      67447271 
+ 2741              	.LASF49:
+ 2742 0386 5646445F 		.ascii	"VFD_1_VoltageScale\000"
+ 2742      315F566F 
+ 2742      6C746167 
+ 2742      65536361 
+ 2742      6C6500
+ 2743              	.LASF12:
+ 2744 0399 666C6F61 		.ascii	"float\000"
+ 2744      7400
+ 2745              	.LASF40:
+ 2746 039f 5646445F 		.ascii	"VFD_1_SetSpeed\000"
+ 2746      315F5365 
+ 2746      74537065 
+ 2746      656400
+ 2747              	.LASF16:
+ 2748 03ae 72656738 		.ascii	"reg8\000"
+ 2748      00
+ 2749              	.LASF68:
+ 2750 03b3 4379446D 		.ascii	"CyDmaChSetRequest\000"
+ 2750      61436853 
+ 2750      65745265 
+ 2750      71756573 
+ 2750      7400
+ 2751              	.LASF30:
+ 2752 03c5 5646445F 		.ascii	"VFD_1_Stop\000"
+ 2752      315F5374 
+ 2752      6F7000
+ 2753              	.LASF1:
+ 2754 03d0 756E7369 		.ascii	"unsigned char\000"
+ 2754      676E6564 
+ 2754      20636861 
+ 2754      7200
+ 2755              	.LASF60:
+ 2756 03de 5646445F 		.ascii	"VFD_1_Comp_UV_Init\000"
+ 2756      315F436F 
+ 2756      6D705F55 
+ 2756      565F496E 
+ 2756      697400
+ 2757              	.LASF57:
+ 2758 03f1 5646445F 		.ascii	"VFD_1_OVRefInit\000"
+ 2758      315F4F56 
+ 2758      52656649 
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 66
+
+
+ 2758      6E697400 
+ 2759              	.LASF24:
+ 2760 0401 5646445F 		.ascii	"VFD_1_AMuxDmaInit\000"
+ 2760      315F414D 
+ 2760      7578446D 
+ 2760      61496E69 
+ 2760      7400
+ 2761              	.LASF2:
+ 2762 0413 73686F72 		.ascii	"short int\000"
+ 2762      7420696E 
+ 2762      7400
+ 2763              	.LASF22:
+ 2764 041d 616D7578 		.ascii	"amuxClear\000"
+ 2764      436C6561 
+ 2764      7200
+ 2765              	.LASF56:
+ 2766 0427 5646445F 		.ascii	"VFD_1_FiltWrDMA_DmaInitialize\000"
+ 2766      315F4669 
+ 2766      6C745772 
+ 2766      444D415F 
+ 2766      446D6149 
+ 2767              	.LASF66:
+ 2768 0445 5646445F 		.ascii	"VFD_1_UVRefEnable\000"
+ 2768      315F5556 
+ 2768      52656645 
+ 2768      6E61626C 
+ 2768      6500
+ 2769              	.LASF14:
+ 2770 0457 63686172 		.ascii	"char\000"
+ 2770      00
+ 2771              	.LASF37:
+ 2772 045c 5646445F 		.ascii	"VFD_1_ComparatorCal\000"
+ 2772      315F436F 
+ 2772      6D706172 
+ 2772      61746F72 
+ 2772      43616C00 
+ 2773              	.LASF77:
+ 2774 0470 5646445F 		.ascii	"VFD_1_Comp_OV_SetSpeed\000"
+ 2774      315F436F 
+ 2774      6D705F4F 
+ 2774      565F5365 
+ 2774      74537065 
+ 2775              	.LASF19:
+ 2776 0487 776F7264 		.ascii	"word\000"
+ 2776      00
+ 2777              	.LASF75:
+ 2778 048c 5646445F 		.ascii	"VFD_1_Comp_UV_ZeroCal\000"
+ 2778      315F436F 
+ 2778      6D705F55 
+ 2778      565F5A65 
+ 2778      726F4361 
+ 2779              	.LASF41:
+ 2780 04a2 73706565 		.ascii	"speedMode\000"
+ 2780      644D6F64 
+ 2780      6500
+ 2781              	.LASF80:
+ 2782 04ac 474E5520 		.ascii	"GNU C 4.9.3 20150303 (release) [ARM/embedded-4_9-br"
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccrP8Bjg.s 			page 67
+
+
+ 2782      4320342E 
+ 2782      392E3320 
+ 2782      32303135 
+ 2782      30333033 
+ 2783 04df 616E6368 		.ascii	"anch revision 221220] -mcpu=cortex-m3 -mthumb -g -O"
+ 2783      20726576 
+ 2783      6973696F 
+ 2783      6E203232 
+ 2783      31323230 
+ 2784 0512 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
+ 2784      66756E63 
+ 2784      74696F6E 
+ 2784      2D736563 
+ 2784      74696F6E 
+ 2785              	.LASF45:
+ 2786 053a 66696C74 		.ascii	"filtWrDmaCh\000"
+ 2786      5772446D 
+ 2786      61436800 
+ 2787              	.LASF65:
+ 2788 0546 5646445F 		.ascii	"VFD_1_Comp_OV_Enable\000"
+ 2788      315F436F 
+ 2788      6D705F4F 
+ 2788      565F456E 
+ 2788      61626C65 
+ 2789              	.LASF55:
+ 2790 055b 4379446D 		.ascii	"CyDmaChSetInitialTd\000"
+ 2790      61436853 
+ 2790      6574496E 
+ 2790      69746961 
+ 2790      6C546400 
+ 2791              	.LASF15:
+ 2792 056f 63797374 		.ascii	"cystatus\000"
+ 2792      61747573 
+ 2792      00
+ 2793              	.LASF79:
+ 2794 0578 5646445F 		.ascii	"VFD_1_Comp_UV_SetSpeed\000"
+ 2794      315F436F 
+ 2794      6D705F55 
+ 2794      565F5365 
+ 2794      74537065 
+ 2795              	.LASF25:
+ 2796 058f 5646445F 		.ascii	"VFD_1_GlitchFilterDmaInit\000"
+ 2796      315F476C 
+ 2796      69746368 
+ 2796      46696C74 
+ 2796      6572446D 
+ 2797              	.LASF48:
+ 2798 05a9 5646445F 		.ascii	"VFD_1_AMux__maskTable\000"
+ 2798      315F414D 
+ 2798      75785F5F 
+ 2798      6D61736B 
+ 2798      5461626C 
+ 2799              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 4.9.3 20150303 (release) [ARM/embedded-4_9-br
