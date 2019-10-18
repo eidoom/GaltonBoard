@@ -1,0 +1,5 @@
+C:\Users\dph5ah\Documents\PSoC Creator\Workspace01\galton board.cydsn\galton board.cyprj|0890d2b4-5d74-413a-be42-5823d189f0ac
+C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\default\CyAnnotationLibrary\CyAnnotationLibrary.cylib\CyAnnotationLibrary.cyprj|37b9cb31-a29d-417f-b865-1c3e7e31570f
+C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\cycomponentlibraryupdates\CyComponentLibraryUpdates.cylib\CyComponentLibraryUpdates.cyprj|8bbe9bfe-2e63-4cea-b491-76f7bdb24b42
+C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\CyComponentLibrary.cyprj|cbcc16a3-cd4b-4a54-8b65-179259d972ce
+C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\cyprimitives\CyPrimitives.cylib\CyPrimitives.cyprj|5539e073-5830-4c98-9239-f2b0bbfb5077

@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CyXmlSerializer>
+<!--This file is machine generated and read. It is not intended to be edited by hand.-->
+<!--Due to this, there is no schema for this file.-->
+<CyGuid_843a90a4-0c4b-4e44-991d-05e7fb117a21 type_name="CyDesigner.Common.ProjMgmt.Model.CyPrjMgmtWrkspcCustomData" version="4">
+<CyGuid_fdba8dfd-b15b-4469-9bbb-9e40c3e70997 type_name="CyDesigner.Common.Base.CyCustomData" version="2">
+<userData>
+<dataGuid v="1b906a0f-a7b6-4e4d-a428-82f98b53cb35">
+<CyGuid_1b906a0f-a7b6-4e4d-a428-82f98b53cb35 type_name="CyDesigner.Common.ProjMgmt.GUI.CyExplorerWindow+CyExplorerWindowState" version="3" SelectedTab="Source">
+<TreeKeys>
+<v>Source</v>
+<v>Components</v>
+<v>Output</v>
+</TreeKeys>
+<TreeStates>
+<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="Galton board sensors\galton board\TopDesign">
+<ExpandedNodeIds>
+<v>Galton board sensors</v>
+<v>Galton board sensors\galton board</v>
+<v>Galton board sensors\galton board\TopDesign</v>
+<v>Galton board sensors\galton board\galton board.cydwr</v>
+<v>Galton board sensors\galton board\galton board.cydwr\Pins</v>
+<v>Galton board sensors\galton board\galton board.cydwr\Analog</v>
+<v>Galton board sensors\galton board\galton board.cydwr\Clocks</v>
+<v>Galton board sensors\galton board\galton board.cydwr\Interrupts</v>
+<v>Galton board sensors\galton board\galton board.cydwr\DMA</v>
+<v>Galton board sensors\galton board\galton board.cydwr\System</v>
+<v>Galton board sensors\galton board\galton board.cydwr\Directives</v>
+<v>Galton board sensors\galton board\galton board.cydwr\Flash Security</v>
+<v>Galton board sensors\galton board\galton board.cydwr\EEPROM</v>
+<v>Galton board sensors\galton board\Header Files</v>
+<v>Galton board sensors\galton board\Header Files\cyapicallbacks.h</v>
+<v>Galton board sensors\galton board\Source Files</v>
+<v>Galton board sensors\galton board\Source Files\main.c</v>
+<v>Galton board sensors\galton board\Generated_Source</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\Clock_1</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\Clock_1\Clock_1.c</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\Clock_1\Clock_1.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cy_boot</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cy_boot\cm3gcc.ld</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cy_boot\Cm3Iar.icf</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cy_boot\Cm3RealView.scat</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cy_boot\Cm3Start.c</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cy_boot\cmsis_armcc.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cy_boot\cmsis_gcc.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cy_boot\core_cm3.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cy_boot\core_cm3_psoc5.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cy_boot\core_cmFunc.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cy_boot\core_cmInstr.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cy_boot\CyBootAsmGnu.s</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cy_boot\CyBootAsmIar.s</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cy_boot\CyBootAsmRv.s</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cy_boot\CyDmac.c</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cy_boot\CyDmac.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cy_boot\CyFlash.c</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cy_boot\CyFlash.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cy_boot\CyLib.c</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cy_boot\CyLib.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cy_boot\cypins.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cy_boot\cyPm.c</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cy_boot\cyPm.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cy_boot\CySpc.c</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cy_boot\CySpc.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cy_boot\cytypes.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cy_boot\cyutils.c</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\isr_1_sensor</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\isr_1_sensor\isr_1_sensor.c</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\isr_1_sensor\isr_1_sensor.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\isr_10_sensor</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\isr_10_sensor\isr_10_sensor.c</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\isr_10_sensor\isr_10_sensor.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\isr_11_sensor</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\isr_11_sensor\isr_11_sensor.c</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\isr_11_sensor\isr_11_sensor.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\isr_12_sensor</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\isr_12_sensor\isr_12_sensor.c</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\isr_12_sensor\isr_12_sensor.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\isr_13_sensor</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\isr_13_sensor\isr_13_sensor.c</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\isr_13_sensor\isr_13_sensor.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\isr_2_sensor</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\isr_2_sensor\isr_2_sensor.c</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\isr_2_sensor\isr_2_sensor.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\isr_3_sensor</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\isr_3_sensor\isr_3_sensor.c</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\isr_3_sensor\isr_3_sensor.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\isr_4_sensor</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\isr_4_sensor\isr_4_sensor.c</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\isr_4_sensor\isr_4_sensor.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\isr_5_sensor</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\isr_5_sensor\isr_5_sensor.c</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\isr_5_sensor\isr_5_sensor.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\isr_6_sensor</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\isr_6_sensor\isr_6_sensor.c</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\isr_6_sensor\isr_6_sensor.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\isr_7_sensor</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\isr_7_sensor\isr_7_sensor.c</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\isr_7_sensor\isr_7_sensor.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\isr_8_sensor</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\isr_8_sensor\isr_8_sensor.c</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\isr_8_sensor\isr_8_sensor.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\isr_9_sensor</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\isr_9_sensor\isr_9_sensor.c</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\isr_9_sensor\isr_9_sensor.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\Pin_1</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\Pin_1\Pin_1.c</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\Pin_1\Pin_1.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\Pin_1\Pin_1_aliases.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\Pin_2</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\Pin_2\Pin_2.c</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\Pin_2\Pin_2.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\Pin_2\Pin_2_aliases.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\sensor_1</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\sensor_1\sensor_1.c</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\sensor_1\sensor_1.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\sensor_1\sensor_1_aliases.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\sensor_10</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\sensor_10\sensor_10.c</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\sensor_10\sensor_10.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\sensor_10\sensor_10_aliases.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\sensor_11</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\sensor_11\sensor_11.c</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\sensor_11\sensor_11.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\sensor_11\sensor_11_aliases.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\sensor_12</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\sensor_12\sensor_12.c</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\sensor_12\sensor_12.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\sensor_12\sensor_12_aliases.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\sensor_13</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\sensor_13\sensor_13.c</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\sensor_13\sensor_13.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\sensor_13\sensor_13_aliases.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\sensor_2</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\sensor_2\sensor_2.c</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\sensor_2\sensor_2.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\sensor_2\sensor_2_aliases.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\sensor_3</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\sensor_3\sensor_3.c</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\sensor_3\sensor_3.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\sensor_3\sensor_3_aliases.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\sensor_4</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\sensor_4\sensor_4.c</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\sensor_4\sensor_4.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\sensor_4\sensor_4_aliases.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\sensor_5</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\sensor_5\sensor_5.c</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\sensor_5\sensor_5.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\sensor_5\sensor_5_aliases.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\sensor_6</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\sensor_6\sensor_6.c</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\sensor_6\sensor_6.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\sensor_6\sensor_6_aliases.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\sensor_7</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\sensor_7\sensor_7.c</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\sensor_7\sensor_7.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\sensor_7\sensor_7_aliases.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\sensor_8</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\sensor_8\sensor_8.c</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\sensor_8\sensor_8.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\sensor_8\sensor_8_aliases.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\sensor_9</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\sensor_9\sensor_9.c</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\sensor_9\sensor_9.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\sensor_9\sensor_9_aliases.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\serial_in_buff</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\serial_in_buff\serial_in_buff.c</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\serial_in_buff\serial_in_buff.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\UART_1</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\UART_1\UART_1.c</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\UART_1\UART_1.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\UART_1\UART_1_BOOT.c</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\UART_1\UART_1_INT.c</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\UART_1\UART_1_PM.c</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\UART_1_IntClock</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\UART_1_IntClock\UART_1_IntClock.c</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\UART_1_IntClock\UART_1_IntClock.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cycodeshareexport.ld</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cycodeshareimport.ld</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cycodeshareimport.scat</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cydevice.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cydevice_trm.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cydevicegnu.inc</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cydevicegnu_trm.inc</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cydeviceiar.inc</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cydeviceiar_trm.inc</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cydevicerv.inc</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cydevicerv_trm.inc</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cydisabledsheets.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cyfitter.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cyfitter_cfg.c</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cyfitter_cfg.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cyfittergnu.inc</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cyfitteriar.inc</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cyfitterrv.inc</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cymetadata.c</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\project.h</v>
+</ExpandedNodeIds>
+<VisibleNodeIds>
+<v>Galton board sensors</v>
+<v>Galton board sensors\galton board</v>
+<v>Galton board sensors\galton board\TopDesign</v>
+<v>Galton board sensors\galton board\galton board.cydwr</v>
+<v>Galton board sensors\galton board\galton board.cydwr\Pins</v>
+<v>Galton board sensors\galton board\galton board.cydwr\Analog</v>
+<v>Galton board sensors\galton board\galton board.cydwr\Clocks</v>
+<v>Galton board sensors\galton board\galton board.cydwr\Interrupts</v>
+<v>Galton board sensors\galton board\galton board.cydwr\DMA</v>
+<v>Galton board sensors\galton board\galton board.cydwr\System</v>
+<v>Galton board sensors\galton board\galton board.cydwr\Directives</v>
+<v>Galton board sensors\galton board\galton board.cydwr\Flash Security</v>
+<v>Galton board sensors\galton board\galton board.cydwr\EEPROM</v>
+<v>Galton board sensors\galton board\Header Files</v>
+<v>Galton board sensors\galton board\Header Files\cyapicallbacks.h</v>
+<v>Galton board sensors\galton board\Source Files</v>
+<v>Galton board sensors\galton board\Source Files\main.c</v>
+<v>Galton board sensors\galton board\Generated_Source</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\Clock_1</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\Clock_1\Clock_1.c</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\Clock_1\Clock_1.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cy_boot</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cy_boot\cm3gcc.ld</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cy_boot\Cm3Iar.icf</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cy_boot\Cm3RealView.scat</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cy_boot\Cm3Start.c</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cy_boot\cmsis_armcc.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cy_boot\cmsis_gcc.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cy_boot\core_cm3.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cy_boot\core_cm3_psoc5.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cy_boot\core_cmFunc.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cy_boot\core_cmInstr.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cy_boot\CyBootAsmGnu.s</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cy_boot\CyBootAsmIar.s</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cy_boot\CyBootAsmRv.s</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cy_boot\CyDmac.c</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cy_boot\CyDmac.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cy_boot\CyFlash.c</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cy_boot\CyFlash.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cy_boot\CyLib.c</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cy_boot\CyLib.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cy_boot\cypins.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cy_boot\cyPm.c</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cy_boot\cyPm.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cy_boot\CySpc.c</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cy_boot\CySpc.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cy_boot\cytypes.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\cy_boot\cyutils.c</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\isr_1_sensor</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\isr_1_sensor\isr_1_sensor.c</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\isr_1_sensor\isr_1_sensor.h</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\isr_10_sensor</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\isr_10_sensor\isr_10_sensor.c</v>
+<v>Galton board sensors\galton board\Generated_Source\PSoC5\isr_10_sensor\isr_10_sensor.h</v>
+</VisibleNodeIds>
+</CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237>
+<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="Galton board sensors">
+<ExpandedNodeIds>
+<v>Galton board sensors</v>
+<v>Galton board sensors\galton board</v>
+<v>Galton board sensors\galton board\TopDesign</v>
+<v>Galton board sensors\galton board\TopDesign\TopDesign.cysch</v>
+</ExpandedNodeIds>
+<VisibleNodeIds>
+<v>Galton board sensors</v>
+<v>Galton board sensors\galton board</v>
+<v>Galton board sensors\galton board\TopDesign</v>
+<v>Galton board sensors\galton board\TopDesign\TopDesign.cysch</v>
+</VisibleNodeIds>
+</CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237>
+<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="">
+<ExpandedNodeIds>
+<v>Galton board sensors</v>
+<v>Galton board sensors\galton board</v>
+<v>Galton board sensors\galton board\galton board.gpdsc</v>
+<v>Galton board sensors\galton board\galton board.rpt</v>
+<v>Galton board sensors\galton board\galton board_timing.html</v>
+</ExpandedNodeIds>
+<VisibleNodeIds>
+<v>Galton board sensors</v>
+<v>Galton board sensors\galton board</v>
+<v>Galton board sensors\galton board\galton board.gpdsc</v>
+<v>Galton board sensors\galton board\galton board.rpt</v>
+<v>Galton board sensors\galton board\galton board_timing.html</v>
+</VisibleNodeIds>
+</CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237>
+</TreeStates>
+<TreeKeysV2>
+<v>Datasheet</v>
+</TreeKeysV2>
+<TreeStatesV2>
+<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="">
+<ExpandedNodeIds>
+<v>Galton board sensors</v>
+<v>Galton board sensors\galton board</v>
+<v>Galton board sensors\galton board\PSoC 5LP Architecture TRM</v>
+<v>Galton board sensors\galton board\CY8C58LP Family Datasheet</v>
+<v>Galton board sensors\galton board\System Reference Guides</v>
+<v>Galton board sensors\galton board\System Reference Guides\cy_boot_v5_50</v>
+<v>Galton board sensors\galton board\cy_clock_v2_20.pdf</v>
+<v>Galton board sensors\galton board\cy_isr_v1_70</v>
+<v>Galton board sensors\galton board\cy_isr_v1_70\cy_isr_v1_70.pdf</v>
+<v>Galton board sensors\galton board\cy_pins_v2_20</v>
+<v>Galton board sensors\galton board\cy_pins_v2_20\cy_pins_v2_20.pdf</v>
+<v>Galton board sensors\galton board\Debouncer_v1_0</v>
+<v>Galton board sensors\galton board\Debouncer_v1_0\Debouncer_v1_0.pdf</v>
+<v>Galton board sensors\galton board\UART_v2_50.pdf</v>
+</ExpandedNodeIds>
+<VisibleNodeIds>
+<v>Galton board sensors</v>
+<v>Galton board sensors\galton board</v>
+<v>Galton board sensors\galton board\PSoC 5LP Architecture TRM</v>
+<v>Galton board sensors\galton board\CY8C58LP Family Datasheet</v>
+<v>Galton board sensors\galton board\System Reference Guides</v>
+<v>Galton board sensors\galton board\System Reference Guides\cy_boot_v5_50</v>
+<v>Galton board sensors\galton board\cy_clock_v2_20.pdf</v>
+<v>Galton board sensors\galton board\cy_isr_v1_70</v>
+<v>Galton board sensors\galton board\cy_isr_v1_70\cy_isr_v1_70.pdf</v>
+<v>Galton board sensors\galton board\cy_pins_v2_20</v>
+<v>Galton board sensors\galton board\cy_pins_v2_20\cy_pins_v2_20.pdf</v>
+<v>Galton board sensors\galton board\Debouncer_v1_0</v>
+<v>Galton board sensors\galton board\Debouncer_v1_0\Debouncer_v1_0.pdf</v>
+<v>Galton board sensors\galton board\UART_v2_50.pdf</v>
+</VisibleNodeIds>
+</CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237>
+</TreeStatesV2>
+</CyGuid_1b906a0f-a7b6-4e4d-a428-82f98b53cb35>
+</dataGuid>
+<dataGuid v="5f2be1a5-0687-4501-bb8c-cf21cb8211bf">
+<CyGuid_5f2be1a5-0687-4501-bb8c-cf21cb8211bf type_name="CyDesigner.Common.ProjMgmt.GUI.CyBookmarkData" version="1">
+<indicators />
+</CyGuid_5f2be1a5-0687-4501-bb8c-cf21cb8211bf>
+</dataGuid>
+</userData>
+</CyGuid_fdba8dfd-b15b-4469-9bbb-9e40c3e70997>
+<Unloaded />
+<OpenDocs>
+<name v=".\galton board.cydsn\galton board.cydwr" />
+<name v=".\galton board.cydsn\main.c" />
+<name v=".\galton board.cydsn\TopDesign\TopDesign.cysch" />
+</OpenDocs>
+<OpenDocsLayout><![CDATA[<?xml version="1.0"?><!--
+
+  Actipro Docking/MDI for WinForms
+  Copyright (c) 2001-2016 Actipro Software LLC.  All rights reserved.
+  http://www.actiprosoftware.com
+
+--><DocumentLayout Version="1.0"><LayoutData><TabbedMdiRootContainer Orientation="Horizontal"><TabbedMdiContainer Size="1212, 831" SelectedTabbedMdiWindow="b39bbc16-afca-4108-b97c-f909e3a3c4cb"><ToolWindow Key="Start Page:bd4649ab-da6b-4d04-a663-c722b8bf99db:Start Page" Guid="57d6124d-f34a-40af-a8cb-cfa5379702e8" /><DocumentWindow Key="C:\Users\dph5ah\Documents\EWS\job 7139 galton board counter\Workspace01\galton board.cydsn\galton board.cydwr" Guid="c8e2b117-c34a-44d3-ba23-f4fb886cd64c" /><DocumentWindow Key="C:\Users\dph5ah\Documents\EWS\job 7139 galton board counter\Workspace01\galton board.cydsn\main.c" Guid="b39bbc16-afca-4108-b97c-f909e3a3c4cb" /><DocumentWindow Key="C:\Users\dph5ah\Documents\EWS\job 7139 galton board counter\Workspace01\galton board.cydsn\TopDesign\TopDesign.cysch" Guid="ad6a8d75-b41d-43e8-bf42-419e9e98a746" /></TabbedMdiContainer></TabbedMdiRootContainer><FloatingContainers /></LayoutData></DocumentLayout>]]></OpenDocsLayout>
+<config v="" />
+<AutoUpdate v="true" />
+</CyGuid_843a90a4-0c4b-4e44-991d-05e7fb117a21>
+</CyXmlSerializer>

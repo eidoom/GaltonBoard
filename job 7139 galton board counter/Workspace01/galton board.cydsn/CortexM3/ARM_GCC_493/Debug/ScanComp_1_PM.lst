@@ -1,0 +1,774 @@
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccqor09j.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.file	"ScanComp_1_PM.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.section	.text.ScanComp_1_Sleep,"ax",%progbits
+  19              		.align	2
+  20              		.global	ScanComp_1_Sleep
+  21              		.thumb
+  22              		.thumb_func
+  23              		.type	ScanComp_1_Sleep, %function
+  24              	ScanComp_1_Sleep:
+  25              	.LFB0:
+  26              		.file 1 "Generated_Source\\PSoC5\\ScanComp_1_PM.c"
+   1:Generated_Source\PSoC5/ScanComp_1_PM.c **** /*******************************************************************************
+   2:Generated_Source\PSoC5/ScanComp_1_PM.c **** * File Name: ScanComp_1_PM.c
+   3:Generated_Source\PSoC5/ScanComp_1_PM.c **** * Version 1.10
+   4:Generated_Source\PSoC5/ScanComp_1_PM.c **** *
+   5:Generated_Source\PSoC5/ScanComp_1_PM.c **** * Description:
+   6:Generated_Source\PSoC5/ScanComp_1_PM.c **** *  This file provides Sleep APIs for Scanning Comparator component.
+   7:Generated_Source\PSoC5/ScanComp_1_PM.c **** *
+   8:Generated_Source\PSoC5/ScanComp_1_PM.c **** * Note:
+   9:Generated_Source\PSoC5/ScanComp_1_PM.c **** *  None
+  10:Generated_Source\PSoC5/ScanComp_1_PM.c **** *
+  11:Generated_Source\PSoC5/ScanComp_1_PM.c **** ********************************************************************************
+  12:Generated_Source\PSoC5/ScanComp_1_PM.c **** * Copyright 2013, Cypress Semiconductor Corporation.  All rights reserved.
+  13:Generated_Source\PSoC5/ScanComp_1_PM.c **** * You may use this file only in accordance with the license, terms, conditions,
+  14:Generated_Source\PSoC5/ScanComp_1_PM.c **** * disclaimers, and limitations in the end user license agreement accompanying
+  15:Generated_Source\PSoC5/ScanComp_1_PM.c **** * the software package with which this file was provided.
+  16:Generated_Source\PSoC5/ScanComp_1_PM.c **** *******************************************************************************/
+  17:Generated_Source\PSoC5/ScanComp_1_PM.c **** 
+  18:Generated_Source\PSoC5/ScanComp_1_PM.c **** #include "ScanComp_1.h"
+  19:Generated_Source\PSoC5/ScanComp_1_PM.c **** 
+  20:Generated_Source\PSoC5/ScanComp_1_PM.c **** static ScanComp_1_BACKUP_STRUCT ScanComp_1_backup;
+  21:Generated_Source\PSoC5/ScanComp_1_PM.c **** 
+  22:Generated_Source\PSoC5/ScanComp_1_PM.c **** 
+  23:Generated_Source\PSoC5/ScanComp_1_PM.c **** /*******************************************************************************
+  24:Generated_Source\PSoC5/ScanComp_1_PM.c **** * Function Name: ScanComp_1_Sleep
+  25:Generated_Source\PSoC5/ScanComp_1_PM.c **** ********************************************************************************
+  26:Generated_Source\PSoC5/ScanComp_1_PM.c **** *
+  27:Generated_Source\PSoC5/ScanComp_1_PM.c **** * Summary:
+  28:Generated_Source\PSoC5/ScanComp_1_PM.c **** *  Prepares the component for low power mode operation.
+  29:Generated_Source\PSoC5/ScanComp_1_PM.c **** *
+  30:Generated_Source\PSoC5/ScanComp_1_PM.c **** * Parameters:
+  31:Generated_Source\PSoC5/ScanComp_1_PM.c **** *  None
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccqor09j.s 			page 2
+
+
+  32:Generated_Source\PSoC5/ScanComp_1_PM.c **** *
+  33:Generated_Source\PSoC5/ScanComp_1_PM.c **** * Return:
+  34:Generated_Source\PSoC5/ScanComp_1_PM.c **** *  None
+  35:Generated_Source\PSoC5/ScanComp_1_PM.c **** *
+  36:Generated_Source\PSoC5/ScanComp_1_PM.c **** *******************************************************************************/
+  37:Generated_Source\PSoC5/ScanComp_1_PM.c **** void ScanComp_1_Sleep(void) 
+  38:Generated_Source\PSoC5/ScanComp_1_PM.c **** {
+  27              		.loc 1 38 0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31 0000 08B5     		push	{r3, lr}
+  32              		.cfi_def_cfa_offset 8
+  33              		.cfi_offset 3, -8
+  34              		.cfi_offset 14, -4
+  39:Generated_Source\PSoC5/ScanComp_1_PM.c ****     if(0u != (ScanComp_1_CONTROL_REG & ScanComp_1_CONTROL_ENABLE))
+  35              		.loc 1 39 0
+  36 0002 094B     		ldr	r3, .L5
+  37 0004 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+  38 0006 13F0010F 		tst	r3, #1
+  39 000a 05D0     		beq	.L2
+  40:Generated_Source\PSoC5/ScanComp_1_PM.c ****     {
+  41:Generated_Source\PSoC5/ScanComp_1_PM.c ****         ScanComp_1_backup.enableState = 1u;
+  40              		.loc 1 41 0
+  41 000c 0122     		movs	r2, #1
+  42 000e 074B     		ldr	r3, .L5+4
+  43 0010 1A70     		strb	r2, [r3]
+  42:Generated_Source\PSoC5/ScanComp_1_PM.c ****         ScanComp_1_Stop();
+  44              		.loc 1 42 0
+  45 0012 FFF7FEFF 		bl	ScanComp_1_Stop
+  46              	.LVL0:
+  47 0016 02E0     		b	.L3
+  48              	.L2:
+  43:Generated_Source\PSoC5/ScanComp_1_PM.c ****     }
+  44:Generated_Source\PSoC5/ScanComp_1_PM.c ****     else /* The component is disabled */
+  45:Generated_Source\PSoC5/ScanComp_1_PM.c ****     {
+  46:Generated_Source\PSoC5/ScanComp_1_PM.c ****         ScanComp_1_backup.enableState = 0u;
+  49              		.loc 1 46 0
+  50 0018 0022     		movs	r2, #0
+  51 001a 044B     		ldr	r3, .L5+4
+  52 001c 1A70     		strb	r2, [r3]
+  53              	.L3:
+  47:Generated_Source\PSoC5/ScanComp_1_PM.c ****     }
+  48:Generated_Source\PSoC5/ScanComp_1_PM.c **** 
+  49:Generated_Source\PSoC5/ScanComp_1_PM.c ****     ScanComp_1_Comp_Sleep();
+  54              		.loc 1 49 0
+  55 001e FFF7FEFF 		bl	ScanComp_1_Comp_Sleep
+  56              	.LVL1:
+  50:Generated_Source\PSoC5/ScanComp_1_PM.c **** 
+  51:Generated_Source\PSoC5/ScanComp_1_PM.c ****     #if (ScanComp_1_INTERNAL_REF_IS_USED)
+  52:Generated_Source\PSoC5/ScanComp_1_PM.c ****         ScanComp_1_VDAC_Sleep();
+  57              		.loc 1 52 0
+  58 0022 FFF7FEFF 		bl	ScanComp_1_VDAC_Sleep
+  59              	.LVL2:
+  60 0026 08BD     		pop	{r3, pc}
+  61              	.L6:
+  62              		.align	2
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccqor09j.s 			page 3
+
+
+  63              	.L5:
+  64 0028 7C640040 		.word	1073767548
+  65 002c 00000000 		.word	.LANCHOR0
+  66              		.cfi_endproc
+  67              	.LFE0:
+  68              		.size	ScanComp_1_Sleep, .-ScanComp_1_Sleep
+  69              		.section	.text.ScanComp_1_Wakeup,"ax",%progbits
+  70              		.align	2
+  71              		.global	ScanComp_1_Wakeup
+  72              		.thumb
+  73              		.thumb_func
+  74              		.type	ScanComp_1_Wakeup, %function
+  75              	ScanComp_1_Wakeup:
+  76              	.LFB1:
+  53:Generated_Source\PSoC5/ScanComp_1_PM.c ****     #endif /* ScanComp_1_INTERNAL_REF_IS_USED */
+  54:Generated_Source\PSoC5/ScanComp_1_PM.c **** }
+  55:Generated_Source\PSoC5/ScanComp_1_PM.c **** 
+  56:Generated_Source\PSoC5/ScanComp_1_PM.c **** 
+  57:Generated_Source\PSoC5/ScanComp_1_PM.c **** /*******************************************************************************
+  58:Generated_Source\PSoC5/ScanComp_1_PM.c **** * Function Name: ScanComp_1_Wakeup
+  59:Generated_Source\PSoC5/ScanComp_1_PM.c **** ********************************************************************************
+  60:Generated_Source\PSoC5/ScanComp_1_PM.c **** *
+  61:Generated_Source\PSoC5/ScanComp_1_PM.c **** * Summary:
+  62:Generated_Source\PSoC5/ScanComp_1_PM.c **** *  Restores the component to the state when ScanComp_1_Sleep() was called.
+  63:Generated_Source\PSoC5/ScanComp_1_PM.c **** *
+  64:Generated_Source\PSoC5/ScanComp_1_PM.c **** * Parameters:
+  65:Generated_Source\PSoC5/ScanComp_1_PM.c **** *  None
+  66:Generated_Source\PSoC5/ScanComp_1_PM.c **** *
+  67:Generated_Source\PSoC5/ScanComp_1_PM.c **** * Return:
+  68:Generated_Source\PSoC5/ScanComp_1_PM.c **** *  None
+  69:Generated_Source\PSoC5/ScanComp_1_PM.c **** *
+  70:Generated_Source\PSoC5/ScanComp_1_PM.c **** *******************************************************************************/
+  71:Generated_Source\PSoC5/ScanComp_1_PM.c **** void ScanComp_1_Wakeup(void) 
+  72:Generated_Source\PSoC5/ScanComp_1_PM.c **** {
+  77              		.loc 1 72 0
+  78              		.cfi_startproc
+  79              		@ args = 0, pretend = 0, frame = 0
+  80              		@ frame_needed = 0, uses_anonymous_args = 0
+  81 0000 08B5     		push	{r3, lr}
+  82              		.cfi_def_cfa_offset 8
+  83              		.cfi_offset 3, -8
+  84              		.cfi_offset 14, -4
+  73:Generated_Source\PSoC5/ScanComp_1_PM.c ****     ScanComp_1_Comp_Wakeup();
+  85              		.loc 1 73 0
+  86 0002 FFF7FEFF 		bl	ScanComp_1_Comp_Wakeup
+  87              	.LVL3:
+  74:Generated_Source\PSoC5/ScanComp_1_PM.c ****     
+  75:Generated_Source\PSoC5/ScanComp_1_PM.c ****     #if (ScanComp_1_INTERNAL_REF_IS_USED)
+  76:Generated_Source\PSoC5/ScanComp_1_PM.c ****         ScanComp_1_VDAC_Start();
+  88              		.loc 1 76 0
+  89 0006 FFF7FEFF 		bl	ScanComp_1_VDAC_Start
+  90              	.LVL4:
+  77:Generated_Source\PSoC5/ScanComp_1_PM.c **** 
+  78:Generated_Source\PSoC5/ScanComp_1_PM.c ****         #if (ScanComp_1_VDAC_PER_CHANNEL_MODE_USED)
+  79:Generated_Source\PSoC5/ScanComp_1_PM.c ****             ScanComp_1_Init();
+  80:Generated_Source\PSoC5/ScanComp_1_PM.c ****         #endif /* ScanComp_1_VDAC_PER_CHANNEL_MODE_USED */
+  81:Generated_Source\PSoC5/ScanComp_1_PM.c ****     #endif /* ScanComp_1_INTERNAL_REF_IS_USED */
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccqor09j.s 			page 4
+
+
+  82:Generated_Source\PSoC5/ScanComp_1_PM.c **** 
+  83:Generated_Source\PSoC5/ScanComp_1_PM.c ****     if(0u != ScanComp_1_backup.enableState)
+  91              		.loc 1 83 0
+  92 000a 034B     		ldr	r3, .L10
+  93 000c 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+  94 000e 0BB1     		cbz	r3, .L7
+  84:Generated_Source\PSoC5/ScanComp_1_PM.c ****     {
+  85:Generated_Source\PSoC5/ScanComp_1_PM.c ****         ScanComp_1_Enable();
+  95              		.loc 1 85 0
+  96 0010 FFF7FEFF 		bl	ScanComp_1_Enable
+  97              	.LVL5:
+  98              	.L7:
+  99 0014 08BD     		pop	{r3, pc}
+ 100              	.L11:
+ 101 0016 00BF     		.align	2
+ 102              	.L10:
+ 103 0018 00000000 		.word	.LANCHOR0
+ 104              		.cfi_endproc
+ 105              	.LFE1:
+ 106              		.size	ScanComp_1_Wakeup, .-ScanComp_1_Wakeup
+ 107              		.bss
+ 108              		.align	2
+ 109              		.set	.LANCHOR0,. + 0
+ 110              		.type	ScanComp_1_backup, %object
+ 111              		.size	ScanComp_1_backup, 1
+ 112              	ScanComp_1_backup:
+ 113 0000 00       		.space	1
+ 114 0001 000000   		.text
+ 115              	.Letext0:
+ 116              		.file 2 "Generated_Source\\PSoC5\\cytypes.h"
+ 117              		.file 3 "Generated_Source\\PSoC5\\ScanComp_1.h"
+ 118              		.file 4 "Generated_Source\\PSoC5\\ScanComp_1_Comp.h"
+ 119              		.file 5 "Generated_Source\\PSoC5\\ScanComp_1_VDAC.h"
+ 120              		.section	.debug_info,"",%progbits
+ 121              	.Ldebug_info0:
+ 122 0000 5E010000 		.4byte	0x15e
+ 123 0004 0400     		.2byte	0x4
+ 124 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 125 000a 04       		.byte	0x4
+ 126 000b 01       		.uleb128 0x1
+ 127 000c C5000000 		.4byte	.LASF24
+ 128 0010 01       		.byte	0x1
+ 129 0011 27000000 		.4byte	.LASF25
+ 130 0015 06020000 		.4byte	.LASF26
+ 131 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 132 001d 00000000 		.4byte	0
+ 133 0021 00000000 		.4byte	.Ldebug_line0
+ 134 0025 02       		.uleb128 0x2
+ 135 0026 01       		.byte	0x1
+ 136 0027 06       		.byte	0x6
+ 137 0028 E4010000 		.4byte	.LASF0
+ 138 002c 02       		.uleb128 0x2
+ 139 002d 01       		.byte	0x1
+ 140 002e 08       		.byte	0x8
+ 141 002f 65010000 		.4byte	.LASF1
+ 142 0033 02       		.uleb128 0x2
+ 143 0034 02       		.byte	0x2
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccqor09j.s 			page 5
+
+
+ 144 0035 05       		.byte	0x5
+ 145 0036 4C020000 		.4byte	.LASF2
+ 146 003a 02       		.uleb128 0x2
+ 147 003b 02       		.byte	0x2
+ 148 003c 07       		.byte	0x7
+ 149 003d D1010000 		.4byte	.LASF3
+ 150 0041 02       		.uleb128 0x2
+ 151 0042 04       		.byte	0x4
+ 152 0043 05       		.byte	0x5
+ 153 0044 B0010000 		.4byte	.LASF4
+ 154 0048 02       		.uleb128 0x2
+ 155 0049 04       		.byte	0x4
+ 156 004a 07       		.byte	0x7
+ 157 004b 7F000000 		.4byte	.LASF5
+ 158 004f 02       		.uleb128 0x2
+ 159 0050 08       		.byte	0x8
+ 160 0051 05       		.byte	0x5
+ 161 0052 00000000 		.4byte	.LASF6
+ 162 0056 02       		.uleb128 0x2
+ 163 0057 08       		.byte	0x8
+ 164 0058 07       		.byte	0x7
+ 165 0059 91000000 		.4byte	.LASF7
+ 166 005d 03       		.uleb128 0x3
+ 167 005e 04       		.byte	0x4
+ 168 005f 05       		.byte	0x5
+ 169 0060 696E7400 		.ascii	"int\000"
+ 170 0064 02       		.uleb128 0x2
+ 171 0065 04       		.byte	0x4
+ 172 0066 07       		.byte	0x7
+ 173 0067 1A000000 		.4byte	.LASF8
+ 174 006b 04       		.uleb128 0x4
+ 175 006c 79000000 		.4byte	.LASF12
+ 176 0070 02       		.byte	0x2
+ 177 0071 9201     		.2byte	0x192
+ 178 0073 2C000000 		.4byte	0x2c
+ 179 0077 02       		.uleb128 0x2
+ 180 0078 04       		.byte	0x4
+ 181 0079 04       		.byte	0x4
+ 182 007a A8000000 		.4byte	.LASF9
+ 183 007e 02       		.uleb128 0x2
+ 184 007f 08       		.byte	0x8
+ 185 0080 04       		.byte	0x4
+ 186 0081 CA010000 		.4byte	.LASF10
+ 187 0085 02       		.uleb128 0x2
+ 188 0086 01       		.byte	0x1
+ 189 0087 08       		.byte	0x8
+ 190 0088 89010000 		.4byte	.LASF11
+ 191 008c 04       		.uleb128 0x4
+ 192 008d 56020000 		.4byte	.LASF13
+ 193 0091 02       		.byte	0x2
+ 194 0092 3C02     		.2byte	0x23c
+ 195 0094 98000000 		.4byte	0x98
+ 196 0098 05       		.uleb128 0x5
+ 197 0099 6B000000 		.4byte	0x6b
+ 198 009d 02       		.uleb128 0x2
+ 199 009e 04       		.byte	0x4
+ 200 009f 07       		.byte	0x7
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccqor09j.s 			page 6
+
+
+ 201 00a0 71020000 		.4byte	.LASF14
+ 202 00a4 06       		.uleb128 0x6
+ 203 00a5 01       		.byte	0x1
+ 204 00a6 03       		.byte	0x3
+ 205 00a7 40       		.byte	0x40
+ 206 00a8 B9000000 		.4byte	0xb9
+ 207 00ac 07       		.uleb128 0x7
+ 208 00ad 0E000000 		.4byte	.LASF27
+ 209 00b1 03       		.byte	0x3
+ 210 00b2 42       		.byte	0x42
+ 211 00b3 6B000000 		.4byte	0x6b
+ 212 00b7 00       		.byte	0
+ 213 00b8 00       		.byte	0
+ 214 00b9 08       		.uleb128 0x8
+ 215 00ba 60000000 		.4byte	.LASF15
+ 216 00be 03       		.byte	0x3
+ 217 00bf 43       		.byte	0x43
+ 218 00c0 A4000000 		.4byte	0xa4
+ 219 00c4 09       		.uleb128 0x9
+ 220 00c5 B9010000 		.4byte	.LASF16
+ 221 00c9 01       		.byte	0x1
+ 222 00ca 25       		.byte	0x25
+ 223 00cb 00000000 		.4byte	.LFB0
+ 224 00cf 30000000 		.4byte	.LFE0-.LFB0
+ 225 00d3 01       		.uleb128 0x1
+ 226 00d4 9C       		.byte	0x9c
+ 227 00d5 F5000000 		.4byte	0xf5
+ 228 00d9 0A       		.uleb128 0xa
+ 229 00da 16000000 		.4byte	.LVL0
+ 230 00de 37010000 		.4byte	0x137
+ 231 00e2 0A       		.uleb128 0xa
+ 232 00e3 22000000 		.4byte	.LVL1
+ 233 00e7 3E010000 		.4byte	0x13e
+ 234 00eb 0A       		.uleb128 0xa
+ 235 00ec 26000000 		.4byte	.LVL2
+ 236 00f0 45010000 		.4byte	0x145
+ 237 00f4 00       		.byte	0
+ 238 00f5 09       		.uleb128 0x9
+ 239 00f6 4E000000 		.4byte	.LASF17
+ 240 00fa 01       		.byte	0x1
+ 241 00fb 47       		.byte	0x47
+ 242 00fc 00000000 		.4byte	.LFB1
+ 243 0100 1C000000 		.4byte	.LFE1-.LFB1
+ 244 0104 01       		.uleb128 0x1
+ 245 0105 9C       		.byte	0x9c
+ 246 0106 26010000 		.4byte	0x126
+ 247 010a 0A       		.uleb128 0xa
+ 248 010b 06000000 		.4byte	.LVL3
+ 249 010f 4C010000 		.4byte	0x14c
+ 250 0113 0A       		.uleb128 0xa
+ 251 0114 0A000000 		.4byte	.LVL4
+ 252 0118 53010000 		.4byte	0x153
+ 253 011c 0A       		.uleb128 0xa
+ 254 011d 14000000 		.4byte	.LVL5
+ 255 0121 5A010000 		.4byte	0x15a
+ 256 0125 00       		.byte	0
+ 257 0126 0B       		.uleb128 0xb
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccqor09j.s 			page 7
+
+
+ 258 0127 8E010000 		.4byte	.LASF28
+ 259 012b 01       		.byte	0x1
+ 260 012c 14       		.byte	0x14
+ 261 012d B9000000 		.4byte	0xb9
+ 262 0131 05       		.uleb128 0x5
+ 263 0132 03       		.byte	0x3
+ 264 0133 00000000 		.4byte	ScanComp_1_backup
+ 265 0137 0C       		.uleb128 0xc
+ 266 0138 A0010000 		.4byte	.LASF18
+ 267 013c 03       		.byte	0x3
+ 268 013d 4D       		.byte	0x4d
+ 269 013e 0C       		.uleb128 0xc
+ 270 013f 5B020000 		.4byte	.LASF19
+ 271 0143 04       		.byte	0x4
+ 272 0144 49       		.byte	0x49
+ 273 0145 0C       		.uleb128 0xc
+ 274 0146 73010000 		.4byte	.LASF20
+ 275 014a 05       		.byte	0x5
+ 276 014b 3D       		.byte	0x3d
+ 277 014c 0C       		.uleb128 0xc
+ 278 014d AE000000 		.4byte	.LASF21
+ 279 0151 04       		.byte	0x4
+ 280 0152 4A       		.byte	0x4a
+ 281 0153 0C       		.uleb128 0xc
+ 282 0154 F0010000 		.4byte	.LASF22
+ 283 0158 05       		.byte	0x5
+ 284 0159 33       		.byte	0x33
+ 285 015a 0C       		.uleb128 0xc
+ 286 015b 53010000 		.4byte	.LASF23
+ 287 015f 03       		.byte	0x3
+ 288 0160 4C       		.byte	0x4c
+ 289 0161 00       		.byte	0
+ 290              		.section	.debug_abbrev,"",%progbits
+ 291              	.Ldebug_abbrev0:
+ 292 0000 01       		.uleb128 0x1
+ 293 0001 11       		.uleb128 0x11
+ 294 0002 01       		.byte	0x1
+ 295 0003 25       		.uleb128 0x25
+ 296 0004 0E       		.uleb128 0xe
+ 297 0005 13       		.uleb128 0x13
+ 298 0006 0B       		.uleb128 0xb
+ 299 0007 03       		.uleb128 0x3
+ 300 0008 0E       		.uleb128 0xe
+ 301 0009 1B       		.uleb128 0x1b
+ 302 000a 0E       		.uleb128 0xe
+ 303 000b 55       		.uleb128 0x55
+ 304 000c 17       		.uleb128 0x17
+ 305 000d 11       		.uleb128 0x11
+ 306 000e 01       		.uleb128 0x1
+ 307 000f 10       		.uleb128 0x10
+ 308 0010 17       		.uleb128 0x17
+ 309 0011 00       		.byte	0
+ 310 0012 00       		.byte	0
+ 311 0013 02       		.uleb128 0x2
+ 312 0014 24       		.uleb128 0x24
+ 313 0015 00       		.byte	0
+ 314 0016 0B       		.uleb128 0xb
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccqor09j.s 			page 8
+
+
+ 315 0017 0B       		.uleb128 0xb
+ 316 0018 3E       		.uleb128 0x3e
+ 317 0019 0B       		.uleb128 0xb
+ 318 001a 03       		.uleb128 0x3
+ 319 001b 0E       		.uleb128 0xe
+ 320 001c 00       		.byte	0
+ 321 001d 00       		.byte	0
+ 322 001e 03       		.uleb128 0x3
+ 323 001f 24       		.uleb128 0x24
+ 324 0020 00       		.byte	0
+ 325 0021 0B       		.uleb128 0xb
+ 326 0022 0B       		.uleb128 0xb
+ 327 0023 3E       		.uleb128 0x3e
+ 328 0024 0B       		.uleb128 0xb
+ 329 0025 03       		.uleb128 0x3
+ 330 0026 08       		.uleb128 0x8
+ 331 0027 00       		.byte	0
+ 332 0028 00       		.byte	0
+ 333 0029 04       		.uleb128 0x4
+ 334 002a 16       		.uleb128 0x16
+ 335 002b 00       		.byte	0
+ 336 002c 03       		.uleb128 0x3
+ 337 002d 0E       		.uleb128 0xe
+ 338 002e 3A       		.uleb128 0x3a
+ 339 002f 0B       		.uleb128 0xb
+ 340 0030 3B       		.uleb128 0x3b
+ 341 0031 05       		.uleb128 0x5
+ 342 0032 49       		.uleb128 0x49
+ 343 0033 13       		.uleb128 0x13
+ 344 0034 00       		.byte	0
+ 345 0035 00       		.byte	0
+ 346 0036 05       		.uleb128 0x5
+ 347 0037 35       		.uleb128 0x35
+ 348 0038 00       		.byte	0
+ 349 0039 49       		.uleb128 0x49
+ 350 003a 13       		.uleb128 0x13
+ 351 003b 00       		.byte	0
+ 352 003c 00       		.byte	0
+ 353 003d 06       		.uleb128 0x6
+ 354 003e 13       		.uleb128 0x13
+ 355 003f 01       		.byte	0x1
+ 356 0040 0B       		.uleb128 0xb
+ 357 0041 0B       		.uleb128 0xb
+ 358 0042 3A       		.uleb128 0x3a
+ 359 0043 0B       		.uleb128 0xb
+ 360 0044 3B       		.uleb128 0x3b
+ 361 0045 0B       		.uleb128 0xb
+ 362 0046 01       		.uleb128 0x1
+ 363 0047 13       		.uleb128 0x13
+ 364 0048 00       		.byte	0
+ 365 0049 00       		.byte	0
+ 366 004a 07       		.uleb128 0x7
+ 367 004b 0D       		.uleb128 0xd
+ 368 004c 00       		.byte	0
+ 369 004d 03       		.uleb128 0x3
+ 370 004e 0E       		.uleb128 0xe
+ 371 004f 3A       		.uleb128 0x3a
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccqor09j.s 			page 9
+
+
+ 372 0050 0B       		.uleb128 0xb
+ 373 0051 3B       		.uleb128 0x3b
+ 374 0052 0B       		.uleb128 0xb
+ 375 0053 49       		.uleb128 0x49
+ 376 0054 13       		.uleb128 0x13
+ 377 0055 38       		.uleb128 0x38
+ 378 0056 0B       		.uleb128 0xb
+ 379 0057 00       		.byte	0
+ 380 0058 00       		.byte	0
+ 381 0059 08       		.uleb128 0x8
+ 382 005a 16       		.uleb128 0x16
+ 383 005b 00       		.byte	0
+ 384 005c 03       		.uleb128 0x3
+ 385 005d 0E       		.uleb128 0xe
+ 386 005e 3A       		.uleb128 0x3a
+ 387 005f 0B       		.uleb128 0xb
+ 388 0060 3B       		.uleb128 0x3b
+ 389 0061 0B       		.uleb128 0xb
+ 390 0062 49       		.uleb128 0x49
+ 391 0063 13       		.uleb128 0x13
+ 392 0064 00       		.byte	0
+ 393 0065 00       		.byte	0
+ 394 0066 09       		.uleb128 0x9
+ 395 0067 2E       		.uleb128 0x2e
+ 396 0068 01       		.byte	0x1
+ 397 0069 3F       		.uleb128 0x3f
+ 398 006a 19       		.uleb128 0x19
+ 399 006b 03       		.uleb128 0x3
+ 400 006c 0E       		.uleb128 0xe
+ 401 006d 3A       		.uleb128 0x3a
+ 402 006e 0B       		.uleb128 0xb
+ 403 006f 3B       		.uleb128 0x3b
+ 404 0070 0B       		.uleb128 0xb
+ 405 0071 27       		.uleb128 0x27
+ 406 0072 19       		.uleb128 0x19
+ 407 0073 11       		.uleb128 0x11
+ 408 0074 01       		.uleb128 0x1
+ 409 0075 12       		.uleb128 0x12
+ 410 0076 06       		.uleb128 0x6
+ 411 0077 40       		.uleb128 0x40
+ 412 0078 18       		.uleb128 0x18
+ 413 0079 9742     		.uleb128 0x2117
+ 414 007b 19       		.uleb128 0x19
+ 415 007c 01       		.uleb128 0x1
+ 416 007d 13       		.uleb128 0x13
+ 417 007e 00       		.byte	0
+ 418 007f 00       		.byte	0
+ 419 0080 0A       		.uleb128 0xa
+ 420 0081 898201   		.uleb128 0x4109
+ 421 0084 00       		.byte	0
+ 422 0085 11       		.uleb128 0x11
+ 423 0086 01       		.uleb128 0x1
+ 424 0087 31       		.uleb128 0x31
+ 425 0088 13       		.uleb128 0x13
+ 426 0089 00       		.byte	0
+ 427 008a 00       		.byte	0
+ 428 008b 0B       		.uleb128 0xb
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccqor09j.s 			page 10
+
+
+ 429 008c 34       		.uleb128 0x34
+ 430 008d 00       		.byte	0
+ 431 008e 03       		.uleb128 0x3
+ 432 008f 0E       		.uleb128 0xe
+ 433 0090 3A       		.uleb128 0x3a
+ 434 0091 0B       		.uleb128 0xb
+ 435 0092 3B       		.uleb128 0x3b
+ 436 0093 0B       		.uleb128 0xb
+ 437 0094 49       		.uleb128 0x49
+ 438 0095 13       		.uleb128 0x13
+ 439 0096 02       		.uleb128 0x2
+ 440 0097 18       		.uleb128 0x18
+ 441 0098 00       		.byte	0
+ 442 0099 00       		.byte	0
+ 443 009a 0C       		.uleb128 0xc
+ 444 009b 2E       		.uleb128 0x2e
+ 445 009c 00       		.byte	0
+ 446 009d 3F       		.uleb128 0x3f
+ 447 009e 19       		.uleb128 0x19
+ 448 009f 03       		.uleb128 0x3
+ 449 00a0 0E       		.uleb128 0xe
+ 450 00a1 3A       		.uleb128 0x3a
+ 451 00a2 0B       		.uleb128 0xb
+ 452 00a3 3B       		.uleb128 0x3b
+ 453 00a4 0B       		.uleb128 0xb
+ 454 00a5 27       		.uleb128 0x27
+ 455 00a6 19       		.uleb128 0x19
+ 456 00a7 3C       		.uleb128 0x3c
+ 457 00a8 19       		.uleb128 0x19
+ 458 00a9 00       		.byte	0
+ 459 00aa 00       		.byte	0
+ 460 00ab 00       		.byte	0
+ 461              		.section	.debug_aranges,"",%progbits
+ 462 0000 24000000 		.4byte	0x24
+ 463 0004 0200     		.2byte	0x2
+ 464 0006 00000000 		.4byte	.Ldebug_info0
+ 465 000a 04       		.byte	0x4
+ 466 000b 00       		.byte	0
+ 467 000c 0000     		.2byte	0
+ 468 000e 0000     		.2byte	0
+ 469 0010 00000000 		.4byte	.LFB0
+ 470 0014 30000000 		.4byte	.LFE0-.LFB0
+ 471 0018 00000000 		.4byte	.LFB1
+ 472 001c 1C000000 		.4byte	.LFE1-.LFB1
+ 473 0020 00000000 		.4byte	0
+ 474 0024 00000000 		.4byte	0
+ 475              		.section	.debug_ranges,"",%progbits
+ 476              	.Ldebug_ranges0:
+ 477 0000 00000000 		.4byte	.LFB0
+ 478 0004 30000000 		.4byte	.LFE0
+ 479 0008 00000000 		.4byte	.LFB1
+ 480 000c 1C000000 		.4byte	.LFE1
+ 481 0010 00000000 		.4byte	0
+ 482 0014 00000000 		.4byte	0
+ 483              		.section	.debug_line,"",%progbits
+ 484              	.Ldebug_line0:
+ 485 0000 B3000000 		.section	.debug_str,"MS",%progbits,1
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccqor09j.s 			page 11
+
+
+ 485      02008400 
+ 485      00000201 
+ 485      FB0E0D00 
+ 485      01010101 
+ 486              	.LASF6:
+ 487 0000 6C6F6E67 		.ascii	"long long int\000"
+ 487      206C6F6E 
+ 487      6720696E 
+ 487      7400
+ 488              	.LASF27:
+ 489 000e 656E6162 		.ascii	"enableState\000"
+ 489      6C655374 
+ 489      61746500 
+ 490              	.LASF8:
+ 491 001a 756E7369 		.ascii	"unsigned int\000"
+ 491      676E6564 
+ 491      20696E74 
+ 491      00
+ 492              	.LASF25:
+ 493 0027 47656E65 		.ascii	"Generated_Source\\PSoC5\\ScanComp_1_PM.c\000"
+ 493      72617465 
+ 493      645F536F 
+ 493      75726365 
+ 493      5C50536F 
+ 494              	.LASF17:
+ 495 004e 5363616E 		.ascii	"ScanComp_1_Wakeup\000"
+ 495      436F6D70 
+ 495      5F315F57 
+ 495      616B6575 
+ 495      7000
+ 496              	.LASF15:
+ 497 0060 5363616E 		.ascii	"ScanComp_1_BACKUP_STRUCT\000"
+ 497      436F6D70 
+ 497      5F315F42 
+ 497      41434B55 
+ 497      505F5354 
+ 498              	.LASF12:
+ 499 0079 75696E74 		.ascii	"uint8\000"
+ 499      3800
+ 500              	.LASF5:
+ 501 007f 6C6F6E67 		.ascii	"long unsigned int\000"
+ 501      20756E73 
+ 501      69676E65 
+ 501      6420696E 
+ 501      7400
+ 502              	.LASF7:
+ 503 0091 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 503      206C6F6E 
+ 503      6720756E 
+ 503      7369676E 
+ 503      65642069 
+ 504              	.LASF9:
+ 505 00a8 666C6F61 		.ascii	"float\000"
+ 505      7400
+ 506              	.LASF21:
+ 507 00ae 5363616E 		.ascii	"ScanComp_1_Comp_Wakeup\000"
+ 507      436F6D70 
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccqor09j.s 			page 12
+
+
+ 507      5F315F43 
+ 507      6F6D705F 
+ 507      57616B65 
+ 508              	.LASF24:
+ 509 00c5 474E5520 		.ascii	"GNU C 4.9.3 20150303 (release) [ARM/embedded-4_9-br"
+ 509      4320342E 
+ 509      392E3320 
+ 509      32303135 
+ 509      30333033 
+ 510 00f8 616E6368 		.ascii	"anch revision 221220] -mcpu=cortex-m3 -mthumb -g -O"
+ 510      20726576 
+ 510      6973696F 
+ 510      6E203232 
+ 510      31323230 
+ 511 012b 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
+ 511      66756E63 
+ 511      74696F6E 
+ 511      2D736563 
+ 511      74696F6E 
+ 512              	.LASF23:
+ 513 0153 5363616E 		.ascii	"ScanComp_1_Enable\000"
+ 513      436F6D70 
+ 513      5F315F45 
+ 513      6E61626C 
+ 513      6500
+ 514              	.LASF1:
+ 515 0165 756E7369 		.ascii	"unsigned char\000"
+ 515      676E6564 
+ 515      20636861 
+ 515      7200
+ 516              	.LASF20:
+ 517 0173 5363616E 		.ascii	"ScanComp_1_VDAC_Sleep\000"
+ 517      436F6D70 
+ 517      5F315F56 
+ 517      4441435F 
+ 517      536C6565 
+ 518              	.LASF11:
+ 519 0189 63686172 		.ascii	"char\000"
+ 519      00
+ 520              	.LASF28:
+ 521 018e 5363616E 		.ascii	"ScanComp_1_backup\000"
+ 521      436F6D70 
+ 521      5F315F62 
+ 521      61636B75 
+ 521      7000
+ 522              	.LASF18:
+ 523 01a0 5363616E 		.ascii	"ScanComp_1_Stop\000"
+ 523      436F6D70 
+ 523      5F315F53 
+ 523      746F7000 
+ 524              	.LASF4:
+ 525 01b0 6C6F6E67 		.ascii	"long int\000"
+ 525      20696E74 
+ 525      00
+ 526              	.LASF16:
+ 527 01b9 5363616E 		.ascii	"ScanComp_1_Sleep\000"
+ 527      436F6D70 
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccqor09j.s 			page 13
+
+
+ 527      5F315F53 
+ 527      6C656570 
+ 527      00
+ 528              	.LASF10:
+ 529 01ca 646F7562 		.ascii	"double\000"
+ 529      6C6500
+ 530              	.LASF3:
+ 531 01d1 73686F72 		.ascii	"short unsigned int\000"
+ 531      7420756E 
+ 531      7369676E 
+ 531      65642069 
+ 531      6E7400
+ 532              	.LASF0:
+ 533 01e4 7369676E 		.ascii	"signed char\000"
+ 533      65642063 
+ 533      68617200 
+ 534              	.LASF22:
+ 535 01f0 5363616E 		.ascii	"ScanComp_1_VDAC_Start\000"
+ 535      436F6D70 
+ 535      5F315F56 
+ 535      4441435F 
+ 535      53746172 
+ 536              	.LASF26:
+ 537 0206 433A5C55 		.ascii	"C:\\Users\\dph5ah\\Documents\\PSoC Creator\\Workspa"
+ 537      73657273 
+ 537      5C647068 
+ 537      3561685C 
+ 537      446F6375 
+ 538 0234 63653031 		.ascii	"ce01\\galton board.cydsn\000"
+ 538      5C67616C 
+ 538      746F6E20 
+ 538      626F6172 
+ 538      642E6379 
+ 539              	.LASF2:
+ 540 024c 73686F72 		.ascii	"short int\000"
+ 540      7420696E 
+ 540      7400
+ 541              	.LASF13:
+ 542 0256 72656738 		.ascii	"reg8\000"
+ 542      00
+ 543              	.LASF19:
+ 544 025b 5363616E 		.ascii	"ScanComp_1_Comp_Sleep\000"
+ 544      436F6D70 
+ 544      5F315F43 
+ 544      6F6D705F 
+ 544      536C6565 
+ 545              	.LASF14:
+ 546 0271 73697A65 		.ascii	"sizetype\000"
+ 546      74797065 
+ 546      00
+ 547              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 4.9.3 20150303 (release) [ARM/embedded-4_9-br

@@ -1,0 +1,1043 @@
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccmUiPmA.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.file	"VFD_1_MuxDMA_dma.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.section	.text.VFD_1_MuxDMA_DmaInitialize,"ax",%progbits
+  19              		.align	2
+  20              		.global	VFD_1_MuxDMA_DmaInitialize
+  21              		.thumb
+  22              		.thumb_func
+  23              		.type	VFD_1_MuxDMA_DmaInitialize, %function
+  24              	VFD_1_MuxDMA_DmaInitialize:
+  25              	.LFB0:
+  26              		.file 1 "Generated_Source\\PSoC5\\VFD_1_MuxDMA_dma.c"
+   1:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** /***************************************************************************
+   2:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** * File Name: VFD_1_MuxDMA_dma.c  
+   3:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** * Version 1.70
+   4:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** *
+   5:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** *  Description:
+   6:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** *   Provides an API for the DMAC component. The API includes functions
+   7:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** *   for the DMA controller, DMA channels and Transfer Descriptors.
+   8:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** *
+   9:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** *
+  10:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** *   Note:
+  11:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** *     This module requires the developer to finish or fill in the auto
+  12:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** *     generated funcions and setup the dma channel and TD's.
+  13:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** *
+  14:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** ********************************************************************************
+  15:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** * Copyright 2008-2010, Cypress Semiconductor Corporation.  All rights reserved.
+  16:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** * You may use this file only in accordance with the license, terms, conditions, 
+  17:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** * disclaimers, and limitations in the end user license agreement accompanying 
+  18:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** * the software package with which this file was provided.
+  19:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** ********************************************************************************/
+  20:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** #include <CYLIB.H>
+  21:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** #include <CYDMAC.H>
+  22:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** #include <VFD_1_MuxDMA_dma.H>
+  23:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** 
+  24:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** 
+  25:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** 
+  26:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** /****************************************************************************
+  27:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** * 
+  28:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** * The following defines are available in Cyfitter.h
+  29:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** * 
+  30:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** * 
+  31:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** * 
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccmUiPmA.s 			page 2
+
+
+  32:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** * VFD_1_MuxDMA__DRQ_CTL_REG
+  33:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** * 
+  34:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** * 
+  35:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** * VFD_1_MuxDMA__DRQ_NUMBER
+  36:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** * 
+  37:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** * Number of TD's used by this channel.
+  38:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** * VFD_1_MuxDMA__NUMBEROF_TDS
+  39:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** * 
+  40:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** * Priority of this channel.
+  41:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** * VFD_1_MuxDMA__PRIORITY
+  42:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** * 
+  43:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** * True if VFD_1_MuxDMA_TERMIN_SEL is used.
+  44:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** * VFD_1_MuxDMA__TERMIN_EN
+  45:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** * 
+  46:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** * TERMIN interrupt line to signal terminate.
+  47:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** * VFD_1_MuxDMA__TERMIN_SEL
+  48:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** * 
+  49:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** * 
+  50:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** * True if VFD_1_MuxDMA_TERMOUT0_SEL is used.
+  51:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** * VFD_1_MuxDMA__TERMOUT0_EN
+  52:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** * 
+  53:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** * 
+  54:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** * TERMOUT0 interrupt line to signal completion.
+  55:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** * VFD_1_MuxDMA__TERMOUT0_SEL
+  56:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** * 
+  57:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** * 
+  58:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** * True if VFD_1_MuxDMA_TERMOUT1_SEL is used.
+  59:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** * VFD_1_MuxDMA__TERMOUT1_EN
+  60:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** * 
+  61:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** * 
+  62:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** * TERMOUT1 interrupt line to signal completion.
+  63:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** * VFD_1_MuxDMA__TERMOUT1_SEL
+  64:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** * 
+  65:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** ****************************************************************************/
+  66:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** 
+  67:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** 
+  68:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** /* Zero based index of VFD_1_MuxDMA dma channel */
+  69:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** uint8 VFD_1_MuxDMA_DmaHandle = DMA_INVALID_CHANNEL;
+  70:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** 
+  71:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** /*********************************************************************
+  72:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** * Function Name: uint8 VFD_1_MuxDMA_DmaInitalize
+  73:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** **********************************************************************
+  74:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** * Summary:
+  75:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** *   Allocates and initialises a channel of the DMAC to be used by the
+  76:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** *   caller.
+  77:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** *
+  78:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** * Parameters:
+  79:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** *   BurstCount.
+  80:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** *       
+  81:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** *       
+  82:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** *   ReqestPerBurst.
+  83:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** *       
+  84:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** *       
+  85:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** *   UpperSrcAddress.
+  86:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** *       
+  87:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** *       
+  88:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** *   UpperDestAddress.
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccmUiPmA.s 			page 3
+
+
+  89:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** *       
+  90:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** *
+  91:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** * Return:
+  92:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** *   The channel that can be used by the caller for DMA activity.
+  93:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** *   DMA_INVALID_CHANNEL (0xFF) if there are no channels left. 
+  94:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** *
+  95:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** *
+  96:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** *******************************************************************/
+  97:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** uint8 VFD_1_MuxDMA_DmaInitialize(uint8 BurstCount, uint8 ReqestPerBurst, uint16 UpperSrcAddress, ui
+  98:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** {
+  27              		.loc 1 98 0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              	.LVL0:
+  32 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+  33              		.cfi_def_cfa_offset 20
+  34              		.cfi_offset 4, -20
+  35              		.cfi_offset 5, -16
+  36              		.cfi_offset 6, -12
+  37              		.cfi_offset 7, -8
+  38              		.cfi_offset 14, -4
+  39 0002 83B0     		sub	sp, sp, #12
+  40              		.cfi_def_cfa_offset 32
+  41 0004 8446     		mov	ip, r0
+  42 0006 8E46     		mov	lr, r1
+  43 0008 1746     		mov	r7, r2
+  44 000a 1E46     		mov	r6, r3
+  99:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** 
+ 100:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c ****     /* Allocate a DMA channel. */
+ 101:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c ****     VFD_1_MuxDMA_DmaHandle = (uint8)VFD_1_MuxDMA__DRQ_NUMBER;
+  45              		.loc 1 101 0
+  46 000c 0B4C     		ldr	r4, .L3
+  47 000e 0225     		movs	r5, #2
+  48 0010 2570     		strb	r5, [r4]
+ 102:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** 
+ 103:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c ****     /* Configure the channel. */
+ 104:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c ****     (void)CyDmaChSetConfiguration(VFD_1_MuxDMA_DmaHandle,
+  49              		.loc 1 104 0
+  50 0012 0023     		movs	r3, #0
+  51              	.LVL1:
+  52 0014 0093     		str	r3, [sp]
+  53 0016 0193     		str	r3, [sp, #4]
+  54 0018 2846     		mov	r0, r5
+  55              	.LVL2:
+  56 001a 6146     		mov	r1, ip
+  57              	.LVL3:
+  58 001c 7246     		mov	r2, lr
+  59              	.LVL4:
+  60 001e 2B46     		mov	r3, r5
+  61 0020 FFF7FEFF 		bl	CyDmaChSetConfiguration
+  62              	.LVL5:
+ 105:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c ****                                   BurstCount,
+ 106:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c ****                                   ReqestPerBurst,
+ 107:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c ****                                   (uint8)VFD_1_MuxDMA__TERMOUT0_SEL,
+ 108:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c ****                                   (uint8)VFD_1_MuxDMA__TERMOUT1_SEL,
+ 109:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c ****                                   (uint8)VFD_1_MuxDMA__TERMIN_SEL);
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccmUiPmA.s 			page 4
+
+
+ 110:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** 
+ 111:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c ****     /* Set the extended address for the transfers */
+ 112:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c ****     (void)CyDmaChSetExtendedAddress(VFD_1_MuxDMA_DmaHandle, UpperSrcAddress, UpperDestAddress);
+  63              		.loc 1 112 0
+  64 0024 2078     		ldrb	r0, [r4]	@ zero_extendqisi2
+  65 0026 3946     		mov	r1, r7
+  66 0028 3246     		mov	r2, r6
+  67 002a FFF7FEFF 		bl	CyDmaChSetExtendedAddress
+  68              	.LVL6:
+ 113:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** 
+ 114:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c ****     /* Set the priority for this channel */
+ 115:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c ****     (void)CyDmaChPriority(VFD_1_MuxDMA_DmaHandle, (uint8)VFD_1_MuxDMA__PRIORITY);
+  69              		.loc 1 115 0
+  70 002e 2078     		ldrb	r0, [r4]	@ zero_extendqisi2
+  71 0030 2946     		mov	r1, r5
+  72 0032 FFF7FEFF 		bl	CyDmaChPriority
+  73              	.LVL7:
+ 116:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c ****     
+ 117:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c ****     return VFD_1_MuxDMA_DmaHandle;
+ 118:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** }
+  74              		.loc 1 118 0
+  75 0036 2078     		ldrb	r0, [r4]	@ zero_extendqisi2
+  76 0038 03B0     		add	sp, sp, #12
+  77              		.cfi_def_cfa_offset 20
+  78              		@ sp needed
+  79 003a F0BD     		pop	{r4, r5, r6, r7, pc}
+  80              	.L4:
+  81              		.align	2
+  82              	.L3:
+  83 003c 00000000 		.word	.LANCHOR0
+  84              		.cfi_endproc
+  85              	.LFE0:
+  86              		.size	VFD_1_MuxDMA_DmaInitialize, .-VFD_1_MuxDMA_DmaInitialize
+  87              		.section	.text.VFD_1_MuxDMA_DmaRelease,"ax",%progbits
+  88              		.align	2
+  89              		.global	VFD_1_MuxDMA_DmaRelease
+  90              		.thumb
+  91              		.thumb_func
+  92              		.type	VFD_1_MuxDMA_DmaRelease, %function
+  93              	VFD_1_MuxDMA_DmaRelease:
+  94              	.LFB1:
+ 119:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** 
+ 120:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** /*********************************************************************
+ 121:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** * Function Name: void VFD_1_MuxDMA_DmaRelease
+ 122:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** **********************************************************************
+ 123:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** * Summary:
+ 124:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** *   Frees the channel associated with VFD_1_MuxDMA.
+ 125:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** *
+ 126:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** *
+ 127:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** * Parameters:
+ 128:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** *   void.
+ 129:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** *
+ 130:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** *
+ 131:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** *
+ 132:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** * Return:
+ 133:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** *   void.
+ 134:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** *
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccmUiPmA.s 			page 5
+
+
+ 135:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** *******************************************************************/
+ 136:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** void VFD_1_MuxDMA_DmaRelease(void) 
+ 137:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c **** {
+  95              		.loc 1 137 0
+  96              		.cfi_startproc
+  97              		@ args = 0, pretend = 0, frame = 0
+  98              		@ frame_needed = 0, uses_anonymous_args = 0
+  99 0000 08B5     		push	{r3, lr}
+ 100              		.cfi_def_cfa_offset 8
+ 101              		.cfi_offset 3, -8
+ 102              		.cfi_offset 14, -4
+ 138:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c ****     /* Disable the channel */
+ 139:Generated_Source\PSoC5/VFD_1_MuxDMA_dma.c ****     (void)CyDmaChDisable(VFD_1_MuxDMA_DmaHandle);
+ 103              		.loc 1 139 0
+ 104 0002 024B     		ldr	r3, .L7
+ 105 0004 1878     		ldrb	r0, [r3]	@ zero_extendqisi2
+ 106 0006 FFF7FEFF 		bl	CyDmaChDisable
+ 107              	.LVL8:
+ 108 000a 08BD     		pop	{r3, pc}
+ 109              	.L8:
+ 110              		.align	2
+ 111              	.L7:
+ 112 000c 00000000 		.word	.LANCHOR0
+ 113              		.cfi_endproc
+ 114              	.LFE1:
+ 115              		.size	VFD_1_MuxDMA_DmaRelease, .-VFD_1_MuxDMA_DmaRelease
+ 116              		.global	VFD_1_MuxDMA_DmaHandle
+ 117              		.data
+ 118              		.set	.LANCHOR0,. + 0
+ 119              		.type	VFD_1_MuxDMA_DmaHandle, %object
+ 120              		.size	VFD_1_MuxDMA_DmaHandle, 1
+ 121              	VFD_1_MuxDMA_DmaHandle:
+ 122 0000 FF       		.byte	-1
+ 123              		.text
+ 124              	.Letext0:
+ 125              		.file 2 "Generated_Source\\PSoC5/cytypes.h"
+ 126              		.file 3 "Generated_Source\\PSoC5/CYDMAC.H"
+ 127              		.section	.debug_info,"",%progbits
+ 128              	.Ldebug_info0:
+ 129 0000 F6010000 		.4byte	0x1f6
+ 130 0004 0400     		.2byte	0x4
+ 131 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 132 000a 04       		.byte	0x4
+ 133 000b 01       		.uleb128 0x1
+ 134 000c ED000000 		.4byte	.LASF23
+ 135 0010 01       		.byte	0x1
+ 136 0011 C3000000 		.4byte	.LASF24
+ 137 0015 B6010000 		.4byte	.LASF25
+ 138 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 139 001d 00000000 		.4byte	0
+ 140 0021 00000000 		.4byte	.Ldebug_line0
+ 141 0025 02       		.uleb128 0x2
+ 142 0026 04       		.byte	0x4
+ 143 0027 05       		.byte	0x5
+ 144 0028 696E7400 		.ascii	"int\000"
+ 145 002c 03       		.uleb128 0x3
+ 146 002d 04       		.byte	0x4
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccmUiPmA.s 			page 6
+
+
+ 147 002e 07       		.byte	0x7
+ 148 002f 7B010000 		.4byte	.LASF0
+ 149 0033 03       		.uleb128 0x3
+ 150 0034 01       		.byte	0x1
+ 151 0035 06       		.byte	0x6
+ 152 0036 56020000 		.4byte	.LASF1
+ 153 003a 03       		.uleb128 0x3
+ 154 003b 01       		.byte	0x1
+ 155 003c 08       		.byte	0x8
+ 156 003d 69000000 		.4byte	.LASF2
+ 157 0041 03       		.uleb128 0x3
+ 158 0042 02       		.byte	0x2
+ 159 0043 05       		.byte	0x5
+ 160 0044 43020000 		.4byte	.LASF3
+ 161 0048 03       		.uleb128 0x3
+ 162 0049 02       		.byte	0x2
+ 163 004a 07       		.byte	0x7
+ 164 004b 38000000 		.4byte	.LASF4
+ 165 004f 03       		.uleb128 0x3
+ 166 0050 04       		.byte	0x4
+ 167 0051 05       		.byte	0x5
+ 168 0052 4D020000 		.4byte	.LASF5
+ 169 0056 03       		.uleb128 0x3
+ 170 0057 04       		.byte	0x4
+ 171 0058 07       		.byte	0x7
+ 172 0059 9D000000 		.4byte	.LASF6
+ 173 005d 03       		.uleb128 0x3
+ 174 005e 08       		.byte	0x8
+ 175 005f 05       		.byte	0x5
+ 176 0060 16020000 		.4byte	.LASF7
+ 177 0064 03       		.uleb128 0x3
+ 178 0065 08       		.byte	0x8
+ 179 0066 07       		.byte	0x7
+ 180 0067 9F010000 		.4byte	.LASF8
+ 181 006b 03       		.uleb128 0x3
+ 182 006c 04       		.byte	0x4
+ 183 006d 07       		.byte	0x7
+ 184 006e 0D020000 		.4byte	.LASF9
+ 185 0072 03       		.uleb128 0x3
+ 186 0073 01       		.byte	0x1
+ 187 0074 08       		.byte	0x8
+ 188 0075 3E020000 		.4byte	.LASF10
+ 189 0079 04       		.uleb128 0x4
+ 190 007a AF000000 		.4byte	.LASF11
+ 191 007e 02       		.byte	0x2
+ 192 007f 9201     		.2byte	0x192
+ 193 0081 3A000000 		.4byte	0x3a
+ 194 0085 04       		.uleb128 0x4
+ 195 0086 BC000000 		.4byte	.LASF12
+ 196 008a 02       		.byte	0x2
+ 197 008b 9301     		.2byte	0x193
+ 198 008d 48000000 		.4byte	0x48
+ 199 0091 03       		.uleb128 0x3
+ 200 0092 04       		.byte	0x4
+ 201 0093 04       		.byte	0x4
+ 202 0094 63000000 		.4byte	.LASF13
+ 203 0098 03       		.uleb128 0x3
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccmUiPmA.s 			page 7
+
+
+ 204 0099 08       		.byte	0x8
+ 205 009a 04       		.byte	0x4
+ 206 009b B5000000 		.4byte	.LASF14
+ 207 009f 04       		.uleb128 0x4
+ 208 00a0 00000000 		.4byte	.LASF15
+ 209 00a4 02       		.byte	0x2
+ 210 00a5 3402     		.2byte	0x234
+ 211 00a7 56000000 		.4byte	0x56
+ 212 00ab 05       		.uleb128 0x5
+ 213 00ac 82000000 		.4byte	.LASF26
+ 214 00b0 01       		.byte	0x1
+ 215 00b1 61       		.byte	0x61
+ 216 00b2 79000000 		.4byte	0x79
+ 217 00b6 00000000 		.4byte	.LFB0
+ 218 00ba 40000000 		.4byte	.LFE0-.LFB0
+ 219 00be 01       		.uleb128 0x1
+ 220 00bf 9C       		.byte	0x9c
+ 221 00c0 51010000 		.4byte	0x151
+ 222 00c4 06       		.uleb128 0x6
+ 223 00c5 77000000 		.4byte	.LASF16
+ 224 00c9 01       		.byte	0x1
+ 225 00ca 61       		.byte	0x61
+ 226 00cb 79000000 		.4byte	0x79
+ 227 00cf 00000000 		.4byte	.LLST0
+ 228 00d3 06       		.uleb128 0x6
+ 229 00d4 29000000 		.4byte	.LASF17
+ 230 00d8 01       		.byte	0x1
+ 231 00d9 61       		.byte	0x61
+ 232 00da 79000000 		.4byte	0x79
+ 233 00de 21000000 		.4byte	.LLST1
+ 234 00e2 06       		.uleb128 0x6
+ 235 00e3 09000000 		.4byte	.LASF18
+ 236 00e7 01       		.byte	0x1
+ 237 00e8 61       		.byte	0x61
+ 238 00e9 85000000 		.4byte	0x85
+ 239 00ed 42000000 		.4byte	.LLST2
+ 240 00f1 06       		.uleb128 0x6
+ 241 00f2 FC010000 		.4byte	.LASF19
+ 242 00f6 01       		.byte	0x1
+ 243 00f7 61       		.byte	0x61
+ 244 00f8 85000000 		.4byte	0x85
+ 245 00fc 63000000 		.4byte	.LLST3
+ 246 0100 07       		.uleb128 0x7
+ 247 0101 24000000 		.4byte	.LVL5
+ 248 0105 81010000 		.4byte	0x181
+ 249 0109 26010000 		.4byte	0x126
+ 250 010d 08       		.uleb128 0x8
+ 251 010e 01       		.uleb128 0x1
+ 252 010f 53       		.byte	0x53
+ 253 0110 02       		.uleb128 0x2
+ 254 0111 75       		.byte	0x75
+ 255 0112 00       		.sleb128 0
+ 256 0113 08       		.uleb128 0x8
+ 257 0114 01       		.uleb128 0x1
+ 258 0115 50       		.byte	0x50
+ 259 0116 02       		.uleb128 0x2
+ 260 0117 75       		.byte	0x75
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccmUiPmA.s 			page 8
+
+
+ 261 0118 00       		.sleb128 0
+ 262 0119 08       		.uleb128 0x8
+ 263 011a 02       		.uleb128 0x2
+ 264 011b 7D       		.byte	0x7d
+ 265 011c 04       		.sleb128 4
+ 266 011d 01       		.uleb128 0x1
+ 267 011e 30       		.byte	0x30
+ 268 011f 08       		.uleb128 0x8
+ 269 0120 02       		.uleb128 0x2
+ 270 0121 7D       		.byte	0x7d
+ 271 0122 00       		.sleb128 0
+ 272 0123 01       		.uleb128 0x1
+ 273 0124 30       		.byte	0x30
+ 274 0125 00       		.byte	0
+ 275 0126 07       		.uleb128 0x7
+ 276 0127 2E000000 		.4byte	.LVL6
+ 277 012b AF010000 		.4byte	0x1af
+ 278 012f 40010000 		.4byte	0x140
+ 279 0133 08       		.uleb128 0x8
+ 280 0134 01       		.uleb128 0x1
+ 281 0135 52       		.byte	0x52
+ 282 0136 02       		.uleb128 0x2
+ 283 0137 76       		.byte	0x76
+ 284 0138 00       		.sleb128 0
+ 285 0139 08       		.uleb128 0x8
+ 286 013a 01       		.uleb128 0x1
+ 287 013b 51       		.byte	0x51
+ 288 013c 02       		.uleb128 0x2
+ 289 013d 77       		.byte	0x77
+ 290 013e 00       		.sleb128 0
+ 291 013f 00       		.byte	0
+ 292 0140 09       		.uleb128 0x9
+ 293 0141 36000000 		.4byte	.LVL7
+ 294 0145 CE010000 		.4byte	0x1ce
+ 295 0149 08       		.uleb128 0x8
+ 296 014a 01       		.uleb128 0x1
+ 297 014b 51       		.byte	0x51
+ 298 014c 02       		.uleb128 0x2
+ 299 014d 75       		.byte	0x75
+ 300 014e 00       		.sleb128 0
+ 301 014f 00       		.byte	0
+ 302 0150 00       		.byte	0
+ 303 0151 0A       		.uleb128 0xa
+ 304 0152 4B000000 		.4byte	.LASF27
+ 305 0156 01       		.byte	0x1
+ 306 0157 88       		.byte	0x88
+ 307 0158 00000000 		.4byte	.LFB1
+ 308 015c 10000000 		.4byte	.LFE1-.LFB1
+ 309 0160 01       		.uleb128 0x1
+ 310 0161 9C       		.byte	0x9c
+ 311 0162 70010000 		.4byte	0x170
+ 312 0166 0B       		.uleb128 0xb
+ 313 0167 0A000000 		.4byte	.LVL8
+ 314 016b E8010000 		.4byte	0x1e8
+ 315 016f 00       		.byte	0
+ 316 0170 0C       		.uleb128 0xc
+ 317 0171 88010000 		.4byte	.LASF28
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccmUiPmA.s 			page 9
+
+
+ 318 0175 01       		.byte	0x1
+ 319 0176 45       		.byte	0x45
+ 320 0177 79000000 		.4byte	0x79
+ 321 017b 05       		.uleb128 0x5
+ 322 017c 03       		.byte	0x3
+ 323 017d 00000000 		.4byte	VFD_1_MuxDMA_DmaHandle
+ 324 0181 0D       		.uleb128 0xd
+ 325 0182 71020000 		.4byte	.LASF20
+ 326 0186 03       		.byte	0x3
+ 327 0187 33       		.byte	0x33
+ 328 0188 9F000000 		.4byte	0x9f
+ 329 018c AF010000 		.4byte	0x1af
+ 330 0190 0E       		.uleb128 0xe
+ 331 0191 79000000 		.4byte	0x79
+ 332 0195 0E       		.uleb128 0xe
+ 333 0196 79000000 		.4byte	0x79
+ 334 019a 0E       		.uleb128 0xe
+ 335 019b 79000000 		.4byte	0x79
+ 336 019f 0E       		.uleb128 0xe
+ 337 01a0 79000000 		.4byte	0x79
+ 338 01a4 0E       		.uleb128 0xe
+ 339 01a5 79000000 		.4byte	0x79
+ 340 01a9 0E       		.uleb128 0xe
+ 341 01aa 79000000 		.4byte	0x79
+ 342 01ae 00       		.byte	0
+ 343 01af 0D       		.uleb128 0xd
+ 344 01b0 24020000 		.4byte	.LASF21
+ 345 01b4 03       		.byte	0x3
+ 346 01b5 2D       		.byte	0x2d
+ 347 01b6 9F000000 		.4byte	0x9f
+ 348 01ba CE010000 		.4byte	0x1ce
+ 349 01be 0E       		.uleb128 0xe
+ 350 01bf 79000000 		.4byte	0x79
+ 351 01c3 0E       		.uleb128 0xe
+ 352 01c4 85000000 		.4byte	0x85
+ 353 01c8 0E       		.uleb128 0xe
+ 354 01c9 85000000 		.4byte	0x85
+ 355 01cd 00       		.byte	0
+ 356 01ce 0D       		.uleb128 0xd
+ 357 01cf 19000000 		.4byte	.LASF22
+ 358 01d3 03       		.byte	0x3
+ 359 01d4 2C       		.byte	0x2c
+ 360 01d5 9F000000 		.4byte	0x9f
+ 361 01d9 E8010000 		.4byte	0x1e8
+ 362 01dd 0E       		.uleb128 0xe
+ 363 01de 79000000 		.4byte	0x79
+ 364 01e2 0E       		.uleb128 0xe
+ 365 01e3 79000000 		.4byte	0x79
+ 366 01e7 00       		.byte	0
+ 367 01e8 0F       		.uleb128 0xf
+ 368 01e9 62020000 		.4byte	.LASF29
+ 369 01ed 03       		.byte	0x3
+ 370 01ee 2A       		.byte	0x2a
+ 371 01ef 9F000000 		.4byte	0x9f
+ 372 01f3 0E       		.uleb128 0xe
+ 373 01f4 79000000 		.4byte	0x79
+ 374 01f8 00       		.byte	0
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccmUiPmA.s 			page 10
+
+
+ 375 01f9 00       		.byte	0
+ 376              		.section	.debug_abbrev,"",%progbits
+ 377              	.Ldebug_abbrev0:
+ 378 0000 01       		.uleb128 0x1
+ 379 0001 11       		.uleb128 0x11
+ 380 0002 01       		.byte	0x1
+ 381 0003 25       		.uleb128 0x25
+ 382 0004 0E       		.uleb128 0xe
+ 383 0005 13       		.uleb128 0x13
+ 384 0006 0B       		.uleb128 0xb
+ 385 0007 03       		.uleb128 0x3
+ 386 0008 0E       		.uleb128 0xe
+ 387 0009 1B       		.uleb128 0x1b
+ 388 000a 0E       		.uleb128 0xe
+ 389 000b 55       		.uleb128 0x55
+ 390 000c 17       		.uleb128 0x17
+ 391 000d 11       		.uleb128 0x11
+ 392 000e 01       		.uleb128 0x1
+ 393 000f 10       		.uleb128 0x10
+ 394 0010 17       		.uleb128 0x17
+ 395 0011 00       		.byte	0
+ 396 0012 00       		.byte	0
+ 397 0013 02       		.uleb128 0x2
+ 398 0014 24       		.uleb128 0x24
+ 399 0015 00       		.byte	0
+ 400 0016 0B       		.uleb128 0xb
+ 401 0017 0B       		.uleb128 0xb
+ 402 0018 3E       		.uleb128 0x3e
+ 403 0019 0B       		.uleb128 0xb
+ 404 001a 03       		.uleb128 0x3
+ 405 001b 08       		.uleb128 0x8
+ 406 001c 00       		.byte	0
+ 407 001d 00       		.byte	0
+ 408 001e 03       		.uleb128 0x3
+ 409 001f 24       		.uleb128 0x24
+ 410 0020 00       		.byte	0
+ 411 0021 0B       		.uleb128 0xb
+ 412 0022 0B       		.uleb128 0xb
+ 413 0023 3E       		.uleb128 0x3e
+ 414 0024 0B       		.uleb128 0xb
+ 415 0025 03       		.uleb128 0x3
+ 416 0026 0E       		.uleb128 0xe
+ 417 0027 00       		.byte	0
+ 418 0028 00       		.byte	0
+ 419 0029 04       		.uleb128 0x4
+ 420 002a 16       		.uleb128 0x16
+ 421 002b 00       		.byte	0
+ 422 002c 03       		.uleb128 0x3
+ 423 002d 0E       		.uleb128 0xe
+ 424 002e 3A       		.uleb128 0x3a
+ 425 002f 0B       		.uleb128 0xb
+ 426 0030 3B       		.uleb128 0x3b
+ 427 0031 05       		.uleb128 0x5
+ 428 0032 49       		.uleb128 0x49
+ 429 0033 13       		.uleb128 0x13
+ 430 0034 00       		.byte	0
+ 431 0035 00       		.byte	0
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccmUiPmA.s 			page 11
+
+
+ 432 0036 05       		.uleb128 0x5
+ 433 0037 2E       		.uleb128 0x2e
+ 434 0038 01       		.byte	0x1
+ 435 0039 3F       		.uleb128 0x3f
+ 436 003a 19       		.uleb128 0x19
+ 437 003b 03       		.uleb128 0x3
+ 438 003c 0E       		.uleb128 0xe
+ 439 003d 3A       		.uleb128 0x3a
+ 440 003e 0B       		.uleb128 0xb
+ 441 003f 3B       		.uleb128 0x3b
+ 442 0040 0B       		.uleb128 0xb
+ 443 0041 27       		.uleb128 0x27
+ 444 0042 19       		.uleb128 0x19
+ 445 0043 49       		.uleb128 0x49
+ 446 0044 13       		.uleb128 0x13
+ 447 0045 11       		.uleb128 0x11
+ 448 0046 01       		.uleb128 0x1
+ 449 0047 12       		.uleb128 0x12
+ 450 0048 06       		.uleb128 0x6
+ 451 0049 40       		.uleb128 0x40
+ 452 004a 18       		.uleb128 0x18
+ 453 004b 9742     		.uleb128 0x2117
+ 454 004d 19       		.uleb128 0x19
+ 455 004e 01       		.uleb128 0x1
+ 456 004f 13       		.uleb128 0x13
+ 457 0050 00       		.byte	0
+ 458 0051 00       		.byte	0
+ 459 0052 06       		.uleb128 0x6
+ 460 0053 05       		.uleb128 0x5
+ 461 0054 00       		.byte	0
+ 462 0055 03       		.uleb128 0x3
+ 463 0056 0E       		.uleb128 0xe
+ 464 0057 3A       		.uleb128 0x3a
+ 465 0058 0B       		.uleb128 0xb
+ 466 0059 3B       		.uleb128 0x3b
+ 467 005a 0B       		.uleb128 0xb
+ 468 005b 49       		.uleb128 0x49
+ 469 005c 13       		.uleb128 0x13
+ 470 005d 02       		.uleb128 0x2
+ 471 005e 17       		.uleb128 0x17
+ 472 005f 00       		.byte	0
+ 473 0060 00       		.byte	0
+ 474 0061 07       		.uleb128 0x7
+ 475 0062 898201   		.uleb128 0x4109
+ 476 0065 01       		.byte	0x1
+ 477 0066 11       		.uleb128 0x11
+ 478 0067 01       		.uleb128 0x1
+ 479 0068 31       		.uleb128 0x31
+ 480 0069 13       		.uleb128 0x13
+ 481 006a 01       		.uleb128 0x1
+ 482 006b 13       		.uleb128 0x13
+ 483 006c 00       		.byte	0
+ 484 006d 00       		.byte	0
+ 485 006e 08       		.uleb128 0x8
+ 486 006f 8A8201   		.uleb128 0x410a
+ 487 0072 00       		.byte	0
+ 488 0073 02       		.uleb128 0x2
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccmUiPmA.s 			page 12
+
+
+ 489 0074 18       		.uleb128 0x18
+ 490 0075 9142     		.uleb128 0x2111
+ 491 0077 18       		.uleb128 0x18
+ 492 0078 00       		.byte	0
+ 493 0079 00       		.byte	0
+ 494 007a 09       		.uleb128 0x9
+ 495 007b 898201   		.uleb128 0x4109
+ 496 007e 01       		.byte	0x1
+ 497 007f 11       		.uleb128 0x11
+ 498 0080 01       		.uleb128 0x1
+ 499 0081 31       		.uleb128 0x31
+ 500 0082 13       		.uleb128 0x13
+ 501 0083 00       		.byte	0
+ 502 0084 00       		.byte	0
+ 503 0085 0A       		.uleb128 0xa
+ 504 0086 2E       		.uleb128 0x2e
+ 505 0087 01       		.byte	0x1
+ 506 0088 3F       		.uleb128 0x3f
+ 507 0089 19       		.uleb128 0x19
+ 508 008a 03       		.uleb128 0x3
+ 509 008b 0E       		.uleb128 0xe
+ 510 008c 3A       		.uleb128 0x3a
+ 511 008d 0B       		.uleb128 0xb
+ 512 008e 3B       		.uleb128 0x3b
+ 513 008f 0B       		.uleb128 0xb
+ 514 0090 27       		.uleb128 0x27
+ 515 0091 19       		.uleb128 0x19
+ 516 0092 11       		.uleb128 0x11
+ 517 0093 01       		.uleb128 0x1
+ 518 0094 12       		.uleb128 0x12
+ 519 0095 06       		.uleb128 0x6
+ 520 0096 40       		.uleb128 0x40
+ 521 0097 18       		.uleb128 0x18
+ 522 0098 9742     		.uleb128 0x2117
+ 523 009a 19       		.uleb128 0x19
+ 524 009b 01       		.uleb128 0x1
+ 525 009c 13       		.uleb128 0x13
+ 526 009d 00       		.byte	0
+ 527 009e 00       		.byte	0
+ 528 009f 0B       		.uleb128 0xb
+ 529 00a0 898201   		.uleb128 0x4109
+ 530 00a3 00       		.byte	0
+ 531 00a4 11       		.uleb128 0x11
+ 532 00a5 01       		.uleb128 0x1
+ 533 00a6 31       		.uleb128 0x31
+ 534 00a7 13       		.uleb128 0x13
+ 535 00a8 00       		.byte	0
+ 536 00a9 00       		.byte	0
+ 537 00aa 0C       		.uleb128 0xc
+ 538 00ab 34       		.uleb128 0x34
+ 539 00ac 00       		.byte	0
+ 540 00ad 03       		.uleb128 0x3
+ 541 00ae 0E       		.uleb128 0xe
+ 542 00af 3A       		.uleb128 0x3a
+ 543 00b0 0B       		.uleb128 0xb
+ 544 00b1 3B       		.uleb128 0x3b
+ 545 00b2 0B       		.uleb128 0xb
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccmUiPmA.s 			page 13
+
+
+ 546 00b3 49       		.uleb128 0x49
+ 547 00b4 13       		.uleb128 0x13
+ 548 00b5 3F       		.uleb128 0x3f
+ 549 00b6 19       		.uleb128 0x19
+ 550 00b7 02       		.uleb128 0x2
+ 551 00b8 18       		.uleb128 0x18
+ 552 00b9 00       		.byte	0
+ 553 00ba 00       		.byte	0
+ 554 00bb 0D       		.uleb128 0xd
+ 555 00bc 2E       		.uleb128 0x2e
+ 556 00bd 01       		.byte	0x1
+ 557 00be 3F       		.uleb128 0x3f
+ 558 00bf 19       		.uleb128 0x19
+ 559 00c0 03       		.uleb128 0x3
+ 560 00c1 0E       		.uleb128 0xe
+ 561 00c2 3A       		.uleb128 0x3a
+ 562 00c3 0B       		.uleb128 0xb
+ 563 00c4 3B       		.uleb128 0x3b
+ 564 00c5 0B       		.uleb128 0xb
+ 565 00c6 27       		.uleb128 0x27
+ 566 00c7 19       		.uleb128 0x19
+ 567 00c8 49       		.uleb128 0x49
+ 568 00c9 13       		.uleb128 0x13
+ 569 00ca 3C       		.uleb128 0x3c
+ 570 00cb 19       		.uleb128 0x19
+ 571 00cc 01       		.uleb128 0x1
+ 572 00cd 13       		.uleb128 0x13
+ 573 00ce 00       		.byte	0
+ 574 00cf 00       		.byte	0
+ 575 00d0 0E       		.uleb128 0xe
+ 576 00d1 05       		.uleb128 0x5
+ 577 00d2 00       		.byte	0
+ 578 00d3 49       		.uleb128 0x49
+ 579 00d4 13       		.uleb128 0x13
+ 580 00d5 00       		.byte	0
+ 581 00d6 00       		.byte	0
+ 582 00d7 0F       		.uleb128 0xf
+ 583 00d8 2E       		.uleb128 0x2e
+ 584 00d9 01       		.byte	0x1
+ 585 00da 3F       		.uleb128 0x3f
+ 586 00db 19       		.uleb128 0x19
+ 587 00dc 03       		.uleb128 0x3
+ 588 00dd 0E       		.uleb128 0xe
+ 589 00de 3A       		.uleb128 0x3a
+ 590 00df 0B       		.uleb128 0xb
+ 591 00e0 3B       		.uleb128 0x3b
+ 592 00e1 0B       		.uleb128 0xb
+ 593 00e2 27       		.uleb128 0x27
+ 594 00e3 19       		.uleb128 0x19
+ 595 00e4 49       		.uleb128 0x49
+ 596 00e5 13       		.uleb128 0x13
+ 597 00e6 3C       		.uleb128 0x3c
+ 598 00e7 19       		.uleb128 0x19
+ 599 00e8 00       		.byte	0
+ 600 00e9 00       		.byte	0
+ 601 00ea 00       		.byte	0
+ 602              		.section	.debug_loc,"",%progbits
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccmUiPmA.s 			page 14
+
+
+ 603              	.Ldebug_loc0:
+ 604              	.LLST0:
+ 605 0000 00000000 		.4byte	.LVL0
+ 606 0004 1A000000 		.4byte	.LVL2
+ 607 0008 0100     		.2byte	0x1
+ 608 000a 50       		.byte	0x50
+ 609 000b 1A000000 		.4byte	.LVL2
+ 610 000f 40000000 		.4byte	.LFE0
+ 611 0013 0400     		.2byte	0x4
+ 612 0015 F3       		.byte	0xf3
+ 613 0016 01       		.uleb128 0x1
+ 614 0017 50       		.byte	0x50
+ 615 0018 9F       		.byte	0x9f
+ 616 0019 00000000 		.4byte	0
+ 617 001d 00000000 		.4byte	0
+ 618              	.LLST1:
+ 619 0021 00000000 		.4byte	.LVL0
+ 620 0025 1C000000 		.4byte	.LVL3
+ 621 0029 0100     		.2byte	0x1
+ 622 002b 51       		.byte	0x51
+ 623 002c 1C000000 		.4byte	.LVL3
+ 624 0030 40000000 		.4byte	.LFE0
+ 625 0034 0400     		.2byte	0x4
+ 626 0036 F3       		.byte	0xf3
+ 627 0037 01       		.uleb128 0x1
+ 628 0038 51       		.byte	0x51
+ 629 0039 9F       		.byte	0x9f
+ 630 003a 00000000 		.4byte	0
+ 631 003e 00000000 		.4byte	0
+ 632              	.LLST2:
+ 633 0042 00000000 		.4byte	.LVL0
+ 634 0046 1E000000 		.4byte	.LVL4
+ 635 004a 0100     		.2byte	0x1
+ 636 004c 52       		.byte	0x52
+ 637 004d 1E000000 		.4byte	.LVL4
+ 638 0051 40000000 		.4byte	.LFE0
+ 639 0055 0400     		.2byte	0x4
+ 640 0057 F3       		.byte	0xf3
+ 641 0058 01       		.uleb128 0x1
+ 642 0059 52       		.byte	0x52
+ 643 005a 9F       		.byte	0x9f
+ 644 005b 00000000 		.4byte	0
+ 645 005f 00000000 		.4byte	0
+ 646              	.LLST3:
+ 647 0063 00000000 		.4byte	.LVL0
+ 648 0067 14000000 		.4byte	.LVL1
+ 649 006b 0100     		.2byte	0x1
+ 650 006d 53       		.byte	0x53
+ 651 006e 14000000 		.4byte	.LVL1
+ 652 0072 40000000 		.4byte	.LFE0
+ 653 0076 0400     		.2byte	0x4
+ 654 0078 F3       		.byte	0xf3
+ 655 0079 01       		.uleb128 0x1
+ 656 007a 53       		.byte	0x53
+ 657 007b 9F       		.byte	0x9f
+ 658 007c 00000000 		.4byte	0
+ 659 0080 00000000 		.4byte	0
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccmUiPmA.s 			page 15
+
+
+ 660              		.section	.debug_aranges,"",%progbits
+ 661 0000 24000000 		.4byte	0x24
+ 662 0004 0200     		.2byte	0x2
+ 663 0006 00000000 		.4byte	.Ldebug_info0
+ 664 000a 04       		.byte	0x4
+ 665 000b 00       		.byte	0
+ 666 000c 0000     		.2byte	0
+ 667 000e 0000     		.2byte	0
+ 668 0010 00000000 		.4byte	.LFB0
+ 669 0014 40000000 		.4byte	.LFE0-.LFB0
+ 670 0018 00000000 		.4byte	.LFB1
+ 671 001c 10000000 		.4byte	.LFE1-.LFB1
+ 672 0020 00000000 		.4byte	0
+ 673 0024 00000000 		.4byte	0
+ 674              		.section	.debug_ranges,"",%progbits
+ 675              	.Ldebug_ranges0:
+ 676 0000 00000000 		.4byte	.LFB0
+ 677 0004 40000000 		.4byte	.LFE0
+ 678 0008 00000000 		.4byte	.LFB1
+ 679 000c 10000000 		.4byte	.LFE1
+ 680 0010 00000000 		.4byte	0
+ 681 0014 00000000 		.4byte	0
+ 682              		.section	.debug_line,"",%progbits
+ 683              	.Ldebug_line0:
+ 684 0000 85000000 		.section	.debug_str,"MS",%progbits,1
+ 684      02005900 
+ 684      00000201 
+ 684      FB0E0D00 
+ 684      01010101 
+ 685              	.LASF15:
+ 686 0000 63797374 		.ascii	"cystatus\000"
+ 686      61747573 
+ 686      00
+ 687              	.LASF18:
+ 688 0009 55707065 		.ascii	"UpperSrcAddress\000"
+ 688      72537263 
+ 688      41646472 
+ 688      65737300 
+ 689              	.LASF22:
+ 690 0019 4379446D 		.ascii	"CyDmaChPriority\000"
+ 690      61436850 
+ 690      72696F72 
+ 690      69747900 
+ 691              	.LASF17:
+ 692 0029 52657165 		.ascii	"ReqestPerBurst\000"
+ 692      73745065 
+ 692      72427572 
+ 692      737400
+ 693              	.LASF4:
+ 694 0038 73686F72 		.ascii	"short unsigned int\000"
+ 694      7420756E 
+ 694      7369676E 
+ 694      65642069 
+ 694      6E7400
+ 695              	.LASF27:
+ 696 004b 5646445F 		.ascii	"VFD_1_MuxDMA_DmaRelease\000"
+ 696      315F4D75 
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccmUiPmA.s 			page 16
+
+
+ 696      78444D41 
+ 696      5F446D61 
+ 696      52656C65 
+ 697              	.LASF13:
+ 698 0063 666C6F61 		.ascii	"float\000"
+ 698      7400
+ 699              	.LASF2:
+ 700 0069 756E7369 		.ascii	"unsigned char\000"
+ 700      676E6564 
+ 700      20636861 
+ 700      7200
+ 701              	.LASF16:
+ 702 0077 42757273 		.ascii	"BurstCount\000"
+ 702      74436F75 
+ 702      6E7400
+ 703              	.LASF26:
+ 704 0082 5646445F 		.ascii	"VFD_1_MuxDMA_DmaInitialize\000"
+ 704      315F4D75 
+ 704      78444D41 
+ 704      5F446D61 
+ 704      496E6974 
+ 705              	.LASF6:
+ 706 009d 6C6F6E67 		.ascii	"long unsigned int\000"
+ 706      20756E73 
+ 706      69676E65 
+ 706      6420696E 
+ 706      7400
+ 707              	.LASF11:
+ 708 00af 75696E74 		.ascii	"uint8\000"
+ 708      3800
+ 709              	.LASF14:
+ 710 00b5 646F7562 		.ascii	"double\000"
+ 710      6C6500
+ 711              	.LASF12:
+ 712 00bc 75696E74 		.ascii	"uint16\000"
+ 712      313600
+ 713              	.LASF24:
+ 714 00c3 47656E65 		.ascii	"Generated_Source\\PSoC5\\VFD_1_MuxDMA_dma.c\000"
+ 714      72617465 
+ 714      645F536F 
+ 714      75726365 
+ 714      5C50536F 
+ 715              	.LASF23:
+ 716 00ed 474E5520 		.ascii	"GNU C 4.9.3 20150303 (release) [ARM/embedded-4_9-br"
+ 716      4320342E 
+ 716      392E3320 
+ 716      32303135 
+ 716      30333033 
+ 717 0120 616E6368 		.ascii	"anch revision 221220] -mcpu=cortex-m3 -mthumb -g -O"
+ 717      20726576 
+ 717      6973696F 
+ 717      6E203232 
+ 717      31323230 
+ 718 0153 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
+ 718      66756E63 
+ 718      74696F6E 
+ 718      2D736563 
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccmUiPmA.s 			page 17
+
+
+ 718      74696F6E 
+ 719              	.LASF0:
+ 720 017b 756E7369 		.ascii	"unsigned int\000"
+ 720      676E6564 
+ 720      20696E74 
+ 720      00
+ 721              	.LASF28:
+ 722 0188 5646445F 		.ascii	"VFD_1_MuxDMA_DmaHandle\000"
+ 722      315F4D75 
+ 722      78444D41 
+ 722      5F446D61 
+ 722      48616E64 
+ 723              	.LASF8:
+ 724 019f 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 724      206C6F6E 
+ 724      6720756E 
+ 724      7369676E 
+ 724      65642069 
+ 725              	.LASF25:
+ 726 01b6 433A5C55 		.ascii	"C:\\Users\\dph5ah\\Documents\\PSoC Creator\\Workspa"
+ 726      73657273 
+ 726      5C647068 
+ 726      3561685C 
+ 726      446F6375 
+ 727 01e4 63653031 		.ascii	"ce01\\galton board.cydsn\000"
+ 727      5C67616C 
+ 727      746F6E20 
+ 727      626F6172 
+ 727      642E6379 
+ 728              	.LASF19:
+ 729 01fc 55707065 		.ascii	"UpperDestAddress\000"
+ 729      72446573 
+ 729      74416464 
+ 729      72657373 
+ 729      00
+ 730              	.LASF9:
+ 731 020d 73697A65 		.ascii	"sizetype\000"
+ 731      74797065 
+ 731      00
+ 732              	.LASF7:
+ 733 0216 6C6F6E67 		.ascii	"long long int\000"
+ 733      206C6F6E 
+ 733      6720696E 
+ 733      7400
+ 734              	.LASF21:
+ 735 0224 4379446D 		.ascii	"CyDmaChSetExtendedAddress\000"
+ 735      61436853 
+ 735      65744578 
+ 735      74656E64 
+ 735      65644164 
+ 736              	.LASF10:
+ 737 023e 63686172 		.ascii	"char\000"
+ 737      00
+ 738              	.LASF3:
+ 739 0243 73686F72 		.ascii	"short int\000"
+ 739      7420696E 
+ 739      7400
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccmUiPmA.s 			page 18
+
+
+ 740              	.LASF5:
+ 741 024d 6C6F6E67 		.ascii	"long int\000"
+ 741      20696E74 
+ 741      00
+ 742              	.LASF1:
+ 743 0256 7369676E 		.ascii	"signed char\000"
+ 743      65642063 
+ 743      68617200 
+ 744              	.LASF29:
+ 745 0262 4379446D 		.ascii	"CyDmaChDisable\000"
+ 745      61436844 
+ 745      69736162 
+ 745      6C6500
+ 746              	.LASF20:
+ 747 0271 4379446D 		.ascii	"CyDmaChSetConfiguration\000"
+ 747      61436853 
+ 747      6574436F 
+ 747      6E666967 
+ 747      75726174 
+ 748              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 4.9.3 20150303 (release) [ARM/embedded-4_9-br

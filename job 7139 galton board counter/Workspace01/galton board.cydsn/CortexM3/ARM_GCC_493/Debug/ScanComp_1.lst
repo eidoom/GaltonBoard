@@ -1,0 +1,3070 @@
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccMZH2Qd.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.file	"ScanComp_1.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.section	.text.ScanComp_1_Stop,"ax",%progbits
+  19              		.align	2
+  20              		.global	ScanComp_1_Stop
+  21              		.thumb
+  22              		.thumb_func
+  23              		.type	ScanComp_1_Stop, %function
+  24              	ScanComp_1_Stop:
+  25              	.LFB2:
+  26              		.file 1 "Generated_Source\\PSoC5\\ScanComp_1.c"
+   1:Generated_Source\PSoC5/ScanComp_1.c **** /*******************************************************************************
+   2:Generated_Source\PSoC5/ScanComp_1.c **** * File Name: ScanComp_1.c
+   3:Generated_Source\PSoC5/ScanComp_1.c **** * Version 1.10
+   4:Generated_Source\PSoC5/ScanComp_1.c **** *
+   5:Generated_Source\PSoC5/ScanComp_1.c **** * Description:
+   6:Generated_Source\PSoC5/ScanComp_1.c **** *  This file provides the source code to the API for the Scanning Comparator
+   7:Generated_Source\PSoC5/ScanComp_1.c **** *  component
+   8:Generated_Source\PSoC5/ScanComp_1.c **** *
+   9:Generated_Source\PSoC5/ScanComp_1.c **** * Note:
+  10:Generated_Source\PSoC5/ScanComp_1.c **** *  None
+  11:Generated_Source\PSoC5/ScanComp_1.c **** *
+  12:Generated_Source\PSoC5/ScanComp_1.c **** ********************************************************************************
+  13:Generated_Source\PSoC5/ScanComp_1.c **** * Copyright 2013, Cypress Semiconductor Corporation.  All rights reserved.
+  14:Generated_Source\PSoC5/ScanComp_1.c **** * You may use this file only in accordance with the license, terms, conditions,
+  15:Generated_Source\PSoC5/ScanComp_1.c **** * disclaimers, and limitations in the end user license agreement accompanying
+  16:Generated_Source\PSoC5/ScanComp_1.c **** * the software package with which this file was provided.
+  17:Generated_Source\PSoC5/ScanComp_1.c **** *******************************************************************************/
+  18:Generated_Source\PSoC5/ScanComp_1.c **** 
+  19:Generated_Source\PSoC5/ScanComp_1.c **** #include "ScanComp_1.h"
+  20:Generated_Source\PSoC5/ScanComp_1.c **** 
+  21:Generated_Source\PSoC5/ScanComp_1.c **** #if (ScanComp_1_INTERNAL_REF_IS_USED)
+  22:Generated_Source\PSoC5/ScanComp_1.c **** 
+  23:Generated_Source\PSoC5/ScanComp_1.c ****     static uint8  ScanComp_1_compDACRange;
+  24:Generated_Source\PSoC5/ScanComp_1.c ****     
+  25:Generated_Source\PSoC5/ScanComp_1.c ****     #if (ScanComp_1_VDAC_PER_CHANNEL_MODE_USED)
+  26:Generated_Source\PSoC5/ScanComp_1.c ****         
+  27:Generated_Source\PSoC5/ScanComp_1.c ****         /* Variable declarations for DMA */
+  28:Generated_Source\PSoC5/ScanComp_1.c ****         static uint8 ScanComp_1_DMA_VDACUpdate_Chan;
+  29:Generated_Source\PSoC5/ScanComp_1.c ****         static uint8 ScanComp_1_DMA_VDACUpdate_TD = CY_DMA_INVALID_TD;
+  30:Generated_Source\PSoC5/ScanComp_1.c ****         
+  31:Generated_Source\PSoC5/ScanComp_1.c ****         static void ScanComp_1_InitDma(void)  ;
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccMZH2Qd.s 			page 2
+
+
+  32:Generated_Source\PSoC5/ScanComp_1.c **** 
+  33:Generated_Source\PSoC5/ScanComp_1.c ****         /* Array from customizer */
+  34:Generated_Source\PSoC5/ScanComp_1.c ****         static uint8 ScanComp_1_DacVoltages[ScanComp_1_NUM_OF_CHANNELS] = {
+  35:Generated_Source\PSoC5/ScanComp_1.c ****     0xFAu, 
+  36:Generated_Source\PSoC5/ScanComp_1.c **** };
+  37:Generated_Source\PSoC5/ScanComp_1.c **** 
+  38:Generated_Source\PSoC5/ScanComp_1.c ****     #else
+  39:Generated_Source\PSoC5/ScanComp_1.c ****         static uint8  ScanComp_1_compDACVoltage;
+  40:Generated_Source\PSoC5/ScanComp_1.c ****     #endif /* ScanComp_1_VDAC_PER_CHANNEL_MODE_USED */
+  41:Generated_Source\PSoC5/ScanComp_1.c **** #endif /* ScanComp_1_INTERNAL_REF_IS_USED */
+  42:Generated_Source\PSoC5/ScanComp_1.c **** 
+  43:Generated_Source\PSoC5/ScanComp_1.c **** #if (ScanComp_1_NUM_OF_CHANNELS >= 8u)
+  44:Generated_Source\PSoC5/ScanComp_1.c ****     static uint8 storeStatusReg;
+  45:Generated_Source\PSoC5/ScanComp_1.c **** #endif /* ScanComp_1_NUM_OF_CHANNELS >= 8u */
+  46:Generated_Source\PSoC5/ScanComp_1.c **** 
+  47:Generated_Source\PSoC5/ScanComp_1.c **** uint8  ScanComp_1_initVar = 0u;
+  48:Generated_Source\PSoC5/ScanComp_1.c **** 
+  49:Generated_Source\PSoC5/ScanComp_1.c **** static reg8 * const CYCODE interruptStatusMaskRegs[ScanComp_1_NUM_OF_INT_REGISTERS] =
+  50:Generated_Source\PSoC5/ScanComp_1.c **** {
+  51:Generated_Source\PSoC5/ScanComp_1.c ****     ScanComp_1_STATUS_INT0_MASK_PTR,
+  52:Generated_Source\PSoC5/ScanComp_1.c **** 
+  53:Generated_Source\PSoC5/ScanComp_1.c ****     #if(ScanComp_1_NUM_OF_CHANNELS > 8u)
+  54:Generated_Source\PSoC5/ScanComp_1.c ****         ScanComp_1_STATUS_INT1_MASK_PTR,
+  55:Generated_Source\PSoC5/ScanComp_1.c ****     #endif /* ScanComp_1_NUM_OF_CHANNELS > 8u */
+  56:Generated_Source\PSoC5/ScanComp_1.c **** 
+  57:Generated_Source\PSoC5/ScanComp_1.c ****     #if(ScanComp_1_NUM_OF_CHANNELS > 16u)
+  58:Generated_Source\PSoC5/ScanComp_1.c ****         ScanComp_1_STATUS_INT2_MASK_PTR,
+  59:Generated_Source\PSoC5/ScanComp_1.c ****     #endif /* ScanComp_1_NUM_OF_CHANNELS > 16u */
+  60:Generated_Source\PSoC5/ScanComp_1.c **** 
+  61:Generated_Source\PSoC5/ScanComp_1.c ****     #if(ScanComp_1_NUM_OF_CHANNELS > 24u)
+  62:Generated_Source\PSoC5/ScanComp_1.c ****         ScanComp_1_STATUS_INT3_MASK_PTR,
+  63:Generated_Source\PSoC5/ScanComp_1.c ****     #endif /* ScanComp_1_NUM_OF_CHANNELS > 24u */
+  64:Generated_Source\PSoC5/ScanComp_1.c **** 
+  65:Generated_Source\PSoC5/ScanComp_1.c ****     #if(ScanComp_1_NUM_OF_CHANNELS > 32u)
+  66:Generated_Source\PSoC5/ScanComp_1.c ****         ScanComp_1_STATUS_INT4_MASK_PTR,
+  67:Generated_Source\PSoC5/ScanComp_1.c ****     #endif /* ScanComp_1_NUM_OF_CHANNELS > 32u */
+  68:Generated_Source\PSoC5/ScanComp_1.c **** 
+  69:Generated_Source\PSoC5/ScanComp_1.c ****     #if(ScanComp_1_NUM_OF_CHANNELS > 40u)
+  70:Generated_Source\PSoC5/ScanComp_1.c ****         ScanComp_1_STATUS_INT5_MASK_PTR,
+  71:Generated_Source\PSoC5/ScanComp_1.c ****     #endif /* ScanComp_1_NUM_OF_CHANNELS > 40u */
+  72:Generated_Source\PSoC5/ScanComp_1.c **** 
+  73:Generated_Source\PSoC5/ScanComp_1.c ****     #if(ScanComp_1_NUM_OF_CHANNELS > 48u)
+  74:Generated_Source\PSoC5/ScanComp_1.c ****         ScanComp_1_STATUS_INT6_MASK_PTR,
+  75:Generated_Source\PSoC5/ScanComp_1.c ****     #endif /* ScanComp_1_NUM_OF_CHANNELS > 48u */
+  76:Generated_Source\PSoC5/ScanComp_1.c **** 
+  77:Generated_Source\PSoC5/ScanComp_1.c ****     #if(ScanComp_1_NUM_OF_CHANNELS > 56u)
+  78:Generated_Source\PSoC5/ScanComp_1.c ****         ScanComp_1_STATUS_INT7_MASK_PTR,
+  79:Generated_Source\PSoC5/ScanComp_1.c ****     #endif /* ScanComp_1_NUM_OF_CHANNELS > 56u */
+  80:Generated_Source\PSoC5/ScanComp_1.c **** };
+  81:Generated_Source\PSoC5/ScanComp_1.c **** 
+  82:Generated_Source\PSoC5/ScanComp_1.c **** 
+  83:Generated_Source\PSoC5/ScanComp_1.c **** /*******************************************************************************
+  84:Generated_Source\PSoC5/ScanComp_1.c **** * Function Name: ScanComp_1_Start
+  85:Generated_Source\PSoC5/ScanComp_1.c **** ********************************************************************************
+  86:Generated_Source\PSoC5/ScanComp_1.c **** *
+  87:Generated_Source\PSoC5/ScanComp_1.c **** * Summary:
+  88:Generated_Source\PSoC5/ScanComp_1.c **** *  Performs all of the required initialization for the ScanComp component
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccMZH2Qd.s 			page 3
+
+
+  89:Generated_Source\PSoC5/ScanComp_1.c **** *  and enables power to the block.
+  90:Generated_Source\PSoC5/ScanComp_1.c **** *
+  91:Generated_Source\PSoC5/ScanComp_1.c **** * Parameters:
+  92:Generated_Source\PSoC5/ScanComp_1.c **** *  None
+  93:Generated_Source\PSoC5/ScanComp_1.c **** *
+  94:Generated_Source\PSoC5/ScanComp_1.c **** * Return:
+  95:Generated_Source\PSoC5/ScanComp_1.c **** *  None
+  96:Generated_Source\PSoC5/ScanComp_1.c **** *
+  97:Generated_Source\PSoC5/ScanComp_1.c **** *******************************************************************************/
+  98:Generated_Source\PSoC5/ScanComp_1.c **** void ScanComp_1_Start(void) 
+  99:Generated_Source\PSoC5/ScanComp_1.c **** {
+ 100:Generated_Source\PSoC5/ScanComp_1.c ****     if(0u == ScanComp_1_initVar)
+ 101:Generated_Source\PSoC5/ScanComp_1.c ****     {
+ 102:Generated_Source\PSoC5/ScanComp_1.c ****         ScanComp_1_Init();
+ 103:Generated_Source\PSoC5/ScanComp_1.c ****         ScanComp_1_initVar = 1u;
+ 104:Generated_Source\PSoC5/ScanComp_1.c ****     }
+ 105:Generated_Source\PSoC5/ScanComp_1.c ****     ScanComp_1_Enable();
+ 106:Generated_Source\PSoC5/ScanComp_1.c **** }
+ 107:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 108:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 109:Generated_Source\PSoC5/ScanComp_1.c **** /*******************************************************************************
+ 110:Generated_Source\PSoC5/ScanComp_1.c **** * Function Name: ScanComp_1_Init
+ 111:Generated_Source\PSoC5/ScanComp_1.c **** ********************************************************************************
+ 112:Generated_Source\PSoC5/ScanComp_1.c **** *
+ 113:Generated_Source\PSoC5/ScanComp_1.c **** * Summary:
+ 114:Generated_Source\PSoC5/ScanComp_1.c **** *  Initializes or restores the ScanComp component according to
+ 115:Generated_Source\PSoC5/ScanComp_1.c **** *  the customizer settings.
+ 116:Generated_Source\PSoC5/ScanComp_1.c **** *
+ 117:Generated_Source\PSoC5/ScanComp_1.c **** * Parameters:
+ 118:Generated_Source\PSoC5/ScanComp_1.c **** *  None
+ 119:Generated_Source\PSoC5/ScanComp_1.c **** *
+ 120:Generated_Source\PSoC5/ScanComp_1.c **** * Return:
+ 121:Generated_Source\PSoC5/ScanComp_1.c **** *  None
+ 122:Generated_Source\PSoC5/ScanComp_1.c **** *
+ 123:Generated_Source\PSoC5/ScanComp_1.c **** *******************************************************************************/
+ 124:Generated_Source\PSoC5/ScanComp_1.c **** void ScanComp_1_Init(void) 
+ 125:Generated_Source\PSoC5/ScanComp_1.c **** {
+ 126:Generated_Source\PSoC5/ScanComp_1.c ****     #if (ScanComp_1_NUM_OF_CHANNELS >= 8u)
+ 127:Generated_Source\PSoC5/ScanComp_1.c ****         storeStatusReg = 0u;
+ 128:Generated_Source\PSoC5/ScanComp_1.c ****     #endif /* ScanComp_1_NUM_OF_CHANNELS >= 8u */
+ 129:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 130:Generated_Source\PSoC5/ScanComp_1.c ****     ScanComp_1_Comp_Init();    
+ 131:Generated_Source\PSoC5/ScanComp_1.c ****     
+ 132:Generated_Source\PSoC5/ScanComp_1.c ****     #if (ScanComp_1_INTERNAL_REF_IS_USED)
+ 133:Generated_Source\PSoC5/ScanComp_1.c ****         ScanComp_1_VDAC_Init();
+ 134:Generated_Source\PSoC5/ScanComp_1.c ****         ScanComp_1_compDACRange = ScanComp_1_DEFAULT_RANGE;
+ 135:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 136:Generated_Source\PSoC5/ScanComp_1.c ****         #if (ScanComp_1_VDAC_PER_CHANNEL_MODE_USED)
+ 137:Generated_Source\PSoC5/ScanComp_1.c ****             ScanComp_1_VDAC_SetValue(0x0u);
+ 138:Generated_Source\PSoC5/ScanComp_1.c ****             
+ 139:Generated_Source\PSoC5/ScanComp_1.c ****             if(CY_DMA_INVALID_TD == ScanComp_1_DMA_VDACUpdate_TD)
+ 140:Generated_Source\PSoC5/ScanComp_1.c ****             {
+ 141:Generated_Source\PSoC5/ScanComp_1.c ****                 ScanComp_1_InitDma();
+ 142:Generated_Source\PSoC5/ScanComp_1.c ****             }            
+ 143:Generated_Source\PSoC5/ScanComp_1.c ****         #else
+ 144:Generated_Source\PSoC5/ScanComp_1.c ****             ScanComp_1_SetDACVoltage(ScanComp_1_DEFAULT_VOLTAGE);
+ 145:Generated_Source\PSoC5/ScanComp_1.c ****         #endif /* ScanComp_1_VDAC_PER_CHANNEL_MODE_USED */
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccMZH2Qd.s 			page 4
+
+
+ 146:Generated_Source\PSoC5/ScanComp_1.c ****     #endif /* ScanComp_1_INTERNAL_REF_IS_USED */
+ 147:Generated_Source\PSoC5/ScanComp_1.c **** }
+ 148:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 149:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 150:Generated_Source\PSoC5/ScanComp_1.c **** /*******************************************************************************
+ 151:Generated_Source\PSoC5/ScanComp_1.c **** * Function Name: ScanComp_1_Stop
+ 152:Generated_Source\PSoC5/ScanComp_1.c **** ********************************************************************************
+ 153:Generated_Source\PSoC5/ScanComp_1.c **** *
+ 154:Generated_Source\PSoC5/ScanComp_1.c **** * Summary:
+ 155:Generated_Source\PSoC5/ScanComp_1.c **** *  Turns off the Scanning Comparator by turning off the comparator itself and 
+ 156:Generated_Source\PSoC5/ScanComp_1.c **** *  halting the muxing of inputs, and turning off the DAC if it is used.
+ 157:Generated_Source\PSoC5/ScanComp_1.c **** *
+ 158:Generated_Source\PSoC5/ScanComp_1.c **** * Parameters:
+ 159:Generated_Source\PSoC5/ScanComp_1.c **** *  None
+ 160:Generated_Source\PSoC5/ScanComp_1.c **** *
+ 161:Generated_Source\PSoC5/ScanComp_1.c **** * Return:
+ 162:Generated_Source\PSoC5/ScanComp_1.c **** *  None
+ 163:Generated_Source\PSoC5/ScanComp_1.c **** *
+ 164:Generated_Source\PSoC5/ScanComp_1.c **** *******************************************************************************/
+ 165:Generated_Source\PSoC5/ScanComp_1.c **** void ScanComp_1_Stop(void) 
+ 166:Generated_Source\PSoC5/ScanComp_1.c **** {
+  27              		.loc 1 166 0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31 0000 08B5     		push	{r3, lr}
+  32              		.cfi_def_cfa_offset 8
+  33              		.cfi_offset 3, -8
+  34              		.cfi_offset 14, -4
+ 167:Generated_Source\PSoC5/ScanComp_1.c ****     ScanComp_1_CONTROL_REG = ScanComp_1_CONTROL_DISABLE;
+  35              		.loc 1 167 0
+  36 0002 0022     		movs	r2, #0
+  37 0004 034B     		ldr	r3, .L3
+  38 0006 1A70     		strb	r2, [r3]
+ 168:Generated_Source\PSoC5/ScanComp_1.c ****     
+ 169:Generated_Source\PSoC5/ScanComp_1.c ****     ScanComp_1_Comp_Stop();    
+  39              		.loc 1 169 0
+  40 0008 FFF7FEFF 		bl	ScanComp_1_Comp_Stop
+  41              	.LVL0:
+ 170:Generated_Source\PSoC5/ScanComp_1.c ****     
+ 171:Generated_Source\PSoC5/ScanComp_1.c ****     #if (ScanComp_1_INTERNAL_REF_IS_USED)
+ 172:Generated_Source\PSoC5/ScanComp_1.c ****         ScanComp_1_VDAC_Stop();
+  42              		.loc 1 172 0
+  43 000c FFF7FEFF 		bl	ScanComp_1_VDAC_Stop
+  44              	.LVL1:
+  45 0010 08BD     		pop	{r3, pc}
+  46              	.L4:
+  47 0012 00BF     		.align	2
+  48              	.L3:
+  49 0014 7C640040 		.word	1073767548
+  50              		.cfi_endproc
+  51              	.LFE2:
+  52              		.size	ScanComp_1_Stop, .-ScanComp_1_Stop
+  53              		.section	.text.ScanComp_1_Enable,"ax",%progbits
+  54              		.align	2
+  55              		.global	ScanComp_1_Enable
+  56              		.thumb
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccMZH2Qd.s 			page 5
+
+
+  57              		.thumb_func
+  58              		.type	ScanComp_1_Enable, %function
+  59              	ScanComp_1_Enable:
+  60              	.LFB3:
+ 173:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 174:Generated_Source\PSoC5/ScanComp_1.c ****         #if (ScanComp_1_VDAC_PER_CHANNEL_MODE_USED)
+ 175:Generated_Source\PSoC5/ScanComp_1.c ****             (void) CyDmaChDisable(ScanComp_1_DMA_VDACUpdate_Chan);
+ 176:Generated_Source\PSoC5/ScanComp_1.c ****         #endif /* ScanComp_1_VDAC_PER_CHANNEL_MODE_USED */
+ 177:Generated_Source\PSoC5/ScanComp_1.c ****     #endif /* ScanComp_1_INTERNAL_REF_IS_USED */
+ 178:Generated_Source\PSoC5/ScanComp_1.c **** }
+ 179:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 180:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 181:Generated_Source\PSoC5/ScanComp_1.c **** /*******************************************************************************
+ 182:Generated_Source\PSoC5/ScanComp_1.c **** * Function Name: ScanComp_1_Enable
+ 183:Generated_Source\PSoC5/ScanComp_1.c **** ********************************************************************************
+ 184:Generated_Source\PSoC5/ScanComp_1.c **** *
+ 185:Generated_Source\PSoC5/ScanComp_1.c **** * Summary:
+ 186:Generated_Source\PSoC5/ScanComp_1.c **** *  Activates the hardware and begins component operation.
+ 187:Generated_Source\PSoC5/ScanComp_1.c **** *
+ 188:Generated_Source\PSoC5/ScanComp_1.c **** * Parameters:
+ 189:Generated_Source\PSoC5/ScanComp_1.c **** *  None
+ 190:Generated_Source\PSoC5/ScanComp_1.c **** *
+ 191:Generated_Source\PSoC5/ScanComp_1.c **** * Return:
+ 192:Generated_Source\PSoC5/ScanComp_1.c **** *  None
+ 193:Generated_Source\PSoC5/ScanComp_1.c **** *
+ 194:Generated_Source\PSoC5/ScanComp_1.c **** *******************************************************************************/
+ 195:Generated_Source\PSoC5/ScanComp_1.c **** void ScanComp_1_Enable(void) 
+ 196:Generated_Source\PSoC5/ScanComp_1.c **** {
+  61              		.loc 1 196 0
+  62              		.cfi_startproc
+  63              		@ args = 0, pretend = 0, frame = 0
+  64              		@ frame_needed = 0, uses_anonymous_args = 0
+  65 0000 08B5     		push	{r3, lr}
+  66              		.cfi_def_cfa_offset 8
+  67              		.cfi_offset 3, -8
+  68              		.cfi_offset 14, -4
+ 197:Generated_Source\PSoC5/ScanComp_1.c ****     uint8 interruptState;
+ 198:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 199:Generated_Source\PSoC5/ScanComp_1.c ****     ScanComp_1_Comp_Enable();
+  69              		.loc 1 199 0
+  70 0002 FFF7FEFF 		bl	ScanComp_1_Comp_Enable
+  71              	.LVL2:
+ 200:Generated_Source\PSoC5/ScanComp_1.c ****     
+ 201:Generated_Source\PSoC5/ScanComp_1.c ****     ScanComp_1_COUNTER_COUNT_REG  = ScanComp_1_DEFAULT_CHANNELS_VAL;
+  72              		.loc 1 201 0
+  73 0006 0022     		movs	r2, #0
+  74 0008 0A4B     		ldr	r3, .L7
+  75 000a 1A70     		strb	r2, [r3]
+ 202:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 203:Generated_Source\PSoC5/ScanComp_1.c ****     #if (ScanComp_1_INTERNAL_REF_IS_USED)
+ 204:Generated_Source\PSoC5/ScanComp_1.c ****         ScanComp_1_VDAC_Enable();
+  76              		.loc 1 204 0
+  77 000c FFF7FEFF 		bl	ScanComp_1_VDAC_Enable
+  78              	.LVL3:
+ 205:Generated_Source\PSoC5/ScanComp_1.c ****         #if (ScanComp_1_VDAC_PER_CHANNEL_MODE_USED)        
+ 206:Generated_Source\PSoC5/ScanComp_1.c ****             (void)CyDmaClearPendingDrq(ScanComp_1_DMA_VDACUpdate_Chan);
+ 207:Generated_Source\PSoC5/ScanComp_1.c ****             (void)CyDmaChEnable(ScanComp_1_DMA_VDACUpdate_Chan, 1u);
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccMZH2Qd.s 			page 6
+
+
+ 208:Generated_Source\PSoC5/ScanComp_1.c ****         #endif /* (ScanComp_1_VDAC_PER_CHANNEL_MODE_USED) */    
+ 209:Generated_Source\PSoC5/ScanComp_1.c ****     #endif /* ScanComp_1_INTERNAL_REF_IS_USED */    
+ 210:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 211:Generated_Source\PSoC5/ScanComp_1.c ****     /* Enable Status Int */
+ 212:Generated_Source\PSoC5/ScanComp_1.c ****     interruptState = CyEnterCriticalSection();
+  79              		.loc 1 212 0
+  80 0010 FFF7FEFF 		bl	CyEnterCriticalSection
+  81              	.LVL4:
+ 213:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 214:Generated_Source\PSoC5/ScanComp_1.c ****     #if (ScanComp_1_NUM_OF_CHANNELS < 8u)
+ 215:Generated_Source\PSoC5/ScanComp_1.c ****         ScanComp_1_STATUS_INT0_AUX_CONTROL |= ScanComp_1_STATUS_INTR_ENBL;
+  82              		.loc 1 215 0
+  83 0014 084A     		ldr	r2, .L7+4
+  84 0016 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+  85 0018 43F01003 		orr	r3, r3, #16
+  86 001c 1370     		strb	r3, [r2]
+ 216:Generated_Source\PSoC5/ScanComp_1.c ****     #endif /* ScanComp_1_NUM_OF_CHANNELS < 8u */
+ 217:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 218:Generated_Source\PSoC5/ScanComp_1.c ****     #if (ScanComp_1_NUM_OF_CHANNELS >= 8u)
+ 219:Generated_Source\PSoC5/ScanComp_1.c ****         ScanComp_1_STATUS_INT8_AUX_CONTROL |= ScanComp_1_STATUS_INTR_ENBL;
+ 220:Generated_Source\PSoC5/ScanComp_1.c ****     #endif /* ScanComp_1_NUM_OF_CHANNELS >= 8u */
+ 221:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 222:Generated_Source\PSoC5/ScanComp_1.c ****     #if (ScanComp_1_NUM_OF_CHANNELS >= 9u)
+ 223:Generated_Source\PSoC5/ScanComp_1.c ****         ScanComp_1_STATUS_INT1_AUX_CONTROL |= ScanComp_1_STATUS_INTR_ENBL;
+ 224:Generated_Source\PSoC5/ScanComp_1.c ****     #endif /* ScanComp_1_NUM_OF_CHANNELS >= 9u */
+ 225:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 226:Generated_Source\PSoC5/ScanComp_1.c ****     #if (ScanComp_1_NUM_OF_CHANNELS > 16u)
+ 227:Generated_Source\PSoC5/ScanComp_1.c ****         ScanComp_1_STATUS_INT2_AUX_CONTROL |= ScanComp_1_STATUS_INTR_ENBL;
+ 228:Generated_Source\PSoC5/ScanComp_1.c ****     #endif /* ScanComp_1_NUM_OF_CHANNELS > 16u */
+ 229:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 230:Generated_Source\PSoC5/ScanComp_1.c ****     #if (ScanComp_1_NUM_OF_CHANNELS > 24u)
+ 231:Generated_Source\PSoC5/ScanComp_1.c ****         ScanComp_1_STATUS_INT3_AUX_CONTROL |= ScanComp_1_STATUS_INTR_ENBL;
+ 232:Generated_Source\PSoC5/ScanComp_1.c ****     #endif /* ScanComp_1_NUM_OF_CHANNELS > 24u */
+ 233:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 234:Generated_Source\PSoC5/ScanComp_1.c ****     #if (ScanComp_1_NUM_OF_CHANNELS > 32u)
+ 235:Generated_Source\PSoC5/ScanComp_1.c ****         ScanComp_1_STATUS_INT4_AUX_CONTROL |= ScanComp_1_STATUS_INTR_ENBL;
+ 236:Generated_Source\PSoC5/ScanComp_1.c ****     #endif /* ScanComp_1_NUM_OF_CHANNELS > 32u */
+ 237:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 238:Generated_Source\PSoC5/ScanComp_1.c ****     #if (ScanComp_1_NUM_OF_CHANNELS > 40u)
+ 239:Generated_Source\PSoC5/ScanComp_1.c ****         ScanComp_1_STATUS_INT5_AUX_CONTROL |= ScanComp_1_STATUS_INTR_ENBL;
+ 240:Generated_Source\PSoC5/ScanComp_1.c ****     #endif /* ScanComp_1_NUM_OF_CHANNELS > 40u */
+ 241:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 242:Generated_Source\PSoC5/ScanComp_1.c ****     #if (ScanComp_1_NUM_OF_CHANNELS > 48u)
+ 243:Generated_Source\PSoC5/ScanComp_1.c ****         ScanComp_1_STATUS_INT6_AUX_CONTROL |= ScanComp_1_STATUS_INTR_ENBL;
+ 244:Generated_Source\PSoC5/ScanComp_1.c ****     #endif /* ScanComp_1_NUM_OF_CHANNELS > 48u */
+ 245:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 246:Generated_Source\PSoC5/ScanComp_1.c ****     #if (ScanComp_1_NUM_OF_CHANNELS > 56u)
+ 247:Generated_Source\PSoC5/ScanComp_1.c ****         ScanComp_1_STATUS_INT7_AUX_CONTROL |= ScanComp_1_STATUS_INTR_ENBL;
+ 248:Generated_Source\PSoC5/ScanComp_1.c ****     #endif /* ScanComp_1_NUM_OF_CHANNELS > 56u */
+ 249:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 250:Generated_Source\PSoC5/ScanComp_1.c ****     #if (ScanComp_1_NUM_OF_CHANNELS == 64)
+ 251:Generated_Source\PSoC5/ScanComp_1.c ****         ScanComp_1_STATUS_INT9_AUX_CONTROL |= ScanComp_1_STATUS_INTR_ENBL;
+ 252:Generated_Source\PSoC5/ScanComp_1.c ****     #endif /* ScanComp_1_NUM_OF_CHANNELS == 64u */
+ 253:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 254:Generated_Source\PSoC5/ScanComp_1.c ****     ScanComp_1_COUNTER_AUX_CONTROL_REG |= ScanComp_1_COUNTER_ENABLE;
+  87              		.loc 1 254 0
+  88 001e 0432     		adds	r2, r2, #4
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccMZH2Qd.s 			page 7
+
+
+  89 0020 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+  90 0022 43F02003 		orr	r3, r3, #32
+  91 0026 1370     		strb	r3, [r2]
+ 255:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 256:Generated_Source\PSoC5/ScanComp_1.c ****     CyExitCriticalSection(interruptState);
+  92              		.loc 1 256 0
+  93 0028 FFF7FEFF 		bl	CyExitCriticalSection
+  94              	.LVL5:
+ 257:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 258:Generated_Source\PSoC5/ScanComp_1.c ****     ScanComp_1_CONTROL_REG = ScanComp_1_CONTROL_ENABLE ;
+  95              		.loc 1 258 0
+  96 002c 0122     		movs	r2, #1
+  97 002e 034B     		ldr	r3, .L7+8
+  98 0030 1A70     		strb	r2, [r3]
+  99 0032 08BD     		pop	{r3, pc}
+ 100              	.L8:
+ 101              		.align	2
+ 102              	.L7:
+ 103 0034 7D640040 		.word	1073767549
+ 104 0038 99640040 		.word	1073767577
+ 105 003c 7C640040 		.word	1073767548
+ 106              		.cfi_endproc
+ 107              	.LFE3:
+ 108              		.size	ScanComp_1_Enable, .-ScanComp_1_Enable
+ 109              		.section	.text.ScanComp_1_SetSpeed,"ax",%progbits
+ 110              		.align	2
+ 111              		.global	ScanComp_1_SetSpeed
+ 112              		.thumb
+ 113              		.thumb_func
+ 114              		.type	ScanComp_1_SetSpeed, %function
+ 115              	ScanComp_1_SetSpeed:
+ 116              	.LFB4:
+ 259:Generated_Source\PSoC5/ScanComp_1.c **** }
+ 260:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 261:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 262:Generated_Source\PSoC5/ScanComp_1.c **** /*******************************************************************************
+ 263:Generated_Source\PSoC5/ScanComp_1.c **** * Function Name: ScanComp_1_SetSpeed
+ 264:Generated_Source\PSoC5/ScanComp_1.c **** ********************************************************************************
+ 265:Generated_Source\PSoC5/ScanComp_1.c **** *
+ 266:Generated_Source\PSoC5/ScanComp_1.c **** * Summary:
+ 267:Generated_Source\PSoC5/ScanComp_1.c **** *  Sets the drive power and speed to one of three settings.
+ 268:Generated_Source\PSoC5/ScanComp_1.c **** *
+ 269:Generated_Source\PSoC5/ScanComp_1.c **** * Parameters:
+ 270:Generated_Source\PSoC5/ScanComp_1.c **** *  speed: enumerated speed mode value.
+ 271:Generated_Source\PSoC5/ScanComp_1.c **** *   ScanComp_1_SLOWSPEED  - Slow speed / Ultra low power
+ 272:Generated_Source\PSoC5/ScanComp_1.c **** *   ScanComp_1_MEDSPEED   - Medium speed / Medium power
+ 273:Generated_Source\PSoC5/ScanComp_1.c **** *   ScanComp_1_HIGHSPEED  - High speed / High power
+ 274:Generated_Source\PSoC5/ScanComp_1.c **** *
+ 275:Generated_Source\PSoC5/ScanComp_1.c **** * Return:
+ 276:Generated_Source\PSoC5/ScanComp_1.c **** *  None
+ 277:Generated_Source\PSoC5/ScanComp_1.c **** *
+ 278:Generated_Source\PSoC5/ScanComp_1.c **** *******************************************************************************/
+ 279:Generated_Source\PSoC5/ScanComp_1.c **** void ScanComp_1_SetSpeed(uint8 speed) 
+ 280:Generated_Source\PSoC5/ScanComp_1.c **** {
+ 117              		.loc 1 280 0
+ 118              		.cfi_startproc
+ 119              		@ args = 0, pretend = 0, frame = 0
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccMZH2Qd.s 			page 8
+
+
+ 120              		@ frame_needed = 0, uses_anonymous_args = 0
+ 121              	.LVL6:
+ 122 0000 08B5     		push	{r3, lr}
+ 123              		.cfi_def_cfa_offset 8
+ 124              		.cfi_offset 3, -8
+ 125              		.cfi_offset 14, -4
+ 281:Generated_Source\PSoC5/ScanComp_1.c ****     #if (CY_PSOC4)
+ 282:Generated_Source\PSoC5/ScanComp_1.c ****         ScanComp_1_Comp_SetSpeed((uint32)speed);
+ 283:Generated_Source\PSoC5/ScanComp_1.c ****     #else
+ 284:Generated_Source\PSoC5/ScanComp_1.c ****         ScanComp_1_Comp_SetSpeed(speed);
+ 126              		.loc 1 284 0
+ 127 0002 FFF7FEFF 		bl	ScanComp_1_Comp_SetSpeed
+ 128              	.LVL7:
+ 129 0006 08BD     		pop	{r3, pc}
+ 130              		.cfi_endproc
+ 131              	.LFE4:
+ 132              		.size	ScanComp_1_SetSpeed, .-ScanComp_1_SetSpeed
+ 133              		.section	.text.ScanComp_1_GetInterruptSource,"ax",%progbits
+ 134              		.align	2
+ 135              		.global	ScanComp_1_GetInterruptSource
+ 136              		.thumb
+ 137              		.thumb_func
+ 138              		.type	ScanComp_1_GetInterruptSource, %function
+ 139              	ScanComp_1_GetInterruptSource:
+ 140              	.LFB5:
+ 285:Generated_Source\PSoC5/ScanComp_1.c ****     #endif /* CY_PSOC4 */
+ 286:Generated_Source\PSoC5/ScanComp_1.c **** }
+ 287:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 288:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 289:Generated_Source\PSoC5/ScanComp_1.c **** /*******************************************************************************
+ 290:Generated_Source\PSoC5/ScanComp_1.c **** * Function Name: ScanComp_1_GetInterruptSource
+ 291:Generated_Source\PSoC5/ScanComp_1.c **** ********************************************************************************
+ 292:Generated_Source\PSoC5/ScanComp_1.c **** *
+ 293:Generated_Source\PSoC5/ScanComp_1.c **** * Summary:
+ 294:Generated_Source\PSoC5/ScanComp_1.c **** *  Gets the pending interrupt requests from the selected block.
+ 295:Generated_Source\PSoC5/ScanComp_1.c **** *  Even masked interrupts are returned.
+ 296:Generated_Source\PSoC5/ScanComp_1.c **** *
+ 297:Generated_Source\PSoC5/ScanComp_1.c **** * Parameters:
+ 298:Generated_Source\PSoC5/ScanComp_1.c **** *  InputBlock: Specifies the block of 8 channels whose interrupt requests
+ 299:Generated_Source\PSoC5/ScanComp_1.c **** *  should be returned.
+ 300:Generated_Source\PSoC5/ScanComp_1.c **** *
+ 301:Generated_Source\PSoC5/ScanComp_1.c **** * Return:
+ 302:Generated_Source\PSoC5/ScanComp_1.c **** *  Bit field of interrupt sources from the selected block of 8 inputs.
+ 303:Generated_Source\PSoC5/ScanComp_1.c **** *
+ 304:Generated_Source\PSoC5/ScanComp_1.c **** *******************************************************************************/
+ 305:Generated_Source\PSoC5/ScanComp_1.c **** uint8 ScanComp_1_GetInterruptSource(uint8 inputBlock) 
+ 306:Generated_Source\PSoC5/ScanComp_1.c **** {
+ 141              		.loc 1 306 0
+ 142              		.cfi_startproc
+ 143              		@ args = 0, pretend = 0, frame = 0
+ 144              		@ frame_needed = 0, uses_anonymous_args = 0
+ 145              		@ link register save eliminated.
+ 146              	.LVL8:
+ 307:Generated_Source\PSoC5/ScanComp_1.c ****     uint8 intSrc = 0u;
+ 308:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 309:Generated_Source\PSoC5/ScanComp_1.c ****     #if (ScanComp_1_NUM_OF_CHANNELS >= 8u)
+ 310:Generated_Source\PSoC5/ScanComp_1.c ****         uint8 intMsb = 0u;
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccMZH2Qd.s 			page 9
+
+
+ 311:Generated_Source\PSoC5/ScanComp_1.c ****     #endif /* ScanComp_1_NUM_OF_CHANNELS >= 8u */
+ 312:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 313:Generated_Source\PSoC5/ScanComp_1.c ****     static reg8 * const CYCODE interruptStatusRegs[ScanComp_1_NUM_OF_INT_REGISTERS] =
+ 314:Generated_Source\PSoC5/ScanComp_1.c ****     {
+ 315:Generated_Source\PSoC5/ScanComp_1.c ****         ScanComp_1_STATUS_INT0_PTR,
+ 316:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 317:Generated_Source\PSoC5/ScanComp_1.c ****         #if(ScanComp_1_NUM_OF_CHANNELS > 8u)
+ 318:Generated_Source\PSoC5/ScanComp_1.c ****             ScanComp_1_STATUS_INT1_PTR,
+ 319:Generated_Source\PSoC5/ScanComp_1.c ****         #endif /* ScanComp_1_NUM_OF_CHANNELS > 8u */
+ 320:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 321:Generated_Source\PSoC5/ScanComp_1.c ****         #if(ScanComp_1_NUM_OF_CHANNELS > 16u)
+ 322:Generated_Source\PSoC5/ScanComp_1.c ****             ScanComp_1_STATUS_INT2_PTR,
+ 323:Generated_Source\PSoC5/ScanComp_1.c ****         #endif /* ScanComp_1_NUM_OF_CHANNELS > 16u */
+ 324:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 325:Generated_Source\PSoC5/ScanComp_1.c ****         #if(ScanComp_1_NUM_OF_CHANNELS > 24u)
+ 326:Generated_Source\PSoC5/ScanComp_1.c ****             ScanComp_1_STATUS_INT3_PTR,
+ 327:Generated_Source\PSoC5/ScanComp_1.c ****         #endif /* ScanComp_1_NUM_OF_CHANNELS > 24u */
+ 328:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 329:Generated_Source\PSoC5/ScanComp_1.c ****         #if(ScanComp_1_NUM_OF_CHANNELS > 32u)
+ 330:Generated_Source\PSoC5/ScanComp_1.c ****             ScanComp_1_STATUS_INT4_PTR,
+ 331:Generated_Source\PSoC5/ScanComp_1.c ****         #endif /* ScanComp_1_NUM_OF_CHANNELS > 32u */
+ 332:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 333:Generated_Source\PSoC5/ScanComp_1.c ****         #if(ScanComp_1_NUM_OF_CHANNELS > 40u)
+ 334:Generated_Source\PSoC5/ScanComp_1.c ****             ScanComp_1_STATUS_INT5_PTR,
+ 335:Generated_Source\PSoC5/ScanComp_1.c ****         #endif /* ScanComp_1_NUM_OF_CHANNELS > 40u */
+ 336:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 337:Generated_Source\PSoC5/ScanComp_1.c ****         #if(ScanComp_1_NUM_OF_CHANNELS > 48u)
+ 338:Generated_Source\PSoC5/ScanComp_1.c ****             ScanComp_1_STATUS_INT6_PTR,
+ 339:Generated_Source\PSoC5/ScanComp_1.c ****         #endif /* ScanComp_1_NUM_OF_CHANNELS > 48u */
+ 340:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 341:Generated_Source\PSoC5/ScanComp_1.c ****         #if(ScanComp_1_NUM_OF_CHANNELS > 56u)
+ 342:Generated_Source\PSoC5/ScanComp_1.c ****             ScanComp_1_STATUS_INT7_PTR,
+ 343:Generated_Source\PSoC5/ScanComp_1.c ****         #endif /* ScanComp_1_NUM_OF_CHANNELS > 56u */
+ 344:Generated_Source\PSoC5/ScanComp_1.c ****     };    
+ 345:Generated_Source\PSoC5/ScanComp_1.c ****     
+ 346:Generated_Source\PSoC5/ScanComp_1.c ****     if (inputBlock < ScanComp_1_NUM_OF_INT_REGISTERS)
+ 147              		.loc 1 346 0
+ 148 0000 20B9     		cbnz	r0, .L13
+ 347:Generated_Source\PSoC5/ScanComp_1.c ****     {
+ 348:Generated_Source\PSoC5/ScanComp_1.c ****         intSrc = ((uint8) (* interruptStatusRegs[inputBlock])) & ScanComp_1_INT_REG_MASK;
+ 149              		.loc 1 348 0
+ 150 0002 034B     		ldr	r3, .L14
+ 151 0004 1878     		ldrb	r0, [r3]	@ zero_extendqisi2
+ 152              	.LVL9:
+ 153 0006 00F07F00 		and	r0, r0, #127
+ 154              	.LVL10:
+ 155 000a 7047     		bx	lr
+ 156              	.LVL11:
+ 157              	.L13:
+ 307:Generated_Source\PSoC5/ScanComp_1.c ****     uint8 intSrc = 0u;
+ 158              		.loc 1 307 0
+ 159 000c 0020     		movs	r0, #0
+ 160              	.LVL12:
+ 349:Generated_Source\PSoC5/ScanComp_1.c ****     }
+ 350:Generated_Source\PSoC5/ScanComp_1.c ****     
+ 351:Generated_Source\PSoC5/ScanComp_1.c ****     #if (ScanComp_1_NUM_OF_CHANNELS > 63u)
+ 352:Generated_Source\PSoC5/ScanComp_1.c ****         if (inputBlock == 7u)
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccMZH2Qd.s 			page 10
+
+
+ 353:Generated_Source\PSoC5/ScanComp_1.c ****         {
+ 354:Generated_Source\PSoC5/ScanComp_1.c ****             intMsb = (uint8)(ScanComp_1_STATUS_INT9_REG  << ScanComp_1_7BIT_SHIFT);
+ 355:Generated_Source\PSoC5/ScanComp_1.c ****         }
+ 356:Generated_Source\PSoC5/ScanComp_1.c ****         else
+ 357:Generated_Source\PSoC5/ScanComp_1.c ****         {
+ 358:Generated_Source\PSoC5/ScanComp_1.c ****             storeStatusReg |= ScanComp_1_STATUS_INT8_REG;
+ 359:Generated_Source\PSoC5/ScanComp_1.c ****             intMsb = (uint8)((storeStatusReg >> inputBlock) << ScanComp_1_7BIT_SHIFT);
+ 360:Generated_Source\PSoC5/ScanComp_1.c ****             storeStatusReg = (storeStatusReg & (uint8)(~(uint8)(1u << inputBlock)));
+ 361:Generated_Source\PSoC5/ScanComp_1.c ****         }
+ 362:Generated_Source\PSoC5/ScanComp_1.c ****         intSrc |= intMsb;
+ 363:Generated_Source\PSoC5/ScanComp_1.c ****     #elif (ScanComp_1_NUM_OF_CHANNELS >= 8u)
+ 364:Generated_Source\PSoC5/ScanComp_1.c ****         if (inputBlock != 7u)
+ 365:Generated_Source\PSoC5/ScanComp_1.c ****         {
+ 366:Generated_Source\PSoC5/ScanComp_1.c ****             storeStatusReg |= ScanComp_1_STATUS_INT8_REG;
+ 367:Generated_Source\PSoC5/ScanComp_1.c ****             intMsb = (uint8)((storeStatusReg >> inputBlock) << ScanComp_1_7BIT_SHIFT);
+ 368:Generated_Source\PSoC5/ScanComp_1.c ****             storeStatusReg = (storeStatusReg & (uint8)(~(uint8)(1u << inputBlock)));
+ 369:Generated_Source\PSoC5/ScanComp_1.c ****         }
+ 370:Generated_Source\PSoC5/ScanComp_1.c ****         intSrc |= intMsb;
+ 371:Generated_Source\PSoC5/ScanComp_1.c ****     #endif /* ScanComp_1_NUM_OF_CHANNELS > 64u */
+ 372:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 373:Generated_Source\PSoC5/ScanComp_1.c ****     return (intSrc);
+ 374:Generated_Source\PSoC5/ScanComp_1.c **** }
+ 161              		.loc 1 374 0
+ 162 000e 7047     		bx	lr
+ 163              	.L15:
+ 164              		.align	2
+ 165              	.L14:
+ 166 0010 69640040 		.word	1073767529
+ 167              		.cfi_endproc
+ 168              	.LFE5:
+ 169              		.size	ScanComp_1_GetInterruptSource, .-ScanComp_1_GetInterruptSource
+ 170              		.section	.text.ScanComp_1_GetInterruptMask,"ax",%progbits
+ 171              		.align	2
+ 172              		.global	ScanComp_1_GetInterruptMask
+ 173              		.thumb
+ 174              		.thumb_func
+ 175              		.type	ScanComp_1_GetInterruptMask, %function
+ 176              	ScanComp_1_GetInterruptMask:
+ 177              	.LFB7:
+ 375:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 376:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 377:Generated_Source\PSoC5/ScanComp_1.c **** /*******************************************************************************
+ 378:Generated_Source\PSoC5/ScanComp_1.c **** * Function Name: ScanComp_1_GetInterruptSourceMasked
+ 379:Generated_Source\PSoC5/ScanComp_1.c **** ********************************************************************************
+ 380:Generated_Source\PSoC5/ScanComp_1.c **** *
+ 381:Generated_Source\PSoC5/ScanComp_1.c **** * Summary:
+ 382:Generated_Source\PSoC5/ScanComp_1.c **** *  Gets the pending interrupt requests from the selected block.
+ 383:Generated_Source\PSoC5/ScanComp_1.c **** *  Masked interrupts are not returned.
+ 384:Generated_Source\PSoC5/ScanComp_1.c **** *
+ 385:Generated_Source\PSoC5/ScanComp_1.c **** * Parameters:
+ 386:Generated_Source\PSoC5/ScanComp_1.c **** *  InputBlock: Specifies the block of 8 channels whose interrupt requests
+ 387:Generated_Source\PSoC5/ScanComp_1.c **** *  should be returned.
+ 388:Generated_Source\PSoC5/ScanComp_1.c **** *
+ 389:Generated_Source\PSoC5/ScanComp_1.c **** * Return:
+ 390:Generated_Source\PSoC5/ScanComp_1.c **** *  Bit field of interrupt sources from the selected block of 8 inputs.
+ 391:Generated_Source\PSoC5/ScanComp_1.c **** *
+ 392:Generated_Source\PSoC5/ScanComp_1.c **** *******************************************************************************/
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccMZH2Qd.s 			page 11
+
+
+ 393:Generated_Source\PSoC5/ScanComp_1.c **** uint8 ScanComp_1_GetInterruptSourceMasked(uint8 inputBlock)   \
+ 394:Generated_Source\PSoC5/ScanComp_1.c ****                                                 
+ 395:Generated_Source\PSoC5/ScanComp_1.c **** {
+ 396:Generated_Source\PSoC5/ScanComp_1.c ****     return (ScanComp_1_GetInterruptSource(inputBlock) & (uint8)~ScanComp_1_GetInterruptMask (inputB
+ 397:Generated_Source\PSoC5/ScanComp_1.c **** }
+ 398:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 399:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 400:Generated_Source\PSoC5/ScanComp_1.c **** /*******************************************************************************
+ 401:Generated_Source\PSoC5/ScanComp_1.c **** * Function Name: ScanComp_1_GetInterruptMask
+ 402:Generated_Source\PSoC5/ScanComp_1.c **** ********************************************************************************
+ 403:Generated_Source\PSoC5/ScanComp_1.c **** *
+ 404:Generated_Source\PSoC5/ScanComp_1.c **** * Summary:
+ 405:Generated_Source\PSoC5/ScanComp_1.c **** *  Gets the current interrupt mask for the selected block.
+ 406:Generated_Source\PSoC5/ScanComp_1.c **** *
+ 407:Generated_Source\PSoC5/ScanComp_1.c **** * Parameters:
+ 408:Generated_Source\PSoC5/ScanComp_1.c **** *  InputBlock: Specifies the block of 8 channels whose interrupt requests
+ 409:Generated_Source\PSoC5/ScanComp_1.c **** *  should be returned.
+ 410:Generated_Source\PSoC5/ScanComp_1.c **** *
+ 411:Generated_Source\PSoC5/ScanComp_1.c **** * Return:
+ 412:Generated_Source\PSoC5/ScanComp_1.c **** *  The interrupt mask for the given block of channels.
+ 413:Generated_Source\PSoC5/ScanComp_1.c **** *  A '1' indicates that the interrupt is enabled, a '0' indicates that it 
+ 414:Generated_Source\PSoC5/ScanComp_1.c **** *  is masked off.
+ 415:Generated_Source\PSoC5/ScanComp_1.c **** *
+ 416:Generated_Source\PSoC5/ScanComp_1.c **** *******************************************************************************/
+ 417:Generated_Source\PSoC5/ScanComp_1.c **** uint8 ScanComp_1_GetInterruptMask(uint8 inputBlock) 
+ 418:Generated_Source\PSoC5/ScanComp_1.c **** {
+ 178              		.loc 1 418 0
+ 179              		.cfi_startproc
+ 180              		@ args = 0, pretend = 0, frame = 0
+ 181              		@ frame_needed = 0, uses_anonymous_args = 0
+ 182              		@ link register save eliminated.
+ 183              	.LVL13:
+ 419:Generated_Source\PSoC5/ScanComp_1.c ****     #if (ScanComp_1_NUM_OF_CHANNELS >= 8u)
+ 420:Generated_Source\PSoC5/ScanComp_1.c ****         uint8 maskMsb = 0u;
+ 421:Generated_Source\PSoC5/ScanComp_1.c ****     #endif /* ScanComp_1_NUM_OF_CHANNELS >= 8u */
+ 422:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 423:Generated_Source\PSoC5/ScanComp_1.c ****     uint8 intSrc = 0u;
+ 424:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 425:Generated_Source\PSoC5/ScanComp_1.c ****     if (inputBlock < ScanComp_1_NUM_OF_INT_REGISTERS)
+ 184              		.loc 1 425 0
+ 185 0000 18B9     		cbnz	r0, .L18
+ 426:Generated_Source\PSoC5/ScanComp_1.c ****     {
+ 427:Generated_Source\PSoC5/ScanComp_1.c ****         intSrc = (uint8) (* interruptStatusMaskRegs[inputBlock]);
+ 186              		.loc 1 427 0
+ 187 0002 034B     		ldr	r3, .L19
+ 188 0004 1878     		ldrb	r0, [r3]	@ zero_extendqisi2
+ 189              	.LVL14:
+ 190 0006 C0B2     		uxtb	r0, r0
+ 191              	.LVL15:
+ 192 0008 7047     		bx	lr
+ 193              	.LVL16:
+ 194              	.L18:
+ 423:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 195              		.loc 1 423 0
+ 196 000a 0020     		movs	r0, #0
+ 197              	.LVL17:
+ 428:Generated_Source\PSoC5/ScanComp_1.c ****     }    
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccMZH2Qd.s 			page 12
+
+
+ 429:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 430:Generated_Source\PSoC5/ScanComp_1.c ****     #if (ScanComp_1_NUM_OF_CHANNELS > 63u)
+ 431:Generated_Source\PSoC5/ScanComp_1.c ****         if (inputBlock == 7u)
+ 432:Generated_Source\PSoC5/ScanComp_1.c ****         {
+ 433:Generated_Source\PSoC5/ScanComp_1.c ****             maskMsb = (uint8)(ScanComp_1_STATUS_INT9_MASK  << ScanComp_1_7BIT_SHIFT);
+ 434:Generated_Source\PSoC5/ScanComp_1.c ****         }
+ 435:Generated_Source\PSoC5/ScanComp_1.c ****         else
+ 436:Generated_Source\PSoC5/ScanComp_1.c ****         {
+ 437:Generated_Source\PSoC5/ScanComp_1.c ****             maskMsb = (uint8)((ScanComp_1_STATUS_INT8_MASK >> inputBlock) << ScanComp_1_7BIT_SHIFT)
+ 438:Generated_Source\PSoC5/ScanComp_1.c ****         }
+ 439:Generated_Source\PSoC5/ScanComp_1.c ****         intSrc |= maskMsb;
+ 440:Generated_Source\PSoC5/ScanComp_1.c ****     #elif (ScanComp_1_NUM_OF_CHANNELS >= 8u)
+ 441:Generated_Source\PSoC5/ScanComp_1.c ****         if (inputBlock != 7u)
+ 442:Generated_Source\PSoC5/ScanComp_1.c ****         {
+ 443:Generated_Source\PSoC5/ScanComp_1.c ****             maskMsb = (uint8)((ScanComp_1_STATUS_INT8_MASK >> inputBlock) << ScanComp_1_7BIT_SHIFT)
+ 444:Generated_Source\PSoC5/ScanComp_1.c ****         }
+ 445:Generated_Source\PSoC5/ScanComp_1.c ****         intSrc |= maskMsb;
+ 446:Generated_Source\PSoC5/ScanComp_1.c ****     #endif /* ScanComp_1_NUM_OF_CHANNELS > 63u */
+ 447:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 448:Generated_Source\PSoC5/ScanComp_1.c ****     return ((uint8)intSrc);
+ 449:Generated_Source\PSoC5/ScanComp_1.c **** }
+ 198              		.loc 1 449 0
+ 199 000c 7047     		bx	lr
+ 200              	.L20:
+ 201 000e 00BF     		.align	2
+ 202              	.L19:
+ 203 0010 89640040 		.word	1073767561
+ 204              		.cfi_endproc
+ 205              	.LFE7:
+ 206              		.size	ScanComp_1_GetInterruptMask, .-ScanComp_1_GetInterruptMask
+ 207              		.section	.text.ScanComp_1_GetInterruptSourceMasked,"ax",%progbits
+ 208              		.align	2
+ 209              		.global	ScanComp_1_GetInterruptSourceMasked
+ 210              		.thumb
+ 211              		.thumb_func
+ 212              		.type	ScanComp_1_GetInterruptSourceMasked, %function
+ 213              	ScanComp_1_GetInterruptSourceMasked:
+ 214              	.LFB6:
+ 395:Generated_Source\PSoC5/ScanComp_1.c ****     return (ScanComp_1_GetInterruptSource(inputBlock) & (uint8)~ScanComp_1_GetInterruptMask (inputB
+ 215              		.loc 1 395 0
+ 216              		.cfi_startproc
+ 217              		@ args = 0, pretend = 0, frame = 0
+ 218              		@ frame_needed = 0, uses_anonymous_args = 0
+ 219              	.LVL18:
+ 220 0000 38B5     		push	{r3, r4, r5, lr}
+ 221              		.cfi_def_cfa_offset 16
+ 222              		.cfi_offset 3, -16
+ 223              		.cfi_offset 4, -12
+ 224              		.cfi_offset 5, -8
+ 225              		.cfi_offset 14, -4
+ 226 0002 0546     		mov	r5, r0
+ 396:Generated_Source\PSoC5/ScanComp_1.c **** }
+ 227              		.loc 1 396 0
+ 228 0004 FFF7FEFF 		bl	ScanComp_1_GetInterruptSource
+ 229              	.LVL19:
+ 230 0008 0446     		mov	r4, r0
+ 231 000a 2846     		mov	r0, r5
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccMZH2Qd.s 			page 13
+
+
+ 232 000c FFF7FEFF 		bl	ScanComp_1_GetInterruptMask
+ 233              	.LVL20:
+ 234 0010 24EA0000 		bic	r0, r4, r0
+ 397:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 235              		.loc 1 397 0
+ 236 0014 C0B2     		uxtb	r0, r0
+ 237 0016 38BD     		pop	{r3, r4, r5, pc}
+ 238              		.cfi_endproc
+ 239              	.LFE6:
+ 240              		.size	ScanComp_1_GetInterruptSourceMasked, .-ScanComp_1_GetInterruptSourceMasked
+ 241              		.section	.text.ScanComp_1_SetInterruptMask,"ax",%progbits
+ 242              		.align	2
+ 243              		.global	ScanComp_1_SetInterruptMask
+ 244              		.thumb
+ 245              		.thumb_func
+ 246              		.type	ScanComp_1_SetInterruptMask, %function
+ 247              	ScanComp_1_SetInterruptMask:
+ 248              	.LFB8:
+ 450:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 451:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 452:Generated_Source\PSoC5/ScanComp_1.c **** /*******************************************************************************
+ 453:Generated_Source\PSoC5/ScanComp_1.c **** * Function Name: ScanComp_1_SetInterruptMask
+ 454:Generated_Source\PSoC5/ScanComp_1.c **** ********************************************************************************
+ 455:Generated_Source\PSoC5/ScanComp_1.c **** *
+ 456:Generated_Source\PSoC5/ScanComp_1.c **** * Summary:
+ 457:Generated_Source\PSoC5/ScanComp_1.c **** *  Sets the interrupt masks for the set block of 8 channels.
+ 458:Generated_Source\PSoC5/ScanComp_1.c **** *
+ 459:Generated_Source\PSoC5/ScanComp_1.c **** * Parameters:
+ 460:Generated_Source\PSoC5/ScanComp_1.c **** *  InputBlock: specifies the block of 8 channels whose interrupt requests
+ 461:Generated_Source\PSoC5/ScanComp_1.c **** *  should be returned.
+ 462:Generated_Source\PSoC5/ScanComp_1.c **** *  mask: Interrupt mask value for the specified block of 8 or less channels. 
+ 463:Generated_Source\PSoC5/ScanComp_1.c **** *  A '1' indicates that the interrupt is enabled, a '0' indicates that it 
+ 464:Generated_Source\PSoC5/ScanComp_1.c **** *  is masked off.
+ 465:Generated_Source\PSoC5/ScanComp_1.c **** *
+ 466:Generated_Source\PSoC5/ScanComp_1.c **** * Return:
+ 467:Generated_Source\PSoC5/ScanComp_1.c **** *  None
+ 468:Generated_Source\PSoC5/ScanComp_1.c **** *
+ 469:Generated_Source\PSoC5/ScanComp_1.c **** *******************************************************************************/
+ 470:Generated_Source\PSoC5/ScanComp_1.c **** void ScanComp_1_SetInterruptMask(uint8 inputBlock, uint8 mask)    \
+ 471:Generated_Source\PSoC5/ScanComp_1.c ****                                        
+ 472:Generated_Source\PSoC5/ScanComp_1.c **** {
+ 249              		.loc 1 472 0
+ 250              		.cfi_startproc
+ 251              		@ args = 0, pretend = 0, frame = 0
+ 252              		@ frame_needed = 0, uses_anonymous_args = 0
+ 253              		@ link register save eliminated.
+ 254              	.LVL21:
+ 473:Generated_Source\PSoC5/ScanComp_1.c ****     uint8 maskLsb = mask & ScanComp_1_7BIT_MASK;
+ 255              		.loc 1 473 0
+ 256 0000 01F07F01 		and	r1, r1, #127
+ 257              	.LVL22:
+ 474:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 475:Generated_Source\PSoC5/ScanComp_1.c ****     #if (ScanComp_1_NUM_OF_CHANNELS >= 8u)
+ 476:Generated_Source\PSoC5/ScanComp_1.c ****         uint8 maskMsb = (uint8)((mask >> ScanComp_1_7BIT_SHIFT) << inputBlock);
+ 477:Generated_Source\PSoC5/ScanComp_1.c ****     #endif /* ScanComp_1_NUM_OF_CHANNELS >= 8u */
+ 478:Generated_Source\PSoC5/ScanComp_1.c ****     
+ 479:Generated_Source\PSoC5/ScanComp_1.c ****     if (inputBlock < ScanComp_1_NUM_OF_INT_REGISTERS)
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccMZH2Qd.s 			page 14
+
+
+ 258              		.loc 1 479 0
+ 259 0004 08B9     		cbnz	r0, .L23
+ 480:Generated_Source\PSoC5/ScanComp_1.c ****     {
+ 481:Generated_Source\PSoC5/ScanComp_1.c ****         (* interruptStatusMaskRegs[inputBlock]) = maskLsb;
+ 260              		.loc 1 481 0
+ 261 0006 014B     		ldr	r3, .L25
+ 262 0008 1970     		strb	r1, [r3]
+ 263              	.L23:
+ 264 000a 7047     		bx	lr
+ 265              	.L26:
+ 266              		.align	2
+ 267              	.L25:
+ 268 000c 89640040 		.word	1073767561
+ 269              		.cfi_endproc
+ 270              	.LFE8:
+ 271              		.size	ScanComp_1_SetInterruptMask, .-ScanComp_1_SetInterruptMask
+ 272              		.section	.text.ScanComp_1_GetCompare,"ax",%progbits
+ 273              		.align	2
+ 274              		.global	ScanComp_1_GetCompare
+ 275              		.thumb
+ 276              		.thumb_func
+ 277              		.type	ScanComp_1_GetCompare, %function
+ 278              	ScanComp_1_GetCompare:
+ 279              	.LFB9:
+ 482:Generated_Source\PSoC5/ScanComp_1.c ****     }    
+ 483:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 484:Generated_Source\PSoC5/ScanComp_1.c ****     #if (ScanComp_1_NUM_OF_CHANNELS > 63u)
+ 485:Generated_Source\PSoC5/ScanComp_1.c ****         if (inputBlock == 7u)
+ 486:Generated_Source\PSoC5/ScanComp_1.c ****         {
+ 487:Generated_Source\PSoC5/ScanComp_1.c ****             ScanComp_1_STATUS_INT9_MASK = maskMsb;
+ 488:Generated_Source\PSoC5/ScanComp_1.c ****         }
+ 489:Generated_Source\PSoC5/ScanComp_1.c ****         else
+ 490:Generated_Source\PSoC5/ScanComp_1.c ****         {
+ 491:Generated_Source\PSoC5/ScanComp_1.c ****             ScanComp_1_STATUS_INT8_MASK = maskMsb;
+ 492:Generated_Source\PSoC5/ScanComp_1.c ****         }
+ 493:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 494:Generated_Source\PSoC5/ScanComp_1.c ****     #elif (ScanComp_1_NUM_OF_CHANNELS >= 8u)
+ 495:Generated_Source\PSoC5/ScanComp_1.c ****         if (inputBlock != 7u)
+ 496:Generated_Source\PSoC5/ScanComp_1.c ****         {
+ 497:Generated_Source\PSoC5/ScanComp_1.c ****             ScanComp_1_STATUS_INT8_MASK = maskMsb;
+ 498:Generated_Source\PSoC5/ScanComp_1.c ****         }
+ 499:Generated_Source\PSoC5/ScanComp_1.c ****     #endif /* ScanComp_1_NUM_OF_CHANNELS > 63u */
+ 500:Generated_Source\PSoC5/ScanComp_1.c **** }
+ 501:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 502:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 503:Generated_Source\PSoC5/ScanComp_1.c **** /*******************************************************************************
+ 504:Generated_Source\PSoC5/ScanComp_1.c **** * Function Name: ScanComp_1_GetCompare
+ 505:Generated_Source\PSoC5/ScanComp_1.c **** ********************************************************************************
+ 506:Generated_Source\PSoC5/ScanComp_1.c **** *
+ 507:Generated_Source\PSoC5/ScanComp_1.c **** * Summary:
+ 508:Generated_Source\PSoC5/ScanComp_1.c **** *  Returns a nonzero value when the voltage connected to the positive input
+ 509:Generated_Source\PSoC5/ScanComp_1.c **** *  is greater than the negative input voltage.
+ 510:Generated_Source\PSoC5/ScanComp_1.c **** *
+ 511:Generated_Source\PSoC5/ScanComp_1.c **** * Parameters:
+ 512:Generated_Source\PSoC5/ScanComp_1.c **** *  channel: channel whose compare output is to be read.
+ 513:Generated_Source\PSoC5/ScanComp_1.c **** *
+ 514:Generated_Source\PSoC5/ScanComp_1.c **** * Return:
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccMZH2Qd.s 			page 15
+
+
+ 515:Generated_Source\PSoC5/ScanComp_1.c **** *  Comparator output state
+ 516:Generated_Source\PSoC5/ScanComp_1.c **** *
+ 517:Generated_Source\PSoC5/ScanComp_1.c **** *******************************************************************************/
+ 518:Generated_Source\PSoC5/ScanComp_1.c **** uint8 ScanComp_1_GetCompare(uint8 channel) 
+ 519:Generated_Source\PSoC5/ScanComp_1.c **** {
+ 280              		.loc 1 519 0
+ 281              		.cfi_startproc
+ 282              		@ args = 0, pretend = 0, frame = 0
+ 283              		@ frame_needed = 0, uses_anonymous_args = 0
+ 284              		@ link register save eliminated.
+ 285              	.LVL23:
+ 520:Generated_Source\PSoC5/ScanComp_1.c ****     uint8 compVal;
+ 521:Generated_Source\PSoC5/ScanComp_1.c ****     uint8 chanPos;
+ 522:Generated_Source\PSoC5/ScanComp_1.c ****     uint8 blockNum;
+ 523:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 524:Generated_Source\PSoC5/ScanComp_1.c ****     static reg8 * const CYCODE outputStatusRegs[ScanComp_1_NUM_OF_OUT_REGISTERS] =
+ 525:Generated_Source\PSoC5/ScanComp_1.c ****     {
+ 526:Generated_Source\PSoC5/ScanComp_1.c ****         ScanComp_1_STATUS_OUT0_PTR,
+ 527:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 528:Generated_Source\PSoC5/ScanComp_1.c ****         #if(ScanComp_1_NUM_OF_CHANNELS > 8u)
+ 529:Generated_Source\PSoC5/ScanComp_1.c ****             ScanComp_1_STATUS_OUT1_PTR,
+ 530:Generated_Source\PSoC5/ScanComp_1.c ****         #endif /* ScanComp_1_NUM_OF_CHANNELS > 8u */
+ 531:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 532:Generated_Source\PSoC5/ScanComp_1.c ****         #if(ScanComp_1_NUM_OF_CHANNELS > 16u)
+ 533:Generated_Source\PSoC5/ScanComp_1.c ****             ScanComp_1_STATUS_OUT2_PTR,
+ 534:Generated_Source\PSoC5/ScanComp_1.c ****         #endif /* ScanComp_1_NUM_OF_CHANNELS > 16u */
+ 535:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 536:Generated_Source\PSoC5/ScanComp_1.c ****         #if(ScanComp_1_NUM_OF_CHANNELS > 24u)
+ 537:Generated_Source\PSoC5/ScanComp_1.c ****             ScanComp_1_STATUS_OUT3_PTR,
+ 538:Generated_Source\PSoC5/ScanComp_1.c ****         #endif /* ScanComp_1_NUM_OF_CHANNELS > 24u */
+ 539:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 540:Generated_Source\PSoC5/ScanComp_1.c ****         #if(ScanComp_1_NUM_OF_CHANNELS > 32u)
+ 541:Generated_Source\PSoC5/ScanComp_1.c ****             ScanComp_1_STATUS_OUT4_PTR,
+ 542:Generated_Source\PSoC5/ScanComp_1.c ****         #endif /* ScanComp_1_NUM_OF_CHANNELS > 32u */
+ 543:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 544:Generated_Source\PSoC5/ScanComp_1.c ****         #if(ScanComp_1_NUM_OF_CHANNELS > 40u)
+ 545:Generated_Source\PSoC5/ScanComp_1.c ****             ScanComp_1_STATUS_OUT5_PTR,
+ 546:Generated_Source\PSoC5/ScanComp_1.c ****         #endif /* ScanComp_1_NUM_OF_CHANNELS > 40u */
+ 547:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 548:Generated_Source\PSoC5/ScanComp_1.c ****         #if(ScanComp_1_NUM_OF_CHANNELS > 48u)
+ 549:Generated_Source\PSoC5/ScanComp_1.c ****             ScanComp_1_STATUS_OUT6_PTR,
+ 550:Generated_Source\PSoC5/ScanComp_1.c ****         #endif /* ScanComp_1_NUM_OF_CHANNELS > 48u */
+ 551:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 552:Generated_Source\PSoC5/ScanComp_1.c ****         #if(ScanComp_1_NUM_OF_CHANNELS > 56u)
+ 553:Generated_Source\PSoC5/ScanComp_1.c ****             ScanComp_1_STATUS_OUT7_PTR,
+ 554:Generated_Source\PSoC5/ScanComp_1.c ****         #endif /* ScanComp_1_NUM_OF_CHANNELS > 56u */
+ 555:Generated_Source\PSoC5/ScanComp_1.c ****     };
+ 556:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 557:Generated_Source\PSoC5/ScanComp_1.c ****     /* Identify block number by dividing by 8 */
+ 558:Generated_Source\PSoC5/ScanComp_1.c ****     blockNum = (channel >> 3u);
+ 559:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 560:Generated_Source\PSoC5/ScanComp_1.c ****     /* Identify maximum available channels for block */
+ 561:Generated_Source\PSoC5/ScanComp_1.c ****     chanPos = (uint8)((blockNum + 1u) << 3u);
+ 286              		.loc 1 561 0
+ 287 0000 00F0F803 		and	r3, r0, #248
+ 288 0004 0833     		adds	r3, r3, #8
+ 289 0006 DBB2     		uxtb	r3, r3
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccMZH2Qd.s 			page 16
+
+
+ 290              	.LVL24:
+ 562:Generated_Source\PSoC5/ScanComp_1.c ****     
+ 563:Generated_Source\PSoC5/ScanComp_1.c ****     /* Identify channel position in the register */
+ 564:Generated_Source\PSoC5/ScanComp_1.c ****     chanPos = ScanComp_1_MSB_REG_BIT_HIGH >> ((chanPos - 1u) - channel);
+ 291              		.loc 1 564 0
+ 292 0008 1B1A     		subs	r3, r3, r0
+ 293              	.LVL25:
+ 294 000a 013B     		subs	r3, r3, #1
+ 295 000c 8020     		movs	r0, #128
+ 296              	.LVL26:
+ 297 000e D840     		lsrs	r0, r0, r3
+ 298              	.LVL27:
+ 565:Generated_Source\PSoC5/ScanComp_1.c ****     
+ 566:Generated_Source\PSoC5/ScanComp_1.c ****     /* Input block int register & MSB bit shift */
+ 567:Generated_Source\PSoC5/ScanComp_1.c ****     compVal = ((uint8) * outputStatusRegs[blockNum]) & chanPos;
+ 299              		.loc 1 567 0
+ 300 0010 014B     		ldr	r3, .L28
+ 301 0012 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 302              	.LVL28:
+ 568:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 569:Generated_Source\PSoC5/ScanComp_1.c ****     return (compVal);
+ 570:Generated_Source\PSoC5/ScanComp_1.c **** }
+ 303              		.loc 1 570 0
+ 304 0014 1840     		ands	r0, r0, r3
+ 305              	.LVL29:
+ 306 0016 7047     		bx	lr
+ 307              	.L29:
+ 308              		.align	2
+ 309              	.L28:
+ 310 0018 6A650040 		.word	1073767786
+ 311              		.cfi_endproc
+ 312              	.LFE9:
+ 313              		.size	ScanComp_1_GetCompare, .-ScanComp_1_GetCompare
+ 314              		.section	.text.ScanComp_1_SetDACRange,"ax",%progbits
+ 315              		.align	2
+ 316              		.global	ScanComp_1_SetDACRange
+ 317              		.thumb
+ 318              		.thumb_func
+ 319              		.type	ScanComp_1_SetDACRange, %function
+ 320              	ScanComp_1_SetDACRange:
+ 321              	.LFB10:
+ 571:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 572:Generated_Source\PSoC5/ScanComp_1.c **** #if (ScanComp_1_INTERNAL_REF_IS_USED)
+ 573:Generated_Source\PSoC5/ScanComp_1.c ****     /*******************************************************************************
+ 574:Generated_Source\PSoC5/ScanComp_1.c ****     * Function Name: ScanComp_1_SetDACRange
+ 575:Generated_Source\PSoC5/ScanComp_1.c ****     ********************************************************************************
+ 576:Generated_Source\PSoC5/ScanComp_1.c ****     *
+ 577:Generated_Source\PSoC5/ScanComp_1.c ****     * Summary:
+ 578:Generated_Source\PSoC5/ScanComp_1.c ****     *  Sets the DAC to a new range.
+ 579:Generated_Source\PSoC5/ScanComp_1.c ****     *
+ 580:Generated_Source\PSoC5/ScanComp_1.c ****     * Parameters:
+ 581:Generated_Source\PSoC5/ScanComp_1.c ****     *  uint8 DACRange: new range to be written to the DAC:
+ 582:Generated_Source\PSoC5/ScanComp_1.c ****     *   ScanComp_1_SCANCOMP_DACRANGE_1V
+ 583:Generated_Source\PSoC5/ScanComp_1.c ****     *   ScanComp_1_SCANCOMP_DACRANGE_4V
+ 584:Generated_Source\PSoC5/ScanComp_1.c ****     *
+ 585:Generated_Source\PSoC5/ScanComp_1.c ****     * Return:
+ 586:Generated_Source\PSoC5/ScanComp_1.c ****     *  void
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccMZH2Qd.s 			page 17
+
+
+ 587:Generated_Source\PSoC5/ScanComp_1.c ****     *
+ 588:Generated_Source\PSoC5/ScanComp_1.c ****     *******************************************************************************/
+ 589:Generated_Source\PSoC5/ScanComp_1.c ****     void ScanComp_1_SetDACRange(uint8 DACRange) 
+ 590:Generated_Source\PSoC5/ScanComp_1.c ****     {
+ 322              		.loc 1 590 0
+ 323              		.cfi_startproc
+ 324              		@ args = 0, pretend = 0, frame = 0
+ 325              		@ frame_needed = 0, uses_anonymous_args = 0
+ 326              	.LVL30:
+ 327 0000 10B5     		push	{r4, lr}
+ 328              		.cfi_def_cfa_offset 8
+ 329              		.cfi_offset 4, -8
+ 330              		.cfi_offset 14, -4
+ 331 0002 0446     		mov	r4, r0
+ 591:Generated_Source\PSoC5/ScanComp_1.c ****         ScanComp_1_VDAC_SetRange(DACRange);
+ 332              		.loc 1 591 0
+ 333 0004 FFF7FEFF 		bl	ScanComp_1_VDAC_SetRange
+ 334              	.LVL31:
+ 592:Generated_Source\PSoC5/ScanComp_1.c ****         ScanComp_1_compDACRange = DACRange;
+ 335              		.loc 1 592 0
+ 336 0008 014B     		ldr	r3, .L32
+ 337 000a 1C70     		strb	r4, [r3]
+ 338 000c 10BD     		pop	{r4, pc}
+ 339              	.L33:
+ 340 000e 00BF     		.align	2
+ 341              	.L32:
+ 342 0010 00000000 		.word	.LANCHOR0
+ 343              		.cfi_endproc
+ 344              	.LFE10:
+ 345              		.size	ScanComp_1_SetDACRange, .-ScanComp_1_SetDACRange
+ 346              		.section	.text.ScanComp_1_GetDACRange,"ax",%progbits
+ 347              		.align	2
+ 348              		.global	ScanComp_1_GetDACRange
+ 349              		.thumb
+ 350              		.thumb_func
+ 351              		.type	ScanComp_1_GetDACRange, %function
+ 352              	ScanComp_1_GetDACRange:
+ 353              	.LFB11:
+ 593:Generated_Source\PSoC5/ScanComp_1.c ****     }
+ 594:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 595:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 596:Generated_Source\PSoC5/ScanComp_1.c ****     /*******************************************************************************
+ 597:Generated_Source\PSoC5/ScanComp_1.c ****     * Function Name: ScanComp_1_GetDACRange
+ 598:Generated_Source\PSoC5/ScanComp_1.c ****     ********************************************************************************
+ 599:Generated_Source\PSoC5/ScanComp_1.c ****     *
+ 600:Generated_Source\PSoC5/ScanComp_1.c ****     * Summary:
+ 601:Generated_Source\PSoC5/ScanComp_1.c ****     *  Gets the DAC range setting..
+ 602:Generated_Source\PSoC5/ScanComp_1.c ****     *
+ 603:Generated_Source\PSoC5/ScanComp_1.c ****     * Parameters:
+ 604:Generated_Source\PSoC5/ScanComp_1.c ****     *  None.
+ 605:Generated_Source\PSoC5/ScanComp_1.c ****     *
+ 606:Generated_Source\PSoC5/ScanComp_1.c ****     * Return:
+ 607:Generated_Source\PSoC5/ScanComp_1.c ****     *  uint8 DACrange:
+ 608:Generated_Source\PSoC5/ScanComp_1.c ****     *   ScanComp_1_SCANCOMP_DACRANGE_1V
+ 609:Generated_Source\PSoC5/ScanComp_1.c ****     *   ScanComp_1_SCANCOMP_DACRANGE_4V
+ 610:Generated_Source\PSoC5/ScanComp_1.c ****     *
+ 611:Generated_Source\PSoC5/ScanComp_1.c ****     *******************************************************************************/
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccMZH2Qd.s 			page 18
+
+
+ 612:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 613:Generated_Source\PSoC5/ScanComp_1.c ****     uint8 ScanComp_1_GetDACRange(void) 
+ 614:Generated_Source\PSoC5/ScanComp_1.c ****     {
+ 354              		.loc 1 614 0
+ 355              		.cfi_startproc
+ 356              		@ args = 0, pretend = 0, frame = 0
+ 357              		@ frame_needed = 0, uses_anonymous_args = 0
+ 358              		@ link register save eliminated.
+ 615:Generated_Source\PSoC5/ScanComp_1.c ****         return (ScanComp_1_compDACRange);
+ 616:Generated_Source\PSoC5/ScanComp_1.c ****     }
+ 359              		.loc 1 616 0
+ 360 0000 014B     		ldr	r3, .L35
+ 361 0002 1878     		ldrb	r0, [r3]	@ zero_extendqisi2
+ 362 0004 7047     		bx	lr
+ 363              	.L36:
+ 364 0006 00BF     		.align	2
+ 365              	.L35:
+ 366 0008 00000000 		.word	.LANCHOR0
+ 367              		.cfi_endproc
+ 368              	.LFE11:
+ 369              		.size	ScanComp_1_GetDACRange, .-ScanComp_1_GetDACRange
+ 370              		.section	.text.ScanComp_1_SetDACVoltage,"ax",%progbits
+ 371              		.align	2
+ 372              		.global	ScanComp_1_SetDACVoltage
+ 373              		.thumb
+ 374              		.thumb_func
+ 375              		.type	ScanComp_1_SetDACVoltage, %function
+ 376              	ScanComp_1_SetDACVoltage:
+ 377              	.LFB12:
+ 617:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 618:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 619:Generated_Source\PSoC5/ScanComp_1.c ****     #if (ScanComp_1_VDAC_PER_CHANNEL_MODE_USED)
+ 620:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 621:Generated_Source\PSoC5/ScanComp_1.c ****         /*******************************************************************************
+ 622:Generated_Source\PSoC5/ScanComp_1.c ****         * Function Name: ScanComp_1_SetChannelDACVoltage
+ 623:Generated_Source\PSoC5/ScanComp_1.c ****         ********************************************************************************
+ 624:Generated_Source\PSoC5/ScanComp_1.c ****         *
+ 625:Generated_Source\PSoC5/ScanComp_1.c ****         * Summary:
+ 626:Generated_Source\PSoC5/ScanComp_1.c ****         *  Sets the DAC output for a specific channel to a new voltage.
+ 627:Generated_Source\PSoC5/ScanComp_1.c ****         *
+ 628:Generated_Source\PSoC5/ScanComp_1.c ****         * Parameters:
+ 629:Generated_Source\PSoC5/ScanComp_1.c ****         *  Channel: Specifies the channel whose DAC voltage should be changed. 0
+ 630:Generated_Source\PSoC5/ScanComp_1.c ****         *           indexed.
+ 631:Generated_Source\PSoC5/ScanComp_1.c ****         *  DACVoltage: Voltage to be written to the DAC, in units depending on the
+ 632:Generated_Source\PSoC5/ScanComp_1.c ****         *              selected range (4 or 16 mV per bit in 1 or 4V range,
+ 633:Generated_Source\PSoC5/ScanComp_1.c ****         *              respectively). Should only be used when the DAC is enabled and
+ 634:Generated_Source\PSoC5/ScanComp_1.c ****         *              voltage is per channel.
+ 635:Generated_Source\PSoC5/ScanComp_1.c ****         *
+ 636:Generated_Source\PSoC5/ScanComp_1.c ****         * Return:
+ 637:Generated_Source\PSoC5/ScanComp_1.c ****         *  void
+ 638:Generated_Source\PSoC5/ScanComp_1.c ****         *
+ 639:Generated_Source\PSoC5/ScanComp_1.c ****         *******************************************************************************/
+ 640:Generated_Source\PSoC5/ScanComp_1.c ****         void ScanComp_1_SetChannelDACVoltage(uint8 channel, uint8 DACVoltage) \
+ 641:Generated_Source\PSoC5/ScanComp_1.c ****                                                    
+ 642:Generated_Source\PSoC5/ScanComp_1.c ****         {
+ 643:Generated_Source\PSoC5/ScanComp_1.c ****             if (channel < ScanComp_1_NUM_OF_CHANNELS)
+ 644:Generated_Source\PSoC5/ScanComp_1.c ****             {
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccMZH2Qd.s 			page 19
+
+
+ 645:Generated_Source\PSoC5/ScanComp_1.c ****                 ScanComp_1_DacVoltages[(ScanComp_1_DEFAULT_CHANNELS_VAL - channel)] = DACVoltage;
+ 646:Generated_Source\PSoC5/ScanComp_1.c ****             }
+ 647:Generated_Source\PSoC5/ScanComp_1.c ****         }
+ 648:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 649:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 650:Generated_Source\PSoC5/ScanComp_1.c ****         /*******************************************************************************
+ 651:Generated_Source\PSoC5/ScanComp_1.c ****         * Function Name: ScanComp_1_GetChannelDACVoltage
+ 652:Generated_Source\PSoC5/ScanComp_1.c ****         ********************************************************************************
+ 653:Generated_Source\PSoC5/ScanComp_1.c ****         *
+ 654:Generated_Source\PSoC5/ScanComp_1.c ****         * Summary:
+ 655:Generated_Source\PSoC5/ScanComp_1.c ****         *  Gets the DAC output voltage for a specific channel.
+ 656:Generated_Source\PSoC5/ScanComp_1.c ****         *
+ 657:Generated_Source\PSoC5/ScanComp_1.c ****         * Parameters:
+ 658:Generated_Source\PSoC5/ScanComp_1.c ****         *  Channel: Specifies the channel whose DAC voltage should be returned.
+ 659:Generated_Source\PSoC5/ScanComp_1.c ****         *
+ 660:Generated_Source\PSoC5/ScanComp_1.c ****         * Return:
+ 661:Generated_Source\PSoC5/ScanComp_1.c ****         *  Voltage the DAC is configured for, for the given channel, in units
+ 662:Generated_Source\PSoC5/ScanComp_1.c ****         *  depending on the selected range (4 or 16 mV per bit in 1 or 4V range,
+ 663:Generated_Source\PSoC5/ScanComp_1.c ****         *  respectively).
+ 664:Generated_Source\PSoC5/ScanComp_1.c ****         *
+ 665:Generated_Source\PSoC5/ScanComp_1.c ****         *******************************************************************************/
+ 666:Generated_Source\PSoC5/ScanComp_1.c ****         uint8 ScanComp_1_GetChannelDACVoltage(uint8 channel)  \
+ 667:Generated_Source\PSoC5/ScanComp_1.c ****                                                     
+ 668:Generated_Source\PSoC5/ScanComp_1.c ****         {
+ 669:Generated_Source\PSoC5/ScanComp_1.c ****             uint8 DACVoltage = 0u;
+ 670:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 671:Generated_Source\PSoC5/ScanComp_1.c ****             if (channel < ScanComp_1_NUM_OF_CHANNELS)
+ 672:Generated_Source\PSoC5/ScanComp_1.c ****             {
+ 673:Generated_Source\PSoC5/ScanComp_1.c ****                 DACVoltage = ScanComp_1_DacVoltages[(ScanComp_1_DEFAULT_CHANNELS_VAL - channel)];
+ 674:Generated_Source\PSoC5/ScanComp_1.c ****             }
+ 675:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 676:Generated_Source\PSoC5/ScanComp_1.c ****             return (DACVoltage);
+ 677:Generated_Source\PSoC5/ScanComp_1.c ****         }
+ 678:Generated_Source\PSoC5/ScanComp_1.c ****         
+ 679:Generated_Source\PSoC5/ScanComp_1.c ****         
+ 680:Generated_Source\PSoC5/ScanComp_1.c ****         /*******************************************************************************
+ 681:Generated_Source\PSoC5/ScanComp_1.c ****         * Function Name: ScanComp_1_InitDma
+ 682:Generated_Source\PSoC5/ScanComp_1.c ****         ********************************************************************************
+ 683:Generated_Source\PSoC5/ScanComp_1.c ****         *
+ 684:Generated_Source\PSoC5/ScanComp_1.c ****         * Summary:
+ 685:Generated_Source\PSoC5/ScanComp_1.c ****         *  Configures a DMA transfer of channel values from memory to VDAC.
+ 686:Generated_Source\PSoC5/ScanComp_1.c ****         *
+ 687:Generated_Source\PSoC5/ScanComp_1.c ****         * Parameters:
+ 688:Generated_Source\PSoC5/ScanComp_1.c ****         *  None
+ 689:Generated_Source\PSoC5/ScanComp_1.c ****         *
+ 690:Generated_Source\PSoC5/ScanComp_1.c ****         * Return:
+ 691:Generated_Source\PSoC5/ScanComp_1.c ****         *  None
+ 692:Generated_Source\PSoC5/ScanComp_1.c ****         *
+ 693:Generated_Source\PSoC5/ScanComp_1.c ****         *******************************************************************************/
+ 694:Generated_Source\PSoC5/ScanComp_1.c ****         static void ScanComp_1_InitDma(void)  
+ 695:Generated_Source\PSoC5/ScanComp_1.c ****         {
+ 696:Generated_Source\PSoC5/ScanComp_1.c ****             /***************************************************************************
+ 697:Generated_Source\PSoC5/ScanComp_1.c ****             * Transfers channel values from SRAM to VDAC register. One byte transfer,
+ 698:Generated_Source\PSoC5/ScanComp_1.c ****             * each burst requires a request.
+ 699:Generated_Source\PSoC5/ScanComp_1.c ****             ***************************************************************************/
+ 700:Generated_Source\PSoC5/ScanComp_1.c ****             ScanComp_1_DMA_VDACUpdate_Chan =  ScanComp_1_DMA_DmaInitialize(
+ 701:Generated_Source\PSoC5/ScanComp_1.c ****                                                     ScanComp_1_DMA_BYTES_PER_BURST,
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccMZH2Qd.s 			page 20
+
+
+ 702:Generated_Source\PSoC5/ScanComp_1.c ****                                                     ScanComp_1_DMA_REQUEST_PER_BURST,
+ 703:Generated_Source\PSoC5/ScanComp_1.c ****                                                     HI16(ScanComp_1_DMA_SRC_BASE),
+ 704:Generated_Source\PSoC5/ScanComp_1.c ****                                                     HI16(ScanComp_1_DMA_DST_BASE));
+ 705:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 706:Generated_Source\PSoC5/ScanComp_1.c ****             ScanComp_1_DMA_VDACUpdate_TD = CyDmaTdAllocate();
+ 707:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 708:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 709:Generated_Source\PSoC5/ScanComp_1.c ****             /***************************************************************************
+ 710:Generated_Source\PSoC5/ScanComp_1.c ****             * One TD looping on itself, increment the source address, but not the
+ 711:Generated_Source\PSoC5/ScanComp_1.c ****             * destination address.
+ 712:Generated_Source\PSoC5/ScanComp_1.c ****             ***************************************************************************/
+ 713:Generated_Source\PSoC5/ScanComp_1.c ****             (void) CyDmaTdSetConfiguration( ScanComp_1_DMA_VDACUpdate_TD,
+ 714:Generated_Source\PSoC5/ScanComp_1.c ****                                             ScanComp_1_NUM_OF_CHANNELS,
+ 715:Generated_Source\PSoC5/ScanComp_1.c ****                                             ScanComp_1_DMA_VDACUpdate_TD,
+ 716:Generated_Source\PSoC5/ScanComp_1.c ****                                             TD_INC_SRC_ADR);
+ 717:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 718:Generated_Source\PSoC5/ScanComp_1.c ****             /* Transfers the value for each channel from memory to VDAC */
+ 719:Generated_Source\PSoC5/ScanComp_1.c ****             (void) CyDmaTdSetAddress(   ScanComp_1_DMA_VDACUpdate_TD,
+ 720:Generated_Source\PSoC5/ScanComp_1.c ****                                         LO16((uint32)ScanComp_1_DacVoltages),
+ 721:Generated_Source\PSoC5/ScanComp_1.c ****                                         LO16((uint32)ScanComp_1_VDAC_Data_PTR));
+ 722:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 723:Generated_Source\PSoC5/ScanComp_1.c ****             (void) CyDmaChSetInitialTd(ScanComp_1_DMA_VDACUpdate_Chan, ScanComp_1_DMA_VDACUpdate_TD
+ 724:Generated_Source\PSoC5/ScanComp_1.c ****         }
+ 725:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 726:Generated_Source\PSoC5/ScanComp_1.c ****     #else
+ 727:Generated_Source\PSoC5/ScanComp_1.c ****         
+ 728:Generated_Source\PSoC5/ScanComp_1.c ****         /*******************************************************************************
+ 729:Generated_Source\PSoC5/ScanComp_1.c ****         * Function Name: ScanComp_1_SetDACVoltage
+ 730:Generated_Source\PSoC5/ScanComp_1.c ****         ********************************************************************************
+ 731:Generated_Source\PSoC5/ScanComp_1.c ****         *
+ 732:Generated_Source\PSoC5/ScanComp_1.c ****         * Summary:
+ 733:Generated_Source\PSoC5/ScanComp_1.c ****         *  Sets the DAC output to a new voltage.
+ 734:Generated_Source\PSoC5/ScanComp_1.c ****         *
+ 735:Generated_Source\PSoC5/ScanComp_1.c ****         * Parameters:
+ 736:Generated_Source\PSoC5/ScanComp_1.c ****         *  DACVoltage: Voltage to be written to the DAC, in units depending
+ 737:Generated_Source\PSoC5/ScanComp_1.c ****         *  on the selected range
+ 738:Generated_Source\PSoC5/ScanComp_1.c ****         *
+ 739:Generated_Source\PSoC5/ScanComp_1.c ****         * Return:
+ 740:Generated_Source\PSoC5/ScanComp_1.c ****         *  void
+ 741:Generated_Source\PSoC5/ScanComp_1.c ****         *
+ 742:Generated_Source\PSoC5/ScanComp_1.c ****         *******************************************************************************/
+ 743:Generated_Source\PSoC5/ScanComp_1.c ****         void ScanComp_1_SetDACVoltage(uint8 DACVoltage) 
+ 744:Generated_Source\PSoC5/ScanComp_1.c ****         {
+ 378              		.loc 1 744 0
+ 379              		.cfi_startproc
+ 380              		@ args = 0, pretend = 0, frame = 0
+ 381              		@ frame_needed = 0, uses_anonymous_args = 0
+ 382              	.LVL32:
+ 383 0000 10B5     		push	{r4, lr}
+ 384              		.cfi_def_cfa_offset 8
+ 385              		.cfi_offset 4, -8
+ 386              		.cfi_offset 14, -4
+ 387 0002 0446     		mov	r4, r0
+ 745:Generated_Source\PSoC5/ScanComp_1.c ****             ScanComp_1_VDAC_SetValue(DACVoltage);
+ 388              		.loc 1 745 0
+ 389 0004 FFF7FEFF 		bl	ScanComp_1_VDAC_SetValue
+ 390              	.LVL33:
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccMZH2Qd.s 			page 21
+
+
+ 746:Generated_Source\PSoC5/ScanComp_1.c ****             ScanComp_1_compDACVoltage = DACVoltage;
+ 391              		.loc 1 746 0
+ 392 0008 014B     		ldr	r3, .L39
+ 393 000a 5C70     		strb	r4, [r3, #1]
+ 394 000c 10BD     		pop	{r4, pc}
+ 395              	.L40:
+ 396 000e 00BF     		.align	2
+ 397              	.L39:
+ 398 0010 00000000 		.word	.LANCHOR0
+ 399              		.cfi_endproc
+ 400              	.LFE12:
+ 401              		.size	ScanComp_1_SetDACVoltage, .-ScanComp_1_SetDACVoltage
+ 402              		.section	.text.ScanComp_1_Init,"ax",%progbits
+ 403              		.align	2
+ 404              		.global	ScanComp_1_Init
+ 405              		.thumb
+ 406              		.thumb_func
+ 407              		.type	ScanComp_1_Init, %function
+ 408              	ScanComp_1_Init:
+ 409              	.LFB1:
+ 125:Generated_Source\PSoC5/ScanComp_1.c ****     #if (ScanComp_1_NUM_OF_CHANNELS >= 8u)
+ 410              		.loc 1 125 0
+ 411              		.cfi_startproc
+ 412              		@ args = 0, pretend = 0, frame = 0
+ 413              		@ frame_needed = 0, uses_anonymous_args = 0
+ 414 0000 08B5     		push	{r3, lr}
+ 415              		.cfi_def_cfa_offset 8
+ 416              		.cfi_offset 3, -8
+ 417              		.cfi_offset 14, -4
+ 130:Generated_Source\PSoC5/ScanComp_1.c ****     
+ 418              		.loc 1 130 0
+ 419 0002 FFF7FEFF 		bl	ScanComp_1_Comp_Init
+ 420              	.LVL34:
+ 133:Generated_Source\PSoC5/ScanComp_1.c ****         ScanComp_1_compDACRange = ScanComp_1_DEFAULT_RANGE;
+ 421              		.loc 1 133 0
+ 422 0006 FFF7FEFF 		bl	ScanComp_1_VDAC_Init
+ 423              	.LVL35:
+ 134:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 424              		.loc 1 134 0
+ 425 000a 0422     		movs	r2, #4
+ 426 000c 024B     		ldr	r3, .L43
+ 427 000e 1A70     		strb	r2, [r3]
+ 144:Generated_Source\PSoC5/ScanComp_1.c ****         #endif /* ScanComp_1_VDAC_PER_CHANNEL_MODE_USED */
+ 428              		.loc 1 144 0
+ 429 0010 FA20     		movs	r0, #250
+ 430 0012 FFF7FEFF 		bl	ScanComp_1_SetDACVoltage
+ 431              	.LVL36:
+ 432 0016 08BD     		pop	{r3, pc}
+ 433              	.L44:
+ 434              		.align	2
+ 435              	.L43:
+ 436 0018 00000000 		.word	.LANCHOR0
+ 437              		.cfi_endproc
+ 438              	.LFE1:
+ 439              		.size	ScanComp_1_Init, .-ScanComp_1_Init
+ 440              		.section	.text.ScanComp_1_Start,"ax",%progbits
+ 441              		.align	2
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccMZH2Qd.s 			page 22
+
+
+ 442              		.global	ScanComp_1_Start
+ 443              		.thumb
+ 444              		.thumb_func
+ 445              		.type	ScanComp_1_Start, %function
+ 446              	ScanComp_1_Start:
+ 447              	.LFB0:
+  99:Generated_Source\PSoC5/ScanComp_1.c ****     if(0u == ScanComp_1_initVar)
+ 448              		.loc 1 99 0
+ 449              		.cfi_startproc
+ 450              		@ args = 0, pretend = 0, frame = 0
+ 451              		@ frame_needed = 0, uses_anonymous_args = 0
+ 452 0000 08B5     		push	{r3, lr}
+ 453              		.cfi_def_cfa_offset 8
+ 454              		.cfi_offset 3, -8
+ 455              		.cfi_offset 14, -4
+ 100:Generated_Source\PSoC5/ScanComp_1.c ****     {
+ 456              		.loc 1 100 0
+ 457 0002 054B     		ldr	r3, .L48
+ 458 0004 9B78     		ldrb	r3, [r3, #2]	@ zero_extendqisi2
+ 459 0006 23B9     		cbnz	r3, .L46
+ 102:Generated_Source\PSoC5/ScanComp_1.c ****         ScanComp_1_initVar = 1u;
+ 460              		.loc 1 102 0
+ 461 0008 FFF7FEFF 		bl	ScanComp_1_Init
+ 462              	.LVL37:
+ 103:Generated_Source\PSoC5/ScanComp_1.c ****     }
+ 463              		.loc 1 103 0
+ 464 000c 0122     		movs	r2, #1
+ 465 000e 024B     		ldr	r3, .L48
+ 466 0010 9A70     		strb	r2, [r3, #2]
+ 467              	.L46:
+ 105:Generated_Source\PSoC5/ScanComp_1.c **** }
+ 468              		.loc 1 105 0
+ 469 0012 FFF7FEFF 		bl	ScanComp_1_Enable
+ 470              	.LVL38:
+ 471 0016 08BD     		pop	{r3, pc}
+ 472              	.L49:
+ 473              		.align	2
+ 474              	.L48:
+ 475 0018 00000000 		.word	.LANCHOR0
+ 476              		.cfi_endproc
+ 477              	.LFE0:
+ 478              		.size	ScanComp_1_Start, .-ScanComp_1_Start
+ 479              		.section	.text.ScanComp_1_GetDACVoltage,"ax",%progbits
+ 480              		.align	2
+ 481              		.global	ScanComp_1_GetDACVoltage
+ 482              		.thumb
+ 483              		.thumb_func
+ 484              		.type	ScanComp_1_GetDACVoltage, %function
+ 485              	ScanComp_1_GetDACVoltage:
+ 486              	.LFB13:
+ 747:Generated_Source\PSoC5/ScanComp_1.c ****         }
+ 748:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 749:Generated_Source\PSoC5/ScanComp_1.c **** 
+ 750:Generated_Source\PSoC5/ScanComp_1.c ****         /*******************************************************************************
+ 751:Generated_Source\PSoC5/ScanComp_1.c ****         * Function Name: ScanComp_1_GetDACVoltage
+ 752:Generated_Source\PSoC5/ScanComp_1.c ****         ********************************************************************************
+ 753:Generated_Source\PSoC5/ScanComp_1.c ****         *
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccMZH2Qd.s 			page 23
+
+
+ 754:Generated_Source\PSoC5/ScanComp_1.c ****         * Summary:
+ 755:Generated_Source\PSoC5/ScanComp_1.c ****         *  Gets the DAC output to a new voltage.
+ 756:Generated_Source\PSoC5/ScanComp_1.c ****         *
+ 757:Generated_Source\PSoC5/ScanComp_1.c ****         * Parameters:
+ 758:Generated_Source\PSoC5/ScanComp_1.c ****         *  None
+ 759:Generated_Source\PSoC5/ScanComp_1.c ****         *
+ 760:Generated_Source\PSoC5/ScanComp_1.c ****         * Return:
+ 761:Generated_Source\PSoC5/ScanComp_1.c ****         *  Voltage the DAC is configured for, in units depending on the selected range
+ 762:Generated_Source\PSoC5/ScanComp_1.c ****         *  (4 or 16 mV per bit in 1 or 4V range, respectively).
+ 763:Generated_Source\PSoC5/ScanComp_1.c ****         *
+ 764:Generated_Source\PSoC5/ScanComp_1.c ****         *******************************************************************************/
+ 765:Generated_Source\PSoC5/ScanComp_1.c ****         uint8 ScanComp_1_GetDACVoltage(void) 
+ 766:Generated_Source\PSoC5/ScanComp_1.c ****         {
+ 487              		.loc 1 766 0
+ 488              		.cfi_startproc
+ 489              		@ args = 0, pretend = 0, frame = 0
+ 490              		@ frame_needed = 0, uses_anonymous_args = 0
+ 491              		@ link register save eliminated.
+ 767:Generated_Source\PSoC5/ScanComp_1.c ****             return (ScanComp_1_compDACVoltage);
+ 768:Generated_Source\PSoC5/ScanComp_1.c ****         }
+ 492              		.loc 1 768 0
+ 493 0000 014B     		ldr	r3, .L51
+ 494 0002 5878     		ldrb	r0, [r3, #1]	@ zero_extendqisi2
+ 495 0004 7047     		bx	lr
+ 496              	.L52:
+ 497 0006 00BF     		.align	2
+ 498              	.L51:
+ 499 0008 00000000 		.word	.LANCHOR0
+ 500              		.cfi_endproc
+ 501              	.LFE13:
+ 502              		.size	ScanComp_1_GetDACVoltage, .-ScanComp_1_GetDACVoltage
+ 503              		.global	ScanComp_1_initVar
+ 504              		.bss
+ 505              		.set	.LANCHOR0,. + 0
+ 506              		.type	ScanComp_1_compDACRange, %object
+ 507              		.size	ScanComp_1_compDACRange, 1
+ 508              	ScanComp_1_compDACRange:
+ 509 0000 00       		.space	1
+ 510              		.type	ScanComp_1_compDACVoltage, %object
+ 511              		.size	ScanComp_1_compDACVoltage, 1
+ 512              	ScanComp_1_compDACVoltage:
+ 513 0001 00       		.space	1
+ 514              		.type	ScanComp_1_initVar, %object
+ 515              		.size	ScanComp_1_initVar, 1
+ 516              	ScanComp_1_initVar:
+ 517 0002 00       		.space	1
+ 518              		.text
+ 519              	.Letext0:
+ 520              		.file 2 "Generated_Source\\PSoC5\\cytypes.h"
+ 521              		.file 3 "Generated_Source\\PSoC5\\ScanComp_1_Comp.h"
+ 522              		.file 4 "Generated_Source\\PSoC5\\ScanComp_1_VDAC.h"
+ 523              		.file 5 "Generated_Source\\PSoC5\\cyLib.h"
+ 524              		.section	.debug_info,"",%progbits
+ 525              	.Ldebug_info0:
+ 526 0000 A7040000 		.4byte	0x4a7
+ 527 0004 0400     		.2byte	0x4
+ 528 0006 00000000 		.4byte	.Ldebug_abbrev0
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccMZH2Qd.s 			page 24
+
+
+ 529 000a 04       		.byte	0x4
+ 530 000b 01       		.uleb128 0x1
+ 531 000c 4D020000 		.4byte	.LASF56
+ 532 0010 01       		.byte	0x1
+ 533 0011 29020000 		.4byte	.LASF57
+ 534 0015 40030000 		.4byte	.LASF58
+ 535 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 536 001d 00000000 		.4byte	0
+ 537 0021 00000000 		.4byte	.Ldebug_line0
+ 538 0025 02       		.uleb128 0x2
+ 539 0026 01       		.byte	0x1
+ 540 0027 06       		.byte	0x6
+ 541 0028 6B040000 		.4byte	.LASF0
+ 542 002c 02       		.uleb128 0x2
+ 543 002d 01       		.byte	0x1
+ 544 002e 08       		.byte	0x8
+ 545 002f AE010000 		.4byte	.LASF1
+ 546 0033 02       		.uleb128 0x2
+ 547 0034 02       		.byte	0x2
+ 548 0035 05       		.byte	0x5
+ 549 0036 FF030000 		.4byte	.LASF2
+ 550 003a 02       		.uleb128 0x2
+ 551 003b 02       		.byte	0x2
+ 552 003c 07       		.byte	0x7
+ 553 003d 85000000 		.4byte	.LASF3
+ 554 0041 02       		.uleb128 0x2
+ 555 0042 04       		.byte	0x4
+ 556 0043 05       		.byte	0x5
+ 557 0044 5D040000 		.4byte	.LASF4
+ 558 0048 02       		.uleb128 0x2
+ 559 0049 04       		.byte	0x4
+ 560 004a 07       		.byte	0x7
+ 561 004b 5C010000 		.4byte	.LASF5
+ 562 004f 02       		.uleb128 0x2
+ 563 0050 08       		.byte	0x8
+ 564 0051 05       		.byte	0x5
+ 565 0052 DB030000 		.4byte	.LASF6
+ 566 0056 02       		.uleb128 0x2
+ 567 0057 08       		.byte	0x8
+ 568 0058 07       		.byte	0x7
+ 569 0059 F3000000 		.4byte	.LASF7
+ 570 005d 03       		.uleb128 0x3
+ 571 005e 04       		.byte	0x4
+ 572 005f 05       		.byte	0x5
+ 573 0060 696E7400 		.ascii	"int\000"
+ 574 0064 02       		.uleb128 0x2
+ 575 0065 04       		.byte	0x4
+ 576 0066 07       		.byte	0x7
+ 577 0067 F2020000 		.4byte	.LASF8
+ 578 006b 04       		.uleb128 0x4
+ 579 006c 6E010000 		.4byte	.LASF12
+ 580 0070 02       		.byte	0x2
+ 581 0071 9201     		.2byte	0x192
+ 582 0073 2C000000 		.4byte	0x2c
+ 583 0077 02       		.uleb128 0x2
+ 584 0078 04       		.byte	0x4
+ 585 0079 04       		.byte	0x4
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccMZH2Qd.s 			page 25
+
+
+ 586 007a ED000000 		.4byte	.LASF9
+ 587 007e 02       		.uleb128 0x2
+ 588 007f 08       		.byte	0x8
+ 589 0080 04       		.byte	0x4
+ 590 0081 D6010000 		.4byte	.LASF10
+ 591 0085 02       		.uleb128 0x2
+ 592 0086 01       		.byte	0x1
+ 593 0087 08       		.byte	0x8
+ 594 0088 66040000 		.4byte	.LASF11
+ 595 008c 04       		.uleb128 0x4
+ 596 008d 37010000 		.4byte	.LASF13
+ 597 0091 02       		.byte	0x2
+ 598 0092 3C02     		.2byte	0x23c
+ 599 0094 98000000 		.4byte	0x98
+ 600 0098 05       		.uleb128 0x5
+ 601 0099 6B000000 		.4byte	0x6b
+ 602 009d 02       		.uleb128 0x2
+ 603 009e 04       		.byte	0x4
+ 604 009f 07       		.byte	0x7
+ 605 00a0 D2030000 		.4byte	.LASF14
+ 606 00a4 06       		.uleb128 0x6
+ 607 00a5 2D040000 		.4byte	.LASF15
+ 608 00a9 01       		.byte	0x1
+ 609 00aa A5       		.byte	0xa5
+ 610 00ab 00000000 		.4byte	.LFB2
+ 611 00af 18000000 		.4byte	.LFE2-.LFB2
+ 612 00b3 01       		.uleb128 0x1
+ 613 00b4 9C       		.byte	0x9c
+ 614 00b5 CC000000 		.4byte	0xcc
+ 615 00b9 07       		.uleb128 0x7
+ 616 00ba 0C000000 		.4byte	.LVL0
+ 617 00be 31040000 		.4byte	0x431
+ 618 00c2 07       		.uleb128 0x7
+ 619 00c3 10000000 		.4byte	.LVL1
+ 620 00c7 38040000 		.4byte	0x438
+ 621 00cb 00       		.byte	0
+ 622 00cc 06       		.uleb128 0x6
+ 623 00cd 49000000 		.4byte	.LASF16
+ 624 00d1 01       		.byte	0x1
+ 625 00d2 C3       		.byte	0xc3
+ 626 00d3 00000000 		.4byte	.LFB3
+ 627 00d7 40000000 		.4byte	.LFE3-.LFB3
+ 628 00db 01       		.uleb128 0x1
+ 629 00dc 9C       		.byte	0x9c
+ 630 00dd 15010000 		.4byte	0x115
+ 631 00e1 08       		.uleb128 0x8
+ 632 00e2 4D010000 		.4byte	.LASF20
+ 633 00e6 01       		.byte	0x1
+ 634 00e7 C5       		.byte	0xc5
+ 635 00e8 6B000000 		.4byte	0x6b
+ 636 00ec 00000000 		.4byte	.LLST0
+ 637 00f0 07       		.uleb128 0x7
+ 638 00f1 06000000 		.4byte	.LVL2
+ 639 00f5 3F040000 		.4byte	0x43f
+ 640 00f9 07       		.uleb128 0x7
+ 641 00fa 10000000 		.4byte	.LVL3
+ 642 00fe 46040000 		.4byte	0x446
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccMZH2Qd.s 			page 26
+
+
+ 643 0102 07       		.uleb128 0x7
+ 644 0103 14000000 		.4byte	.LVL4
+ 645 0107 4D040000 		.4byte	0x44d
+ 646 010b 07       		.uleb128 0x7
+ 647 010c 2C000000 		.4byte	.LVL5
+ 648 0110 58040000 		.4byte	0x458
+ 649 0114 00       		.byte	0
+ 650 0115 09       		.uleb128 0x9
+ 651 0116 16030000 		.4byte	.LASF17
+ 652 011a 01       		.byte	0x1
+ 653 011b 1701     		.2byte	0x117
+ 654 011d 00000000 		.4byte	.LFB4
+ 655 0121 08000000 		.4byte	.LFE4-.LFB4
+ 656 0125 01       		.uleb128 0x1
+ 657 0126 9C       		.byte	0x9c
+ 658 0127 45010000 		.4byte	0x145
+ 659 012b 0A       		.uleb128 0xa
+ 660 012c CC030000 		.4byte	.LASF18
+ 661 0130 01       		.byte	0x1
+ 662 0131 1701     		.2byte	0x117
+ 663 0133 6B000000 		.4byte	0x6b
+ 664 0137 13000000 		.4byte	.LLST1
+ 665 013b 07       		.uleb128 0x7
+ 666 013c 06000000 		.4byte	.LVL7
+ 667 0140 69040000 		.4byte	0x469
+ 668 0144 00       		.byte	0
+ 669 0145 0B       		.uleb128 0xb
+ 670 0146 74010000 		.4byte	.LASF23
+ 671 014a 01       		.byte	0x1
+ 672 014b 3101     		.2byte	0x131
+ 673 014d 6B000000 		.4byte	0x6b
+ 674 0151 00000000 		.4byte	.LFB5
+ 675 0155 14000000 		.4byte	.LFE5-.LFB5
+ 676 0159 01       		.uleb128 0x1
+ 677 015a 9C       		.byte	0x9c
+ 678 015b 91010000 		.4byte	0x191
+ 679 015f 0A       		.uleb128 0xa
+ 680 0160 52040000 		.4byte	.LASF19
+ 681 0164 01       		.byte	0x1
+ 682 0165 3101     		.2byte	0x131
+ 683 0167 6B000000 		.4byte	0x6b
+ 684 016b 34000000 		.4byte	.LLST2
+ 685 016f 0C       		.uleb128 0xc
+ 686 0170 DD010000 		.4byte	.LASF21
+ 687 0174 01       		.byte	0x1
+ 688 0175 3301     		.2byte	0x133
+ 689 0177 6B000000 		.4byte	0x6b
+ 690 017b 6E000000 		.4byte	.LLST3
+ 691 017f 0D       		.uleb128 0xd
+ 692 0180 86030000 		.4byte	.LASF22
+ 693 0184 01       		.byte	0x1
+ 694 0185 3901     		.2byte	0x139
+ 695 0187 AC010000 		.4byte	0x1ac
+ 696 018b 04       		.byte	0x4
+ 697 018c 69       		.byte	0x69
+ 698 018d 64       		.byte	0x64
+ 699 018e 00       		.byte	0
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccMZH2Qd.s 			page 27
+
+
+ 700 018f 40       		.byte	0x40
+ 701 0190 00       		.byte	0
+ 702 0191 0E       		.uleb128 0xe
+ 703 0192 A1010000 		.4byte	0x1a1
+ 704 0196 A1010000 		.4byte	0x1a1
+ 705 019a 0F       		.uleb128 0xf
+ 706 019b 9D000000 		.4byte	0x9d
+ 707 019f 00       		.byte	0
+ 708 01a0 00       		.byte	0
+ 709 01a1 10       		.uleb128 0x10
+ 710 01a2 04       		.byte	0x4
+ 711 01a3 A7010000 		.4byte	0x1a7
+ 712 01a7 05       		.uleb128 0x5
+ 713 01a8 2C000000 		.4byte	0x2c
+ 714 01ac 11       		.uleb128 0x11
+ 715 01ad 91010000 		.4byte	0x191
+ 716 01b1 0B       		.uleb128 0xb
+ 717 01b2 92010000 		.4byte	.LASF24
+ 718 01b6 01       		.byte	0x1
+ 719 01b7 A101     		.2byte	0x1a1
+ 720 01b9 6B000000 		.4byte	0x6b
+ 721 01bd 00000000 		.4byte	.LFB7
+ 722 01c1 14000000 		.4byte	.LFE7-.LFB7
+ 723 01c5 01       		.uleb128 0x1
+ 724 01c6 9C       		.byte	0x9c
+ 725 01c7 EC010000 		.4byte	0x1ec
+ 726 01cb 0A       		.uleb128 0xa
+ 727 01cc 52040000 		.4byte	.LASF19
+ 728 01d0 01       		.byte	0x1
+ 729 01d1 A101     		.2byte	0x1a1
+ 730 01d3 6B000000 		.4byte	0x6b
+ 731 01d7 A4000000 		.4byte	.LLST4
+ 732 01db 0C       		.uleb128 0xc
+ 733 01dc DD010000 		.4byte	.LASF21
+ 734 01e0 01       		.byte	0x1
+ 735 01e1 A701     		.2byte	0x1a7
+ 736 01e3 6B000000 		.4byte	0x6b
+ 737 01e7 DE000000 		.4byte	.LLST5
+ 738 01eb 00       		.byte	0
+ 739 01ec 0B       		.uleb128 0xb
+ 740 01ed 09040000 		.4byte	.LASF25
+ 741 01f1 01       		.byte	0x1
+ 742 01f2 8901     		.2byte	0x189
+ 743 01f4 6B000000 		.4byte	0x6b
+ 744 01f8 00000000 		.4byte	.LFB6
+ 745 01fc 18000000 		.4byte	.LFE6-.LFB6
+ 746 0200 01       		.uleb128 0x1
+ 747 0201 9C       		.byte	0x9c
+ 748 0202 3B020000 		.4byte	0x23b
+ 749 0206 0A       		.uleb128 0xa
+ 750 0207 52040000 		.4byte	.LASF19
+ 751 020b 01       		.byte	0x1
+ 752 020c 8901     		.2byte	0x189
+ 753 020e 6B000000 		.4byte	0x6b
+ 754 0212 14010000 		.4byte	.LLST6
+ 755 0216 12       		.uleb128 0x12
+ 756 0217 08000000 		.4byte	.LVL19
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccMZH2Qd.s 			page 28
+
+
+ 757 021b 45010000 		.4byte	0x145
+ 758 021f 2A020000 		.4byte	0x22a
+ 759 0223 13       		.uleb128 0x13
+ 760 0224 01       		.uleb128 0x1
+ 761 0225 50       		.byte	0x50
+ 762 0226 02       		.uleb128 0x2
+ 763 0227 75       		.byte	0x75
+ 764 0228 00       		.sleb128 0
+ 765 0229 00       		.byte	0
+ 766 022a 14       		.uleb128 0x14
+ 767 022b 10000000 		.4byte	.LVL20
+ 768 022f B1010000 		.4byte	0x1b1
+ 769 0233 13       		.uleb128 0x13
+ 770 0234 01       		.uleb128 0x1
+ 771 0235 50       		.byte	0x50
+ 772 0236 02       		.uleb128 0x2
+ 773 0237 75       		.byte	0x75
+ 774 0238 00       		.sleb128 0
+ 775 0239 00       		.byte	0
+ 776 023a 00       		.byte	0
+ 777 023b 09       		.uleb128 0x9
+ 778 023c 98000000 		.4byte	.LASF26
+ 779 0240 01       		.byte	0x1
+ 780 0241 D601     		.2byte	0x1d6
+ 781 0243 00000000 		.4byte	.LFB8
+ 782 0247 10000000 		.4byte	.LFE8-.LFB8
+ 783 024b 01       		.uleb128 0x1
+ 784 024c 9C       		.byte	0x9c
+ 785 024d 7E020000 		.4byte	0x27e
+ 786 0251 15       		.uleb128 0x15
+ 787 0252 52040000 		.4byte	.LASF19
+ 788 0256 01       		.byte	0x1
+ 789 0257 D601     		.2byte	0x1d6
+ 790 0259 6B000000 		.4byte	0x6b
+ 791 025d 01       		.uleb128 0x1
+ 792 025e 50       		.byte	0x50
+ 793 025f 0A       		.uleb128 0xa
+ 794 0260 E9030000 		.4byte	.LASF27
+ 795 0264 01       		.byte	0x1
+ 796 0265 D601     		.2byte	0x1d6
+ 797 0267 6B000000 		.4byte	0x6b
+ 798 026b 35010000 		.4byte	.LLST7
+ 799 026f 16       		.uleb128 0x16
+ 800 0270 30000000 		.4byte	.LASF28
+ 801 0274 01       		.byte	0x1
+ 802 0275 D901     		.2byte	0x1d9
+ 803 0277 6B000000 		.4byte	0x6b
+ 804 027b 01       		.uleb128 0x1
+ 805 027c 51       		.byte	0x51
+ 806 027d 00       		.byte	0
+ 807 027e 0B       		.uleb128 0xb
+ 808 027f 82040000 		.4byte	.LASF29
+ 809 0283 01       		.byte	0x1
+ 810 0284 0602     		.2byte	0x206
+ 811 0286 6B000000 		.4byte	0x6b
+ 812 028a 00000000 		.4byte	.LFB9
+ 813 028e 1C000000 		.4byte	.LFE9-.LFB9
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccMZH2Qd.s 			page 29
+
+
+ 814 0292 01       		.uleb128 0x1
+ 815 0293 9C       		.byte	0x9c
+ 816 0294 EA020000 		.4byte	0x2ea
+ 817 0298 0A       		.uleb128 0xa
+ 818 0299 41000000 		.4byte	.LASF30
+ 819 029d 01       		.byte	0x1
+ 820 029e 0602     		.2byte	0x206
+ 821 02a0 6B000000 		.4byte	0x6b
+ 822 02a4 56010000 		.4byte	.LLST8
+ 823 02a8 0C       		.uleb128 0xc
+ 824 02a9 E5000000 		.4byte	.LASF31
+ 825 02ad 01       		.byte	0x1
+ 826 02ae 0802     		.2byte	0x208
+ 827 02b0 6B000000 		.4byte	0x6b
+ 828 02b4 77010000 		.4byte	.LLST9
+ 829 02b8 0C       		.uleb128 0xc
+ 830 02b9 AD040000 		.4byte	.LASF32
+ 831 02bd 01       		.byte	0x1
+ 832 02be 0902     		.2byte	0x209
+ 833 02c0 6B000000 		.4byte	0x6b
+ 834 02c4 8F010000 		.4byte	.LLST10
+ 835 02c8 0C       		.uleb128 0xc
+ 836 02c9 38000000 		.4byte	.LASF33
+ 837 02cd 01       		.byte	0x1
+ 838 02ce 0A02     		.2byte	0x20a
+ 839 02d0 6B000000 		.4byte	0x6b
+ 840 02d4 BF010000 		.4byte	.LLST11
+ 841 02d8 0D       		.uleb128 0xd
+ 842 02d9 EE030000 		.4byte	.LASF34
+ 843 02dd 01       		.byte	0x1
+ 844 02de 0C02     		.2byte	0x20c
+ 845 02e0 EA020000 		.4byte	0x2ea
+ 846 02e4 04       		.byte	0x4
+ 847 02e5 6A       		.byte	0x6a
+ 848 02e6 65       		.byte	0x65
+ 849 02e7 00       		.byte	0
+ 850 02e8 40       		.byte	0x40
+ 851 02e9 00       		.byte	0
+ 852 02ea 11       		.uleb128 0x11
+ 853 02eb 91010000 		.4byte	0x191
+ 854 02ef 09       		.uleb128 0x9
+ 855 02f0 FD010000 		.4byte	.LASF35
+ 856 02f4 01       		.byte	0x1
+ 857 02f5 4D02     		.2byte	0x24d
+ 858 02f7 00000000 		.4byte	.LFB10
+ 859 02fb 14000000 		.4byte	.LFE10-.LFB10
+ 860 02ff 01       		.uleb128 0x1
+ 861 0300 9C       		.byte	0x9c
+ 862 0301 26030000 		.4byte	0x326
+ 863 0305 0A       		.uleb128 0xa
+ 864 0306 E4010000 		.4byte	.LASF36
+ 865 030a 01       		.byte	0x1
+ 866 030b 4D02     		.2byte	0x24d
+ 867 030d 6B000000 		.4byte	0x6b
+ 868 0311 D6010000 		.4byte	.LLST12
+ 869 0315 14       		.uleb128 0x14
+ 870 0316 08000000 		.4byte	.LVL31
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccMZH2Qd.s 			page 30
+
+
+ 871 031a 7A040000 		.4byte	0x47a
+ 872 031e 13       		.uleb128 0x13
+ 873 031f 01       		.uleb128 0x1
+ 874 0320 50       		.byte	0x50
+ 875 0321 02       		.uleb128 0x2
+ 876 0322 74       		.byte	0x74
+ 877 0323 00       		.sleb128 0
+ 878 0324 00       		.byte	0
+ 879 0325 00       		.byte	0
+ 880 0326 17       		.uleb128 0x17
+ 881 0327 19000000 		.4byte	.LASF41
+ 882 032b 01       		.byte	0x1
+ 883 032c 6502     		.2byte	0x265
+ 884 032e 6B000000 		.4byte	0x6b
+ 885 0332 00000000 		.4byte	.LFB11
+ 886 0336 0C000000 		.4byte	.LFE11-.LFB11
+ 887 033a 01       		.uleb128 0x1
+ 888 033b 9C       		.byte	0x9c
+ 889 033c 09       		.uleb128 0x9
+ 890 033d CC000000 		.4byte	.LASF37
+ 891 0341 01       		.byte	0x1
+ 892 0342 E702     		.2byte	0x2e7
+ 893 0344 00000000 		.4byte	.LFB12
+ 894 0348 14000000 		.4byte	.LFE12-.LFB12
+ 895 034c 01       		.uleb128 0x1
+ 896 034d 9C       		.byte	0x9c
+ 897 034e 73030000 		.4byte	0x373
+ 898 0352 0A       		.uleb128 0xa
+ 899 0353 77040000 		.4byte	.LASF38
+ 900 0357 01       		.byte	0x1
+ 901 0358 E702     		.2byte	0x2e7
+ 902 035a 6B000000 		.4byte	0x6b
+ 903 035e F7010000 		.4byte	.LLST13
+ 904 0362 14       		.uleb128 0x14
+ 905 0363 08000000 		.4byte	.LVL33
+ 906 0367 8B040000 		.4byte	0x48b
+ 907 036b 13       		.uleb128 0x13
+ 908 036c 01       		.uleb128 0x1
+ 909 036d 50       		.byte	0x50
+ 910 036e 02       		.uleb128 0x2
+ 911 036f 74       		.byte	0x74
+ 912 0370 00       		.sleb128 0
+ 913 0371 00       		.byte	0
+ 914 0372 00       		.byte	0
+ 915 0373 06       		.uleb128 0x6
+ 916 0374 ED010000 		.4byte	.LASF39
+ 917 0378 01       		.byte	0x1
+ 918 0379 7C       		.byte	0x7c
+ 919 037a 00000000 		.4byte	.LFB1
+ 920 037e 1C000000 		.4byte	.LFE1-.LFB1
+ 921 0382 01       		.uleb128 0x1
+ 922 0383 9C       		.byte	0x9c
+ 923 0384 AB030000 		.4byte	0x3ab
+ 924 0388 07       		.uleb128 0x7
+ 925 0389 06000000 		.4byte	.LVL34
+ 926 038d 9C040000 		.4byte	0x49c
+ 927 0391 07       		.uleb128 0x7
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccMZH2Qd.s 			page 31
+
+
+ 928 0392 0A000000 		.4byte	.LVL35
+ 929 0396 A3040000 		.4byte	0x4a3
+ 930 039a 14       		.uleb128 0x14
+ 931 039b 16000000 		.4byte	.LVL36
+ 932 039f 3C030000 		.4byte	0x33c
+ 933 03a3 13       		.uleb128 0x13
+ 934 03a4 01       		.uleb128 0x1
+ 935 03a5 50       		.byte	0x50
+ 936 03a6 02       		.uleb128 0x2
+ 937 03a7 09       		.byte	0x9
+ 938 03a8 FA       		.byte	0xfa
+ 939 03a9 00       		.byte	0
+ 940 03aa 00       		.byte	0
+ 941 03ab 06       		.uleb128 0x6
+ 942 03ac 3C010000 		.4byte	.LASF40
+ 943 03b0 01       		.byte	0x1
+ 944 03b1 62       		.byte	0x62
+ 945 03b2 00000000 		.4byte	.LFB0
+ 946 03b6 1C000000 		.4byte	.LFE0-.LFB0
+ 947 03ba 01       		.uleb128 0x1
+ 948 03bb 9C       		.byte	0x9c
+ 949 03bc D3030000 		.4byte	0x3d3
+ 950 03c0 07       		.uleb128 0x7
+ 951 03c1 0C000000 		.4byte	.LVL37
+ 952 03c5 73030000 		.4byte	0x373
+ 953 03c9 07       		.uleb128 0x7
+ 954 03ca 16000000 		.4byte	.LVL38
+ 955 03ce CC000000 		.4byte	0xcc
+ 956 03d2 00       		.byte	0
+ 957 03d3 17       		.uleb128 0x17
+ 958 03d4 B5040000 		.4byte	.LASF42
+ 959 03d8 01       		.byte	0x1
+ 960 03d9 FD02     		.2byte	0x2fd
+ 961 03db 6B000000 		.4byte	0x6b
+ 962 03df 00000000 		.4byte	.LFB13
+ 963 03e3 0C000000 		.4byte	.LFE13-.LFB13
+ 964 03e7 01       		.uleb128 0x1
+ 965 03e8 9C       		.byte	0x9c
+ 966 03e9 18       		.uleb128 0x18
+ 967 03ea B4000000 		.4byte	.LASF43
+ 968 03ee 01       		.byte	0x1
+ 969 03ef 17       		.byte	0x17
+ 970 03f0 6B000000 		.4byte	0x6b
+ 971 03f4 05       		.uleb128 0x5
+ 972 03f5 03       		.byte	0x3
+ 973 03f6 00000000 		.4byte	ScanComp_1_compDACRange
+ 974 03fa 18       		.uleb128 0x18
+ 975 03fb BC010000 		.4byte	.LASF44
+ 976 03ff 01       		.byte	0x1
+ 977 0400 27       		.byte	0x27
+ 978 0401 6B000000 		.4byte	0x6b
+ 979 0405 05       		.uleb128 0x5
+ 980 0406 03       		.byte	0x3
+ 981 0407 01000000 		.4byte	ScanComp_1_compDACVoltage
+ 982 040b 19       		.uleb128 0x19
+ 983 040c 0A010000 		.4byte	.LASF45
+ 984 0410 01       		.byte	0x1
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccMZH2Qd.s 			page 32
+
+
+ 985 0411 31       		.byte	0x31
+ 986 0412 1B040000 		.4byte	0x41b
+ 987 0416 04       		.byte	0x4
+ 988 0417 89       		.byte	0x89
+ 989 0418 64       		.byte	0x64
+ 990 0419 00       		.byte	0
+ 991 041a 40       		.byte	0x40
+ 992 041b 11       		.uleb128 0x11
+ 993 041c 91010000 		.4byte	0x191
+ 994 0420 1A       		.uleb128 0x1a
+ 995 0421 72000000 		.4byte	.LASF59
+ 996 0425 01       		.byte	0x1
+ 997 0426 2F       		.byte	0x2f
+ 998 0427 6B000000 		.4byte	0x6b
+ 999 042b 05       		.uleb128 0x5
+ 1000 042c 03       		.byte	0x3
+ 1001 042d 00000000 		.4byte	ScanComp_1_initVar
+ 1002 0431 1B       		.uleb128 0x1b
+ 1003 0432 3D040000 		.4byte	.LASF46
+ 1004 0436 03       		.byte	0x3
+ 1005 0437 40       		.byte	0x40
+ 1006 0438 1B       		.uleb128 0x1b
+ 1007 0439 22010000 		.4byte	.LASF47
+ 1008 043d 04       		.byte	0x4
+ 1009 043e 34       		.byte	0x34
+ 1010 043f 1B       		.uleb128 0x1b
+ 1011 0440 FF020000 		.4byte	.LASF48
+ 1012 0444 03       		.byte	0x3
+ 1013 0445 46       		.byte	0x46
+ 1014 0446 1B       		.uleb128 0x1b
+ 1015 0447 5B000000 		.4byte	.LASF49
+ 1016 044b 04       		.byte	0x4
+ 1017 044c 3A       		.byte	0x3a
+ 1018 044d 1C       		.uleb128 0x1c
+ 1019 044e DB020000 		.4byte	.LASF60
+ 1020 0452 05       		.byte	0x5
+ 1021 0453 7D       		.byte	0x7d
+ 1022 0454 6B000000 		.4byte	0x6b
+ 1023 0458 1D       		.uleb128 0x1d
+ 1024 0459 2A030000 		.4byte	.LASF50
+ 1025 045d 05       		.byte	0x5
+ 1026 045e 7E       		.byte	0x7e
+ 1027 045f 69040000 		.4byte	0x469
+ 1028 0463 1E       		.uleb128 0x1e
+ 1029 0464 6B000000 		.4byte	0x6b
+ 1030 0468 00       		.byte	0
+ 1031 0469 1D       		.uleb128 0x1d
+ 1032 046a B3030000 		.4byte	.LASF51
+ 1033 046e 03       		.byte	0x3
+ 1034 046f 41       		.byte	0x41
+ 1035 0470 7A040000 		.4byte	0x47a
+ 1036 0474 1E       		.uleb128 0x1e
+ 1037 0475 6B000000 		.4byte	0x6b
+ 1038 0479 00       		.byte	0
+ 1039 047a 1D       		.uleb128 0x1d
+ 1040 047b 00000000 		.4byte	.LASF52
+ 1041 047f 04       		.byte	0x4
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccMZH2Qd.s 			page 33
+
+
+ 1042 0480 36       		.byte	0x36
+ 1043 0481 8B040000 		.4byte	0x48b
+ 1044 0485 1E       		.uleb128 0x1e
+ 1045 0486 6B000000 		.4byte	0x6b
+ 1046 048a 00       		.byte	0
+ 1047 048b 1D       		.uleb128 0x1d
+ 1048 048c 9A030000 		.4byte	.LASF53
+ 1049 0490 04       		.byte	0x4
+ 1050 0491 37       		.byte	0x37
+ 1051 0492 9C040000 		.4byte	0x49c
+ 1052 0496 1E       		.uleb128 0x1e
+ 1053 0497 6B000000 		.4byte	0x6b
+ 1054 049b 00       		.byte	0
+ 1055 049c 1B       		.uleb128 0x1b
+ 1056 049d 14020000 		.4byte	.LASF54
+ 1057 04a1 03       		.byte	0x3
+ 1058 04a2 45       		.byte	0x45
+ 1059 04a3 1B       		.uleb128 0x1b
+ 1060 04a4 98040000 		.4byte	.LASF55
+ 1061 04a8 04       		.byte	0x4
+ 1062 04a9 39       		.byte	0x39
+ 1063 04aa 00       		.byte	0
+ 1064              		.section	.debug_abbrev,"",%progbits
+ 1065              	.Ldebug_abbrev0:
+ 1066 0000 01       		.uleb128 0x1
+ 1067 0001 11       		.uleb128 0x11
+ 1068 0002 01       		.byte	0x1
+ 1069 0003 25       		.uleb128 0x25
+ 1070 0004 0E       		.uleb128 0xe
+ 1071 0005 13       		.uleb128 0x13
+ 1072 0006 0B       		.uleb128 0xb
+ 1073 0007 03       		.uleb128 0x3
+ 1074 0008 0E       		.uleb128 0xe
+ 1075 0009 1B       		.uleb128 0x1b
+ 1076 000a 0E       		.uleb128 0xe
+ 1077 000b 55       		.uleb128 0x55
+ 1078 000c 17       		.uleb128 0x17
+ 1079 000d 11       		.uleb128 0x11
+ 1080 000e 01       		.uleb128 0x1
+ 1081 000f 10       		.uleb128 0x10
+ 1082 0010 17       		.uleb128 0x17
+ 1083 0011 00       		.byte	0
+ 1084 0012 00       		.byte	0
+ 1085 0013 02       		.uleb128 0x2
+ 1086 0014 24       		.uleb128 0x24
+ 1087 0015 00       		.byte	0
+ 1088 0016 0B       		.uleb128 0xb
+ 1089 0017 0B       		.uleb128 0xb
+ 1090 0018 3E       		.uleb128 0x3e
+ 1091 0019 0B       		.uleb128 0xb
+ 1092 001a 03       		.uleb128 0x3
+ 1093 001b 0E       		.uleb128 0xe
+ 1094 001c 00       		.byte	0
+ 1095 001d 00       		.byte	0
+ 1096 001e 03       		.uleb128 0x3
+ 1097 001f 24       		.uleb128 0x24
+ 1098 0020 00       		.byte	0
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccMZH2Qd.s 			page 34
+
+
+ 1099 0021 0B       		.uleb128 0xb
+ 1100 0022 0B       		.uleb128 0xb
+ 1101 0023 3E       		.uleb128 0x3e
+ 1102 0024 0B       		.uleb128 0xb
+ 1103 0025 03       		.uleb128 0x3
+ 1104 0026 08       		.uleb128 0x8
+ 1105 0027 00       		.byte	0
+ 1106 0028 00       		.byte	0
+ 1107 0029 04       		.uleb128 0x4
+ 1108 002a 16       		.uleb128 0x16
+ 1109 002b 00       		.byte	0
+ 1110 002c 03       		.uleb128 0x3
+ 1111 002d 0E       		.uleb128 0xe
+ 1112 002e 3A       		.uleb128 0x3a
+ 1113 002f 0B       		.uleb128 0xb
+ 1114 0030 3B       		.uleb128 0x3b
+ 1115 0031 05       		.uleb128 0x5
+ 1116 0032 49       		.uleb128 0x49
+ 1117 0033 13       		.uleb128 0x13
+ 1118 0034 00       		.byte	0
+ 1119 0035 00       		.byte	0
+ 1120 0036 05       		.uleb128 0x5
+ 1121 0037 35       		.uleb128 0x35
+ 1122 0038 00       		.byte	0
+ 1123 0039 49       		.uleb128 0x49
+ 1124 003a 13       		.uleb128 0x13
+ 1125 003b 00       		.byte	0
+ 1126 003c 00       		.byte	0
+ 1127 003d 06       		.uleb128 0x6
+ 1128 003e 2E       		.uleb128 0x2e
+ 1129 003f 01       		.byte	0x1
+ 1130 0040 3F       		.uleb128 0x3f
+ 1131 0041 19       		.uleb128 0x19
+ 1132 0042 03       		.uleb128 0x3
+ 1133 0043 0E       		.uleb128 0xe
+ 1134 0044 3A       		.uleb128 0x3a
+ 1135 0045 0B       		.uleb128 0xb
+ 1136 0046 3B       		.uleb128 0x3b
+ 1137 0047 0B       		.uleb128 0xb
+ 1138 0048 27       		.uleb128 0x27
+ 1139 0049 19       		.uleb128 0x19
+ 1140 004a 11       		.uleb128 0x11
+ 1141 004b 01       		.uleb128 0x1
+ 1142 004c 12       		.uleb128 0x12
+ 1143 004d 06       		.uleb128 0x6
+ 1144 004e 40       		.uleb128 0x40
+ 1145 004f 18       		.uleb128 0x18
+ 1146 0050 9742     		.uleb128 0x2117
+ 1147 0052 19       		.uleb128 0x19
+ 1148 0053 01       		.uleb128 0x1
+ 1149 0054 13       		.uleb128 0x13
+ 1150 0055 00       		.byte	0
+ 1151 0056 00       		.byte	0
+ 1152 0057 07       		.uleb128 0x7
+ 1153 0058 898201   		.uleb128 0x4109
+ 1154 005b 00       		.byte	0
+ 1155 005c 11       		.uleb128 0x11
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccMZH2Qd.s 			page 35
+
+
+ 1156 005d 01       		.uleb128 0x1
+ 1157 005e 31       		.uleb128 0x31
+ 1158 005f 13       		.uleb128 0x13
+ 1159 0060 00       		.byte	0
+ 1160 0061 00       		.byte	0
+ 1161 0062 08       		.uleb128 0x8
+ 1162 0063 34       		.uleb128 0x34
+ 1163 0064 00       		.byte	0
+ 1164 0065 03       		.uleb128 0x3
+ 1165 0066 0E       		.uleb128 0xe
+ 1166 0067 3A       		.uleb128 0x3a
+ 1167 0068 0B       		.uleb128 0xb
+ 1168 0069 3B       		.uleb128 0x3b
+ 1169 006a 0B       		.uleb128 0xb
+ 1170 006b 49       		.uleb128 0x49
+ 1171 006c 13       		.uleb128 0x13
+ 1172 006d 02       		.uleb128 0x2
+ 1173 006e 17       		.uleb128 0x17
+ 1174 006f 00       		.byte	0
+ 1175 0070 00       		.byte	0
+ 1176 0071 09       		.uleb128 0x9
+ 1177 0072 2E       		.uleb128 0x2e
+ 1178 0073 01       		.byte	0x1
+ 1179 0074 3F       		.uleb128 0x3f
+ 1180 0075 19       		.uleb128 0x19
+ 1181 0076 03       		.uleb128 0x3
+ 1182 0077 0E       		.uleb128 0xe
+ 1183 0078 3A       		.uleb128 0x3a
+ 1184 0079 0B       		.uleb128 0xb
+ 1185 007a 3B       		.uleb128 0x3b
+ 1186 007b 05       		.uleb128 0x5
+ 1187 007c 27       		.uleb128 0x27
+ 1188 007d 19       		.uleb128 0x19
+ 1189 007e 11       		.uleb128 0x11
+ 1190 007f 01       		.uleb128 0x1
+ 1191 0080 12       		.uleb128 0x12
+ 1192 0081 06       		.uleb128 0x6
+ 1193 0082 40       		.uleb128 0x40
+ 1194 0083 18       		.uleb128 0x18
+ 1195 0084 9742     		.uleb128 0x2117
+ 1196 0086 19       		.uleb128 0x19
+ 1197 0087 01       		.uleb128 0x1
+ 1198 0088 13       		.uleb128 0x13
+ 1199 0089 00       		.byte	0
+ 1200 008a 00       		.byte	0
+ 1201 008b 0A       		.uleb128 0xa
+ 1202 008c 05       		.uleb128 0x5
+ 1203 008d 00       		.byte	0
+ 1204 008e 03       		.uleb128 0x3
+ 1205 008f 0E       		.uleb128 0xe
+ 1206 0090 3A       		.uleb128 0x3a
+ 1207 0091 0B       		.uleb128 0xb
+ 1208 0092 3B       		.uleb128 0x3b
+ 1209 0093 05       		.uleb128 0x5
+ 1210 0094 49       		.uleb128 0x49
+ 1211 0095 13       		.uleb128 0x13
+ 1212 0096 02       		.uleb128 0x2
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccMZH2Qd.s 			page 36
+
+
+ 1213 0097 17       		.uleb128 0x17
+ 1214 0098 00       		.byte	0
+ 1215 0099 00       		.byte	0
+ 1216 009a 0B       		.uleb128 0xb
+ 1217 009b 2E       		.uleb128 0x2e
+ 1218 009c 01       		.byte	0x1
+ 1219 009d 3F       		.uleb128 0x3f
+ 1220 009e 19       		.uleb128 0x19
+ 1221 009f 03       		.uleb128 0x3
+ 1222 00a0 0E       		.uleb128 0xe
+ 1223 00a1 3A       		.uleb128 0x3a
+ 1224 00a2 0B       		.uleb128 0xb
+ 1225 00a3 3B       		.uleb128 0x3b
+ 1226 00a4 05       		.uleb128 0x5
+ 1227 00a5 27       		.uleb128 0x27
+ 1228 00a6 19       		.uleb128 0x19
+ 1229 00a7 49       		.uleb128 0x49
+ 1230 00a8 13       		.uleb128 0x13
+ 1231 00a9 11       		.uleb128 0x11
+ 1232 00aa 01       		.uleb128 0x1
+ 1233 00ab 12       		.uleb128 0x12
+ 1234 00ac 06       		.uleb128 0x6
+ 1235 00ad 40       		.uleb128 0x40
+ 1236 00ae 18       		.uleb128 0x18
+ 1237 00af 9742     		.uleb128 0x2117
+ 1238 00b1 19       		.uleb128 0x19
+ 1239 00b2 01       		.uleb128 0x1
+ 1240 00b3 13       		.uleb128 0x13
+ 1241 00b4 00       		.byte	0
+ 1242 00b5 00       		.byte	0
+ 1243 00b6 0C       		.uleb128 0xc
+ 1244 00b7 34       		.uleb128 0x34
+ 1245 00b8 00       		.byte	0
+ 1246 00b9 03       		.uleb128 0x3
+ 1247 00ba 0E       		.uleb128 0xe
+ 1248 00bb 3A       		.uleb128 0x3a
+ 1249 00bc 0B       		.uleb128 0xb
+ 1250 00bd 3B       		.uleb128 0x3b
+ 1251 00be 05       		.uleb128 0x5
+ 1252 00bf 49       		.uleb128 0x49
+ 1253 00c0 13       		.uleb128 0x13
+ 1254 00c1 02       		.uleb128 0x2
+ 1255 00c2 17       		.uleb128 0x17
+ 1256 00c3 00       		.byte	0
+ 1257 00c4 00       		.byte	0
+ 1258 00c5 0D       		.uleb128 0xd
+ 1259 00c6 34       		.uleb128 0x34
+ 1260 00c7 00       		.byte	0
+ 1261 00c8 03       		.uleb128 0x3
+ 1262 00c9 0E       		.uleb128 0xe
+ 1263 00ca 3A       		.uleb128 0x3a
+ 1264 00cb 0B       		.uleb128 0xb
+ 1265 00cc 3B       		.uleb128 0x3b
+ 1266 00cd 05       		.uleb128 0x5
+ 1267 00ce 49       		.uleb128 0x49
+ 1268 00cf 13       		.uleb128 0x13
+ 1269 00d0 1C       		.uleb128 0x1c
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccMZH2Qd.s 			page 37
+
+
+ 1270 00d1 0A       		.uleb128 0xa
+ 1271 00d2 00       		.byte	0
+ 1272 00d3 00       		.byte	0
+ 1273 00d4 0E       		.uleb128 0xe
+ 1274 00d5 01       		.uleb128 0x1
+ 1275 00d6 01       		.byte	0x1
+ 1276 00d7 49       		.uleb128 0x49
+ 1277 00d8 13       		.uleb128 0x13
+ 1278 00d9 01       		.uleb128 0x1
+ 1279 00da 13       		.uleb128 0x13
+ 1280 00db 00       		.byte	0
+ 1281 00dc 00       		.byte	0
+ 1282 00dd 0F       		.uleb128 0xf
+ 1283 00de 21       		.uleb128 0x21
+ 1284 00df 00       		.byte	0
+ 1285 00e0 49       		.uleb128 0x49
+ 1286 00e1 13       		.uleb128 0x13
+ 1287 00e2 2F       		.uleb128 0x2f
+ 1288 00e3 0B       		.uleb128 0xb
+ 1289 00e4 00       		.byte	0
+ 1290 00e5 00       		.byte	0
+ 1291 00e6 10       		.uleb128 0x10
+ 1292 00e7 0F       		.uleb128 0xf
+ 1293 00e8 00       		.byte	0
+ 1294 00e9 0B       		.uleb128 0xb
+ 1295 00ea 0B       		.uleb128 0xb
+ 1296 00eb 49       		.uleb128 0x49
+ 1297 00ec 13       		.uleb128 0x13
+ 1298 00ed 00       		.byte	0
+ 1299 00ee 00       		.byte	0
+ 1300 00ef 11       		.uleb128 0x11
+ 1301 00f0 26       		.uleb128 0x26
+ 1302 00f1 00       		.byte	0
+ 1303 00f2 49       		.uleb128 0x49
+ 1304 00f3 13       		.uleb128 0x13
+ 1305 00f4 00       		.byte	0
+ 1306 00f5 00       		.byte	0
+ 1307 00f6 12       		.uleb128 0x12
+ 1308 00f7 898201   		.uleb128 0x4109
+ 1309 00fa 01       		.byte	0x1
+ 1310 00fb 11       		.uleb128 0x11
+ 1311 00fc 01       		.uleb128 0x1
+ 1312 00fd 31       		.uleb128 0x31
+ 1313 00fe 13       		.uleb128 0x13
+ 1314 00ff 01       		.uleb128 0x1
+ 1315 0100 13       		.uleb128 0x13
+ 1316 0101 00       		.byte	0
+ 1317 0102 00       		.byte	0
+ 1318 0103 13       		.uleb128 0x13
+ 1319 0104 8A8201   		.uleb128 0x410a
+ 1320 0107 00       		.byte	0
+ 1321 0108 02       		.uleb128 0x2
+ 1322 0109 18       		.uleb128 0x18
+ 1323 010a 9142     		.uleb128 0x2111
+ 1324 010c 18       		.uleb128 0x18
+ 1325 010d 00       		.byte	0
+ 1326 010e 00       		.byte	0
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccMZH2Qd.s 			page 38
+
+
+ 1327 010f 14       		.uleb128 0x14
+ 1328 0110 898201   		.uleb128 0x4109
+ 1329 0113 01       		.byte	0x1
+ 1330 0114 11       		.uleb128 0x11
+ 1331 0115 01       		.uleb128 0x1
+ 1332 0116 31       		.uleb128 0x31
+ 1333 0117 13       		.uleb128 0x13
+ 1334 0118 00       		.byte	0
+ 1335 0119 00       		.byte	0
+ 1336 011a 15       		.uleb128 0x15
+ 1337 011b 05       		.uleb128 0x5
+ 1338 011c 00       		.byte	0
+ 1339 011d 03       		.uleb128 0x3
+ 1340 011e 0E       		.uleb128 0xe
+ 1341 011f 3A       		.uleb128 0x3a
+ 1342 0120 0B       		.uleb128 0xb
+ 1343 0121 3B       		.uleb128 0x3b
+ 1344 0122 05       		.uleb128 0x5
+ 1345 0123 49       		.uleb128 0x49
+ 1346 0124 13       		.uleb128 0x13
+ 1347 0125 02       		.uleb128 0x2
+ 1348 0126 18       		.uleb128 0x18
+ 1349 0127 00       		.byte	0
+ 1350 0128 00       		.byte	0
+ 1351 0129 16       		.uleb128 0x16
+ 1352 012a 34       		.uleb128 0x34
+ 1353 012b 00       		.byte	0
+ 1354 012c 03       		.uleb128 0x3
+ 1355 012d 0E       		.uleb128 0xe
+ 1356 012e 3A       		.uleb128 0x3a
+ 1357 012f 0B       		.uleb128 0xb
+ 1358 0130 3B       		.uleb128 0x3b
+ 1359 0131 05       		.uleb128 0x5
+ 1360 0132 49       		.uleb128 0x49
+ 1361 0133 13       		.uleb128 0x13
+ 1362 0134 02       		.uleb128 0x2
+ 1363 0135 18       		.uleb128 0x18
+ 1364 0136 00       		.byte	0
+ 1365 0137 00       		.byte	0
+ 1366 0138 17       		.uleb128 0x17
+ 1367 0139 2E       		.uleb128 0x2e
+ 1368 013a 00       		.byte	0
+ 1369 013b 3F       		.uleb128 0x3f
+ 1370 013c 19       		.uleb128 0x19
+ 1371 013d 03       		.uleb128 0x3
+ 1372 013e 0E       		.uleb128 0xe
+ 1373 013f 3A       		.uleb128 0x3a
+ 1374 0140 0B       		.uleb128 0xb
+ 1375 0141 3B       		.uleb128 0x3b
+ 1376 0142 05       		.uleb128 0x5
+ 1377 0143 27       		.uleb128 0x27
+ 1378 0144 19       		.uleb128 0x19
+ 1379 0145 49       		.uleb128 0x49
+ 1380 0146 13       		.uleb128 0x13
+ 1381 0147 11       		.uleb128 0x11
+ 1382 0148 01       		.uleb128 0x1
+ 1383 0149 12       		.uleb128 0x12
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccMZH2Qd.s 			page 39
+
+
+ 1384 014a 06       		.uleb128 0x6
+ 1385 014b 40       		.uleb128 0x40
+ 1386 014c 18       		.uleb128 0x18
+ 1387 014d 9742     		.uleb128 0x2117
+ 1388 014f 19       		.uleb128 0x19
+ 1389 0150 00       		.byte	0
+ 1390 0151 00       		.byte	0
+ 1391 0152 18       		.uleb128 0x18
+ 1392 0153 34       		.uleb128 0x34
+ 1393 0154 00       		.byte	0
+ 1394 0155 03       		.uleb128 0x3
+ 1395 0156 0E       		.uleb128 0xe
+ 1396 0157 3A       		.uleb128 0x3a
+ 1397 0158 0B       		.uleb128 0xb
+ 1398 0159 3B       		.uleb128 0x3b
+ 1399 015a 0B       		.uleb128 0xb
+ 1400 015b 49       		.uleb128 0x49
+ 1401 015c 13       		.uleb128 0x13
+ 1402 015d 02       		.uleb128 0x2
+ 1403 015e 18       		.uleb128 0x18
+ 1404 015f 00       		.byte	0
+ 1405 0160 00       		.byte	0
+ 1406 0161 19       		.uleb128 0x19
+ 1407 0162 34       		.uleb128 0x34
+ 1408 0163 00       		.byte	0
+ 1409 0164 03       		.uleb128 0x3
+ 1410 0165 0E       		.uleb128 0xe
+ 1411 0166 3A       		.uleb128 0x3a
+ 1412 0167 0B       		.uleb128 0xb
+ 1413 0168 3B       		.uleb128 0x3b
+ 1414 0169 0B       		.uleb128 0xb
+ 1415 016a 49       		.uleb128 0x49
+ 1416 016b 13       		.uleb128 0x13
+ 1417 016c 1C       		.uleb128 0x1c
+ 1418 016d 0A       		.uleb128 0xa
+ 1419 016e 00       		.byte	0
+ 1420 016f 00       		.byte	0
+ 1421 0170 1A       		.uleb128 0x1a
+ 1422 0171 34       		.uleb128 0x34
+ 1423 0172 00       		.byte	0
+ 1424 0173 03       		.uleb128 0x3
+ 1425 0174 0E       		.uleb128 0xe
+ 1426 0175 3A       		.uleb128 0x3a
+ 1427 0176 0B       		.uleb128 0xb
+ 1428 0177 3B       		.uleb128 0x3b
+ 1429 0178 0B       		.uleb128 0xb
+ 1430 0179 49       		.uleb128 0x49
+ 1431 017a 13       		.uleb128 0x13
+ 1432 017b 3F       		.uleb128 0x3f
+ 1433 017c 19       		.uleb128 0x19
+ 1434 017d 02       		.uleb128 0x2
+ 1435 017e 18       		.uleb128 0x18
+ 1436 017f 00       		.byte	0
+ 1437 0180 00       		.byte	0
+ 1438 0181 1B       		.uleb128 0x1b
+ 1439 0182 2E       		.uleb128 0x2e
+ 1440 0183 00       		.byte	0
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccMZH2Qd.s 			page 40
+
+
+ 1441 0184 3F       		.uleb128 0x3f
+ 1442 0185 19       		.uleb128 0x19
+ 1443 0186 03       		.uleb128 0x3
+ 1444 0187 0E       		.uleb128 0xe
+ 1445 0188 3A       		.uleb128 0x3a
+ 1446 0189 0B       		.uleb128 0xb
+ 1447 018a 3B       		.uleb128 0x3b
+ 1448 018b 0B       		.uleb128 0xb
+ 1449 018c 27       		.uleb128 0x27
+ 1450 018d 19       		.uleb128 0x19
+ 1451 018e 3C       		.uleb128 0x3c
+ 1452 018f 19       		.uleb128 0x19
+ 1453 0190 00       		.byte	0
+ 1454 0191 00       		.byte	0
+ 1455 0192 1C       		.uleb128 0x1c
+ 1456 0193 2E       		.uleb128 0x2e
+ 1457 0194 00       		.byte	0
+ 1458 0195 3F       		.uleb128 0x3f
+ 1459 0196 19       		.uleb128 0x19
+ 1460 0197 03       		.uleb128 0x3
+ 1461 0198 0E       		.uleb128 0xe
+ 1462 0199 3A       		.uleb128 0x3a
+ 1463 019a 0B       		.uleb128 0xb
+ 1464 019b 3B       		.uleb128 0x3b
+ 1465 019c 0B       		.uleb128 0xb
+ 1466 019d 27       		.uleb128 0x27
+ 1467 019e 19       		.uleb128 0x19
+ 1468 019f 49       		.uleb128 0x49
+ 1469 01a0 13       		.uleb128 0x13
+ 1470 01a1 3C       		.uleb128 0x3c
+ 1471 01a2 19       		.uleb128 0x19
+ 1472 01a3 00       		.byte	0
+ 1473 01a4 00       		.byte	0
+ 1474 01a5 1D       		.uleb128 0x1d
+ 1475 01a6 2E       		.uleb128 0x2e
+ 1476 01a7 01       		.byte	0x1
+ 1477 01a8 3F       		.uleb128 0x3f
+ 1478 01a9 19       		.uleb128 0x19
+ 1479 01aa 03       		.uleb128 0x3
+ 1480 01ab 0E       		.uleb128 0xe
+ 1481 01ac 3A       		.uleb128 0x3a
+ 1482 01ad 0B       		.uleb128 0xb
+ 1483 01ae 3B       		.uleb128 0x3b
+ 1484 01af 0B       		.uleb128 0xb
+ 1485 01b0 27       		.uleb128 0x27
+ 1486 01b1 19       		.uleb128 0x19
+ 1487 01b2 3C       		.uleb128 0x3c
+ 1488 01b3 19       		.uleb128 0x19
+ 1489 01b4 01       		.uleb128 0x1
+ 1490 01b5 13       		.uleb128 0x13
+ 1491 01b6 00       		.byte	0
+ 1492 01b7 00       		.byte	0
+ 1493 01b8 1E       		.uleb128 0x1e
+ 1494 01b9 05       		.uleb128 0x5
+ 1495 01ba 00       		.byte	0
+ 1496 01bb 49       		.uleb128 0x49
+ 1497 01bc 13       		.uleb128 0x13
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccMZH2Qd.s 			page 41
+
+
+ 1498 01bd 00       		.byte	0
+ 1499 01be 00       		.byte	0
+ 1500 01bf 00       		.byte	0
+ 1501              		.section	.debug_loc,"",%progbits
+ 1502              	.Ldebug_loc0:
+ 1503              	.LLST0:
+ 1504 0000 14000000 		.4byte	.LVL4
+ 1505 0004 2B000000 		.4byte	.LVL5-1
+ 1506 0008 0100     		.2byte	0x1
+ 1507 000a 50       		.byte	0x50
+ 1508 000b 00000000 		.4byte	0
+ 1509 000f 00000000 		.4byte	0
+ 1510              	.LLST1:
+ 1511 0013 00000000 		.4byte	.LVL6
+ 1512 0017 05000000 		.4byte	.LVL7-1
+ 1513 001b 0100     		.2byte	0x1
+ 1514 001d 50       		.byte	0x50
+ 1515 001e 05000000 		.4byte	.LVL7-1
+ 1516 0022 08000000 		.4byte	.LFE4
+ 1517 0026 0400     		.2byte	0x4
+ 1518 0028 F3       		.byte	0xf3
+ 1519 0029 01       		.uleb128 0x1
+ 1520 002a 50       		.byte	0x50
+ 1521 002b 9F       		.byte	0x9f
+ 1522 002c 00000000 		.4byte	0
+ 1523 0030 00000000 		.4byte	0
+ 1524              	.LLST2:
+ 1525 0034 00000000 		.4byte	.LVL8
+ 1526 0038 06000000 		.4byte	.LVL9
+ 1527 003c 0100     		.2byte	0x1
+ 1528 003e 50       		.byte	0x50
+ 1529 003f 06000000 		.4byte	.LVL9
+ 1530 0043 0C000000 		.4byte	.LVL11
+ 1531 0047 0400     		.2byte	0x4
+ 1532 0049 F3       		.byte	0xf3
+ 1533 004a 01       		.uleb128 0x1
+ 1534 004b 50       		.byte	0x50
+ 1535 004c 9F       		.byte	0x9f
+ 1536 004d 0C000000 		.4byte	.LVL11
+ 1537 0051 0E000000 		.4byte	.LVL12
+ 1538 0055 0100     		.2byte	0x1
+ 1539 0057 50       		.byte	0x50
+ 1540 0058 0E000000 		.4byte	.LVL12
+ 1541 005c 14000000 		.4byte	.LFE5
+ 1542 0060 0400     		.2byte	0x4
+ 1543 0062 F3       		.byte	0xf3
+ 1544 0063 01       		.uleb128 0x1
+ 1545 0064 50       		.byte	0x50
+ 1546 0065 9F       		.byte	0x9f
+ 1547 0066 00000000 		.4byte	0
+ 1548 006a 00000000 		.4byte	0
+ 1549              	.LLST3:
+ 1550 006e 00000000 		.4byte	.LVL8
+ 1551 0072 0A000000 		.4byte	.LVL10
+ 1552 0076 0200     		.2byte	0x2
+ 1553 0078 30       		.byte	0x30
+ 1554 0079 9F       		.byte	0x9f
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccMZH2Qd.s 			page 42
+
+
+ 1555 007a 0A000000 		.4byte	.LVL10
+ 1556 007e 0C000000 		.4byte	.LVL11
+ 1557 0082 0100     		.2byte	0x1
+ 1558 0084 50       		.byte	0x50
+ 1559 0085 0C000000 		.4byte	.LVL11
+ 1560 0089 0E000000 		.4byte	.LVL12
+ 1561 008d 0200     		.2byte	0x2
+ 1562 008f 30       		.byte	0x30
+ 1563 0090 9F       		.byte	0x9f
+ 1564 0091 0E000000 		.4byte	.LVL12
+ 1565 0095 14000000 		.4byte	.LFE5
+ 1566 0099 0100     		.2byte	0x1
+ 1567 009b 50       		.byte	0x50
+ 1568 009c 00000000 		.4byte	0
+ 1569 00a0 00000000 		.4byte	0
+ 1570              	.LLST4:
+ 1571 00a4 00000000 		.4byte	.LVL13
+ 1572 00a8 06000000 		.4byte	.LVL14
+ 1573 00ac 0100     		.2byte	0x1
+ 1574 00ae 50       		.byte	0x50
+ 1575 00af 06000000 		.4byte	.LVL14
+ 1576 00b3 0A000000 		.4byte	.LVL16
+ 1577 00b7 0400     		.2byte	0x4
+ 1578 00b9 F3       		.byte	0xf3
+ 1579 00ba 01       		.uleb128 0x1
+ 1580 00bb 50       		.byte	0x50
+ 1581 00bc 9F       		.byte	0x9f
+ 1582 00bd 0A000000 		.4byte	.LVL16
+ 1583 00c1 0C000000 		.4byte	.LVL17
+ 1584 00c5 0100     		.2byte	0x1
+ 1585 00c7 50       		.byte	0x50
+ 1586 00c8 0C000000 		.4byte	.LVL17
+ 1587 00cc 14000000 		.4byte	.LFE7
+ 1588 00d0 0400     		.2byte	0x4
+ 1589 00d2 F3       		.byte	0xf3
+ 1590 00d3 01       		.uleb128 0x1
+ 1591 00d4 50       		.byte	0x50
+ 1592 00d5 9F       		.byte	0x9f
+ 1593 00d6 00000000 		.4byte	0
+ 1594 00da 00000000 		.4byte	0
+ 1595              	.LLST5:
+ 1596 00de 00000000 		.4byte	.LVL13
+ 1597 00e2 08000000 		.4byte	.LVL15
+ 1598 00e6 0200     		.2byte	0x2
+ 1599 00e8 30       		.byte	0x30
+ 1600 00e9 9F       		.byte	0x9f
+ 1601 00ea 08000000 		.4byte	.LVL15
+ 1602 00ee 0A000000 		.4byte	.LVL16
+ 1603 00f2 0100     		.2byte	0x1
+ 1604 00f4 50       		.byte	0x50
+ 1605 00f5 0A000000 		.4byte	.LVL16
+ 1606 00f9 0C000000 		.4byte	.LVL17
+ 1607 00fd 0200     		.2byte	0x2
+ 1608 00ff 30       		.byte	0x30
+ 1609 0100 9F       		.byte	0x9f
+ 1610 0101 0C000000 		.4byte	.LVL17
+ 1611 0105 14000000 		.4byte	.LFE7
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccMZH2Qd.s 			page 43
+
+
+ 1612 0109 0100     		.2byte	0x1
+ 1613 010b 50       		.byte	0x50
+ 1614 010c 00000000 		.4byte	0
+ 1615 0110 00000000 		.4byte	0
+ 1616              	.LLST6:
+ 1617 0114 00000000 		.4byte	.LVL18
+ 1618 0118 07000000 		.4byte	.LVL19-1
+ 1619 011c 0100     		.2byte	0x1
+ 1620 011e 50       		.byte	0x50
+ 1621 011f 07000000 		.4byte	.LVL19-1
+ 1622 0123 18000000 		.4byte	.LFE6
+ 1623 0127 0400     		.2byte	0x4
+ 1624 0129 F3       		.byte	0xf3
+ 1625 012a 01       		.uleb128 0x1
+ 1626 012b 50       		.byte	0x50
+ 1627 012c 9F       		.byte	0x9f
+ 1628 012d 00000000 		.4byte	0
+ 1629 0131 00000000 		.4byte	0
+ 1630              	.LLST7:
+ 1631 0135 00000000 		.4byte	.LVL21
+ 1632 0139 04000000 		.4byte	.LVL22
+ 1633 013d 0100     		.2byte	0x1
+ 1634 013f 51       		.byte	0x51
+ 1635 0140 04000000 		.4byte	.LVL22
+ 1636 0144 10000000 		.4byte	.LFE8
+ 1637 0148 0400     		.2byte	0x4
+ 1638 014a F3       		.byte	0xf3
+ 1639 014b 01       		.uleb128 0x1
+ 1640 014c 51       		.byte	0x51
+ 1641 014d 9F       		.byte	0x9f
+ 1642 014e 00000000 		.4byte	0
+ 1643 0152 00000000 		.4byte	0
+ 1644              	.LLST8:
+ 1645 0156 00000000 		.4byte	.LVL23
+ 1646 015a 0E000000 		.4byte	.LVL26
+ 1647 015e 0100     		.2byte	0x1
+ 1648 0160 50       		.byte	0x50
+ 1649 0161 0E000000 		.4byte	.LVL26
+ 1650 0165 1C000000 		.4byte	.LFE9
+ 1651 0169 0400     		.2byte	0x4
+ 1652 016b F3       		.byte	0xf3
+ 1653 016c 01       		.uleb128 0x1
+ 1654 016d 50       		.byte	0x50
+ 1655 016e 9F       		.byte	0x9f
+ 1656 016f 00000000 		.4byte	0
+ 1657 0173 00000000 		.4byte	0
+ 1658              	.LLST9:
+ 1659 0177 14000000 		.4byte	.LVL28
+ 1660 017b 16000000 		.4byte	.LVL29
+ 1661 017f 0600     		.2byte	0x6
+ 1662 0181 73       		.byte	0x73
+ 1663 0182 00       		.sleb128 0
+ 1664 0183 70       		.byte	0x70
+ 1665 0184 00       		.sleb128 0
+ 1666 0185 1A       		.byte	0x1a
+ 1667 0186 9F       		.byte	0x9f
+ 1668 0187 00000000 		.4byte	0
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccMZH2Qd.s 			page 44
+
+
+ 1669 018b 00000000 		.4byte	0
+ 1670              	.LLST10:
+ 1671 018f 08000000 		.4byte	.LVL24
+ 1672 0193 0A000000 		.4byte	.LVL25
+ 1673 0197 0100     		.2byte	0x1
+ 1674 0199 53       		.byte	0x53
+ 1675 019a 0A000000 		.4byte	.LVL25
+ 1676 019e 0E000000 		.4byte	.LVL26
+ 1677 01a2 0800     		.2byte	0x8
+ 1678 01a4 70       		.byte	0x70
+ 1679 01a5 00       		.sleb128 0
+ 1680 01a6 08       		.byte	0x8
+ 1681 01a7 F8       		.byte	0xf8
+ 1682 01a8 1A       		.byte	0x1a
+ 1683 01a9 23       		.byte	0x23
+ 1684 01aa 08       		.uleb128 0x8
+ 1685 01ab 9F       		.byte	0x9f
+ 1686 01ac 10000000 		.4byte	.LVL27
+ 1687 01b0 16000000 		.4byte	.LVL29
+ 1688 01b4 0100     		.2byte	0x1
+ 1689 01b6 50       		.byte	0x50
+ 1690 01b7 00000000 		.4byte	0
+ 1691 01bb 00000000 		.4byte	0
+ 1692              	.LLST11:
+ 1693 01bf 00000000 		.4byte	.LVL23
+ 1694 01c3 0E000000 		.4byte	.LVL26
+ 1695 01c7 0500     		.2byte	0x5
+ 1696 01c9 70       		.byte	0x70
+ 1697 01ca 00       		.sleb128 0
+ 1698 01cb 33       		.byte	0x33
+ 1699 01cc 25       		.byte	0x25
+ 1700 01cd 9F       		.byte	0x9f
+ 1701 01ce 00000000 		.4byte	0
+ 1702 01d2 00000000 		.4byte	0
+ 1703              	.LLST12:
+ 1704 01d6 00000000 		.4byte	.LVL30
+ 1705 01da 07000000 		.4byte	.LVL31-1
+ 1706 01de 0100     		.2byte	0x1
+ 1707 01e0 50       		.byte	0x50
+ 1708 01e1 07000000 		.4byte	.LVL31-1
+ 1709 01e5 14000000 		.4byte	.LFE10
+ 1710 01e9 0400     		.2byte	0x4
+ 1711 01eb F3       		.byte	0xf3
+ 1712 01ec 01       		.uleb128 0x1
+ 1713 01ed 50       		.byte	0x50
+ 1714 01ee 9F       		.byte	0x9f
+ 1715 01ef 00000000 		.4byte	0
+ 1716 01f3 00000000 		.4byte	0
+ 1717              	.LLST13:
+ 1718 01f7 00000000 		.4byte	.LVL32
+ 1719 01fb 07000000 		.4byte	.LVL33-1
+ 1720 01ff 0100     		.2byte	0x1
+ 1721 0201 50       		.byte	0x50
+ 1722 0202 07000000 		.4byte	.LVL33-1
+ 1723 0206 14000000 		.4byte	.LFE12
+ 1724 020a 0400     		.2byte	0x4
+ 1725 020c F3       		.byte	0xf3
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccMZH2Qd.s 			page 45
+
+
+ 1726 020d 01       		.uleb128 0x1
+ 1727 020e 50       		.byte	0x50
+ 1728 020f 9F       		.byte	0x9f
+ 1729 0210 00000000 		.4byte	0
+ 1730 0214 00000000 		.4byte	0
+ 1731              		.section	.debug_aranges,"",%progbits
+ 1732 0000 84000000 		.4byte	0x84
+ 1733 0004 0200     		.2byte	0x2
+ 1734 0006 00000000 		.4byte	.Ldebug_info0
+ 1735 000a 04       		.byte	0x4
+ 1736 000b 00       		.byte	0
+ 1737 000c 0000     		.2byte	0
+ 1738 000e 0000     		.2byte	0
+ 1739 0010 00000000 		.4byte	.LFB2
+ 1740 0014 18000000 		.4byte	.LFE2-.LFB2
+ 1741 0018 00000000 		.4byte	.LFB3
+ 1742 001c 40000000 		.4byte	.LFE3-.LFB3
+ 1743 0020 00000000 		.4byte	.LFB4
+ 1744 0024 08000000 		.4byte	.LFE4-.LFB4
+ 1745 0028 00000000 		.4byte	.LFB5
+ 1746 002c 14000000 		.4byte	.LFE5-.LFB5
+ 1747 0030 00000000 		.4byte	.LFB7
+ 1748 0034 14000000 		.4byte	.LFE7-.LFB7
+ 1749 0038 00000000 		.4byte	.LFB6
+ 1750 003c 18000000 		.4byte	.LFE6-.LFB6
+ 1751 0040 00000000 		.4byte	.LFB8
+ 1752 0044 10000000 		.4byte	.LFE8-.LFB8
+ 1753 0048 00000000 		.4byte	.LFB9
+ 1754 004c 1C000000 		.4byte	.LFE9-.LFB9
+ 1755 0050 00000000 		.4byte	.LFB10
+ 1756 0054 14000000 		.4byte	.LFE10-.LFB10
+ 1757 0058 00000000 		.4byte	.LFB11
+ 1758 005c 0C000000 		.4byte	.LFE11-.LFB11
+ 1759 0060 00000000 		.4byte	.LFB12
+ 1760 0064 14000000 		.4byte	.LFE12-.LFB12
+ 1761 0068 00000000 		.4byte	.LFB1
+ 1762 006c 1C000000 		.4byte	.LFE1-.LFB1
+ 1763 0070 00000000 		.4byte	.LFB0
+ 1764 0074 1C000000 		.4byte	.LFE0-.LFB0
+ 1765 0078 00000000 		.4byte	.LFB13
+ 1766 007c 0C000000 		.4byte	.LFE13-.LFB13
+ 1767 0080 00000000 		.4byte	0
+ 1768 0084 00000000 		.4byte	0
+ 1769              		.section	.debug_ranges,"",%progbits
+ 1770              	.Ldebug_ranges0:
+ 1771 0000 00000000 		.4byte	.LFB2
+ 1772 0004 18000000 		.4byte	.LFE2
+ 1773 0008 00000000 		.4byte	.LFB3
+ 1774 000c 40000000 		.4byte	.LFE3
+ 1775 0010 00000000 		.4byte	.LFB4
+ 1776 0014 08000000 		.4byte	.LFE4
+ 1777 0018 00000000 		.4byte	.LFB5
+ 1778 001c 14000000 		.4byte	.LFE5
+ 1779 0020 00000000 		.4byte	.LFB7
+ 1780 0024 14000000 		.4byte	.LFE7
+ 1781 0028 00000000 		.4byte	.LFB6
+ 1782 002c 18000000 		.4byte	.LFE6
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccMZH2Qd.s 			page 46
+
+
+ 1783 0030 00000000 		.4byte	.LFB8
+ 1784 0034 10000000 		.4byte	.LFE8
+ 1785 0038 00000000 		.4byte	.LFB9
+ 1786 003c 1C000000 		.4byte	.LFE9
+ 1787 0040 00000000 		.4byte	.LFB10
+ 1788 0044 14000000 		.4byte	.LFE10
+ 1789 0048 00000000 		.4byte	.LFB11
+ 1790 004c 0C000000 		.4byte	.LFE11
+ 1791 0050 00000000 		.4byte	.LFB12
+ 1792 0054 14000000 		.4byte	.LFE12
+ 1793 0058 00000000 		.4byte	.LFB1
+ 1794 005c 1C000000 		.4byte	.LFE1
+ 1795 0060 00000000 		.4byte	.LFB0
+ 1796 0064 1C000000 		.4byte	.LFE0
+ 1797 0068 00000000 		.4byte	.LFB13
+ 1798 006c 0C000000 		.4byte	.LFE13
+ 1799 0070 00000000 		.4byte	0
+ 1800 0074 00000000 		.4byte	0
+ 1801              		.section	.debug_line,"",%progbits
+ 1802              	.Ldebug_line0:
+ 1803 0000 9C010000 		.section	.debug_str,"MS",%progbits,1
+ 1803      02007C00 
+ 1803      00000201 
+ 1803      FB0E0D00 
+ 1803      01010101 
+ 1804              	.LASF52:
+ 1805 0000 5363616E 		.ascii	"ScanComp_1_VDAC_SetRange\000"
+ 1805      436F6D70 
+ 1805      5F315F56 
+ 1805      4441435F 
+ 1805      53657452 
+ 1806              	.LASF41:
+ 1807 0019 5363616E 		.ascii	"ScanComp_1_GetDACRange\000"
+ 1807      436F6D70 
+ 1807      5F315F47 
+ 1807      65744441 
+ 1807      4352616E 
+ 1808              	.LASF28:
+ 1809 0030 6D61736B 		.ascii	"maskLsb\000"
+ 1809      4C736200 
+ 1810              	.LASF33:
+ 1811 0038 626C6F63 		.ascii	"blockNum\000"
+ 1811      6B4E756D 
+ 1811      00
+ 1812              	.LASF30:
+ 1813 0041 6368616E 		.ascii	"channel\000"
+ 1813      6E656C00 
+ 1814              	.LASF16:
+ 1815 0049 5363616E 		.ascii	"ScanComp_1_Enable\000"
+ 1815      436F6D70 
+ 1815      5F315F45 
+ 1815      6E61626C 
+ 1815      6500
+ 1816              	.LASF49:
+ 1817 005b 5363616E 		.ascii	"ScanComp_1_VDAC_Enable\000"
+ 1817      436F6D70 
+ 1817      5F315F56 
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccMZH2Qd.s 			page 47
+
+
+ 1817      4441435F 
+ 1817      456E6162 
+ 1818              	.LASF59:
+ 1819 0072 5363616E 		.ascii	"ScanComp_1_initVar\000"
+ 1819      436F6D70 
+ 1819      5F315F69 
+ 1819      6E697456 
+ 1819      617200
+ 1820              	.LASF3:
+ 1821 0085 73686F72 		.ascii	"short unsigned int\000"
+ 1821      7420756E 
+ 1821      7369676E 
+ 1821      65642069 
+ 1821      6E7400
+ 1822              	.LASF26:
+ 1823 0098 5363616E 		.ascii	"ScanComp_1_SetInterruptMask\000"
+ 1823      436F6D70 
+ 1823      5F315F53 
+ 1823      6574496E 
+ 1823      74657272 
+ 1824              	.LASF43:
+ 1825 00b4 5363616E 		.ascii	"ScanComp_1_compDACRange\000"
+ 1825      436F6D70 
+ 1825      5F315F63 
+ 1825      6F6D7044 
+ 1825      41435261 
+ 1826              	.LASF37:
+ 1827 00cc 5363616E 		.ascii	"ScanComp_1_SetDACVoltage\000"
+ 1827      436F6D70 
+ 1827      5F315F53 
+ 1827      65744441 
+ 1827      43566F6C 
+ 1828              	.LASF31:
+ 1829 00e5 636F6D70 		.ascii	"compVal\000"
+ 1829      56616C00 
+ 1830              	.LASF9:
+ 1831 00ed 666C6F61 		.ascii	"float\000"
+ 1831      7400
+ 1832              	.LASF7:
+ 1833 00f3 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 1833      206C6F6E 
+ 1833      6720756E 
+ 1833      7369676E 
+ 1833      65642069 
+ 1834              	.LASF45:
+ 1835 010a 696E7465 		.ascii	"interruptStatusMaskRegs\000"
+ 1835      72727570 
+ 1835      74537461 
+ 1835      7475734D 
+ 1835      61736B52 
+ 1836              	.LASF47:
+ 1837 0122 5363616E 		.ascii	"ScanComp_1_VDAC_Stop\000"
+ 1837      436F6D70 
+ 1837      5F315F56 
+ 1837      4441435F 
+ 1837      53746F70 
+ 1838              	.LASF13:
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccMZH2Qd.s 			page 48
+
+
+ 1839 0137 72656738 		.ascii	"reg8\000"
+ 1839      00
+ 1840              	.LASF40:
+ 1841 013c 5363616E 		.ascii	"ScanComp_1_Start\000"
+ 1841      436F6D70 
+ 1841      5F315F53 
+ 1841      74617274 
+ 1841      00
+ 1842              	.LASF20:
+ 1843 014d 696E7465 		.ascii	"interruptState\000"
+ 1843      72727570 
+ 1843      74537461 
+ 1843      746500
+ 1844              	.LASF5:
+ 1845 015c 6C6F6E67 		.ascii	"long unsigned int\000"
+ 1845      20756E73 
+ 1845      69676E65 
+ 1845      6420696E 
+ 1845      7400
+ 1846              	.LASF12:
+ 1847 016e 75696E74 		.ascii	"uint8\000"
+ 1847      3800
+ 1848              	.LASF23:
+ 1849 0174 5363616E 		.ascii	"ScanComp_1_GetInterruptSource\000"
+ 1849      436F6D70 
+ 1849      5F315F47 
+ 1849      6574496E 
+ 1849      74657272 
+ 1850              	.LASF24:
+ 1851 0192 5363616E 		.ascii	"ScanComp_1_GetInterruptMask\000"
+ 1851      436F6D70 
+ 1851      5F315F47 
+ 1851      6574496E 
+ 1851      74657272 
+ 1852              	.LASF1:
+ 1853 01ae 756E7369 		.ascii	"unsigned char\000"
+ 1853      676E6564 
+ 1853      20636861 
+ 1853      7200
+ 1854              	.LASF44:
+ 1855 01bc 5363616E 		.ascii	"ScanComp_1_compDACVoltage\000"
+ 1855      436F6D70 
+ 1855      5F315F63 
+ 1855      6F6D7044 
+ 1855      4143566F 
+ 1856              	.LASF10:
+ 1857 01d6 646F7562 		.ascii	"double\000"
+ 1857      6C6500
+ 1858              	.LASF21:
+ 1859 01dd 696E7453 		.ascii	"intSrc\000"
+ 1859      726300
+ 1860              	.LASF36:
+ 1861 01e4 44414352 		.ascii	"DACRange\000"
+ 1861      616E6765 
+ 1861      00
+ 1862              	.LASF39:
+ 1863 01ed 5363616E 		.ascii	"ScanComp_1_Init\000"
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccMZH2Qd.s 			page 49
+
+
+ 1863      436F6D70 
+ 1863      5F315F49 
+ 1863      6E697400 
+ 1864              	.LASF35:
+ 1865 01fd 5363616E 		.ascii	"ScanComp_1_SetDACRange\000"
+ 1865      436F6D70 
+ 1865      5F315F53 
+ 1865      65744441 
+ 1865      4352616E 
+ 1866              	.LASF54:
+ 1867 0214 5363616E 		.ascii	"ScanComp_1_Comp_Init\000"
+ 1867      436F6D70 
+ 1867      5F315F43 
+ 1867      6F6D705F 
+ 1867      496E6974 
+ 1868              	.LASF57:
+ 1869 0229 47656E65 		.ascii	"Generated_Source\\PSoC5\\ScanComp_1.c\000"
+ 1869      72617465 
+ 1869      645F536F 
+ 1869      75726365 
+ 1869      5C50536F 
+ 1870              	.LASF56:
+ 1871 024d 474E5520 		.ascii	"GNU C 4.9.3 20150303 (release) [ARM/embedded-4_9-br"
+ 1871      4320342E 
+ 1871      392E3320 
+ 1871      32303135 
+ 1871      30333033 
+ 1872 0280 616E6368 		.ascii	"anch revision 221220] -mcpu=cortex-m3 -mthumb -g -O"
+ 1872      20726576 
+ 1872      6973696F 
+ 1872      6E203232 
+ 1872      31323230 
+ 1873 02b3 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
+ 1873      66756E63 
+ 1873      74696F6E 
+ 1873      2D736563 
+ 1873      74696F6E 
+ 1874              	.LASF60:
+ 1875 02db 4379456E 		.ascii	"CyEnterCriticalSection\000"
+ 1875      74657243 
+ 1875      72697469 
+ 1875      63616C53 
+ 1875      65637469 
+ 1876              	.LASF8:
+ 1877 02f2 756E7369 		.ascii	"unsigned int\000"
+ 1877      676E6564 
+ 1877      20696E74 
+ 1877      00
+ 1878              	.LASF48:
+ 1879 02ff 5363616E 		.ascii	"ScanComp_1_Comp_Enable\000"
+ 1879      436F6D70 
+ 1879      5F315F43 
+ 1879      6F6D705F 
+ 1879      456E6162 
+ 1880              	.LASF17:
+ 1881 0316 5363616E 		.ascii	"ScanComp_1_SetSpeed\000"
+ 1881      436F6D70 
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccMZH2Qd.s 			page 50
+
+
+ 1881      5F315F53 
+ 1881      65745370 
+ 1881      65656400 
+ 1882              	.LASF50:
+ 1883 032a 43794578 		.ascii	"CyExitCriticalSection\000"
+ 1883      69744372 
+ 1883      69746963 
+ 1883      616C5365 
+ 1883      6374696F 
+ 1884              	.LASF58:
+ 1885 0340 433A5C55 		.ascii	"C:\\Users\\dph5ah\\Documents\\PSoC Creator\\Workspa"
+ 1885      73657273 
+ 1885      5C647068 
+ 1885      3561685C 
+ 1885      446F6375 
+ 1886 036e 63653031 		.ascii	"ce01\\galton board.cydsn\000"
+ 1886      5C67616C 
+ 1886      746F6E20 
+ 1886      626F6172 
+ 1886      642E6379 
+ 1887              	.LASF22:
+ 1888 0386 696E7465 		.ascii	"interruptStatusRegs\000"
+ 1888      72727570 
+ 1888      74537461 
+ 1888      74757352 
+ 1888      65677300 
+ 1889              	.LASF53:
+ 1890 039a 5363616E 		.ascii	"ScanComp_1_VDAC_SetValue\000"
+ 1890      436F6D70 
+ 1890      5F315F56 
+ 1890      4441435F 
+ 1890      53657456 
+ 1891              	.LASF51:
+ 1892 03b3 5363616E 		.ascii	"ScanComp_1_Comp_SetSpeed\000"
+ 1892      436F6D70 
+ 1892      5F315F43 
+ 1892      6F6D705F 
+ 1892      53657453 
+ 1893              	.LASF18:
+ 1894 03cc 73706565 		.ascii	"speed\000"
+ 1894      6400
+ 1895              	.LASF14:
+ 1896 03d2 73697A65 		.ascii	"sizetype\000"
+ 1896      74797065 
+ 1896      00
+ 1897              	.LASF6:
+ 1898 03db 6C6F6E67 		.ascii	"long long int\000"
+ 1898      206C6F6E 
+ 1898      6720696E 
+ 1898      7400
+ 1899              	.LASF27:
+ 1900 03e9 6D61736B 		.ascii	"mask\000"
+ 1900      00
+ 1901              	.LASF34:
+ 1902 03ee 6F757470 		.ascii	"outputStatusRegs\000"
+ 1902      75745374 
+ 1902      61747573 
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccMZH2Qd.s 			page 51
+
+
+ 1902      52656773 
+ 1902      00
+ 1903              	.LASF2:
+ 1904 03ff 73686F72 		.ascii	"short int\000"
+ 1904      7420696E 
+ 1904      7400
+ 1905              	.LASF25:
+ 1906 0409 5363616E 		.ascii	"ScanComp_1_GetInterruptSourceMasked\000"
+ 1906      436F6D70 
+ 1906      5F315F47 
+ 1906      6574496E 
+ 1906      74657272 
+ 1907              	.LASF15:
+ 1908 042d 5363616E 		.ascii	"ScanComp_1_Stop\000"
+ 1908      436F6D70 
+ 1908      5F315F53 
+ 1908      746F7000 
+ 1909              	.LASF46:
+ 1910 043d 5363616E 		.ascii	"ScanComp_1_Comp_Stop\000"
+ 1910      436F6D70 
+ 1910      5F315F43 
+ 1910      6F6D705F 
+ 1910      53746F70 
+ 1911              	.LASF19:
+ 1912 0452 696E7075 		.ascii	"inputBlock\000"
+ 1912      74426C6F 
+ 1912      636B00
+ 1913              	.LASF4:
+ 1914 045d 6C6F6E67 		.ascii	"long int\000"
+ 1914      20696E74 
+ 1914      00
+ 1915              	.LASF11:
+ 1916 0466 63686172 		.ascii	"char\000"
+ 1916      00
+ 1917              	.LASF0:
+ 1918 046b 7369676E 		.ascii	"signed char\000"
+ 1918      65642063 
+ 1918      68617200 
+ 1919              	.LASF38:
+ 1920 0477 44414356 		.ascii	"DACVoltage\000"
+ 1920      6F6C7461 
+ 1920      676500
+ 1921              	.LASF29:
+ 1922 0482 5363616E 		.ascii	"ScanComp_1_GetCompare\000"
+ 1922      436F6D70 
+ 1922      5F315F47 
+ 1922      6574436F 
+ 1922      6D706172 
+ 1923              	.LASF55:
+ 1924 0498 5363616E 		.ascii	"ScanComp_1_VDAC_Init\000"
+ 1924      436F6D70 
+ 1924      5F315F56 
+ 1924      4441435F 
+ 1924      496E6974 
+ 1925              	.LASF32:
+ 1926 04ad 6368616E 		.ascii	"chanPos\000"
+ 1926      506F7300 
+ARM GAS  C:\Users\dph5ah\AppData\Local\Temp\ccMZH2Qd.s 			page 52
+
+
+ 1927              	.LASF42:
+ 1928 04b5 5363616E 		.ascii	"ScanComp_1_GetDACVoltage\000"
+ 1928      436F6D70 
+ 1928      5F315F47 
+ 1928      65744441 
+ 1928      43566F6C 
+ 1929              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 4.9.3 20150303 (release) [ARM/embedded-4_9-br
