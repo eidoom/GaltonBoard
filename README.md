@@ -12,7 +12,7 @@ This was developed by [Andrew Hunter](andrew.hunter@durham.ac.uk), electrical en
 
 ## Simulation dependancies
 
-* Python 2.7
+* Python 3
   * matplotlib
   * scipy
 
