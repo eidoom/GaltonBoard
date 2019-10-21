@@ -13,6 +13,8 @@ This was developed by [Andrew Hunter](andrew.hunter@durham.ac.uk), electrical en
 ## Simulation dependancies
 
 * Python 3
+  * numpy
   * matplotlib
   * scipy
 
+* python3-tk (system dependancy)
