@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Terminal=false
+Exec=/home/pi/git/GaltonBoard/galtonsim
+Name=Galton board simulation
+Comment=Runs a simulation of a Galton board
+Categories=Education;
+Icon=/home/pi/git/GaltonBoard/icon.png
