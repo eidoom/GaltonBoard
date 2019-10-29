@@ -8,7 +8,7 @@ The code for this is in the folder `job 7139 galton board counter`.
 It is for a Psoc 5lp development board ( CY8KIT-059 ) from Cypress, they come from Farnell/RS.
 The software is written in Psoc creator which you can download from Cypress’s website.
 There are LEDs with resistors in line to produce light and photo diodes and resistors to produce a pulse when the balls drop past the holes which the Psoc registers via interrupts.
-This was developed by [Andrew Hunter](andrew.hunter@durham.ac.uk), electrical engineering technician at the Department of Physics, Durham University. 
+This was developed by [Andrew Hunter](https://www.dur.ac.uk/directory/profile/?id=1730), electrical engineering technician at the Department of Physics, Durham University. 
 
 ## Simulation dependancies
 
