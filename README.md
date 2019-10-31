@@ -10,6 +10,12 @@ The software is written in Psoc creator which you can download from Cypress’s 
 There are LEDs with resistors in line to produce light and photo diodes and resistors to produce a pulse when the balls drop past the holes which the Psoc registers via interrupts.
 This was developed by [Andrew Hunter](https://www.dur.ac.uk/directory/profile/?id=1730), electrical engineering technician at the Department of Physics, Durham University. 
 
+## Installation
+
+* Install desktop files so the simulation can be accessed by the application menu and from the desktop by running the `install-sim.sh`. 
+* Similarly, `install-server.sh` installs desktop files for the server scripts.
+* Undo by running the `uninstall-*.sh` scripts.
+
 ## Simulation dependancies
 
 * Python 3
