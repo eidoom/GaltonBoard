@@ -1,2 +1,4 @@
 David Grellscheid "dgrell" <d.grellscheid@gmail.com>
 Matthew Kirk "MJKirk" <matthew.kirk@roma1.infn.it>
+James Whitehead "jcwhitehead" <james.c.whitehead@durham.ac.uk>
+Ryan Moodie "eidoom" <ryan.i.moodie@durham.ac.uk>
