@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Galton server
+Exec=/home/pi/git/GaltonBoard/readout_server
+Terminal=false
+Icon=/home/pi/git/GaltonBoard/icon.png
+Type=Application
+Categories=Education;
+Comment=Measures the physical Galton board and displays results

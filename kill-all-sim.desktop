@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Kill all simulations
+Comment=Remotely kill all simulations
+Exec=/home/pi/git/GaltonBoard/kill-all-sim.sh
+Icon=/home/pi/git/GaltonBoard/icon.png
+Terminal=false
+Type=Application
+Categories=Education;

@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Reboot all
+Comment=Remotely reboot all rpis
+Exec=/home/pi/git/GaltonBoard/reboot-all.sh
+Icon=/home/pi/git/GaltonBoard/icon.png
+Terminal=false
+Type=Application
+Categories=Education;
