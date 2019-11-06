@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Update code
+Comment=Update local code against the online git repository
+Exec=/home/pi/git/GaltonBoard/update.sh
+Icon=/home/pi/git/GaltonBoard/icon.png
+Terminal=false
+Type=Application
+Categories=Education;

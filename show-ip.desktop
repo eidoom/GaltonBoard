@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Show IP address
+Comment=Display IP address of Pi
+Exec=/home/pi/git/GaltonBoard/show-ip.sh
+Icon=/home/pi/git/GaltonBoard/icon.png
+Terminal=true
+Type=Application
+Categories=Education;
