@@ -1,3 +1,5 @@
+DEPRECATED: this project has moved to [gitlab.dur.scotgrid.ac.uk/computing-club/galton-board](https://gitlab.dur.scotgrid.ac.uk/computing-club/galton-board).
+
 #  Modelling the Invisible #
 
 Software for the Galton board exhibit used for [IPPP](https://www.ippp.dur.ac.uk/) [outreach](https://www.modellinginvisible.org/).
